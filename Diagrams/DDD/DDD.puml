@@ -1,0 +1,235 @@
+@startuml
+hide circle
+
+!define ENTITY(entityName) class entityName << Entity >>
+!define AGGREGATE_ROOT(aggregateRootName) class aggregateRootName << Aggregate Root >>
+!define VALUE_OBJECT(valueObjectName) class valueObjectName << Value Object >>
+
+skinparam package {
+    BackgroundColor<<Entity>> LightCyan
+    BackgroundColor<<Aggregate Root>> LightGreen
+    BackgroundColor<<Value Object>> LightGray
+}
+
+Package "Shipment Sub-Domain" <<Rectangle>> #BBDEFB{
+
+    AGGREGATE_ROOT(Shipment) #lightblue{
+        shipmentStatus: enum
+    }
+
+    VALUE_OBJECT(DepartureAddress){
+        streetAddress: String
+        city: String
+        postalCode: String
+        province: String
+        country: String
+    }
+    VALUE_OBJECT(ArrivalAddress){
+        streetAddress: String
+        city: String
+        postalCode: String
+        province: String
+        country: String
+    }
+
+    VALUE_OBJECT(Movers) {
+        movers: List<Mover>
+    }
+
+    ENTITY(Driver) #FFCA57{
+        firstName: String
+        lastName: String
+    }
+
+    VALUE_OBJECT(DriverIdentifier){
+        driverId: String
+    }
+
+    ENTITY(MovingCrew) #FFCA57 {
+        type: enum
+    }
+    ENTITY(Trailer) #FFCA57{
+        capacity: double
+        serialnumber: String
+        liscencePlate: String
+    }
+    VALUE_OBJECT(TractorIdentifier){
+        VIN: String
+    }
+    VALUE_OBJECT(TrailerIdentifier){
+        VIN: String
+    }
+
+    VALUE_OBJECT(ContactDetails){
+        phoneNumber: String
+        email: String
+    }
+    ENTITY(Mover) #FFCA57 {
+        firstName: String
+        lastName: String
+        email: String
+    }
+
+    ENTITY(Tractor) #FFCA57 {
+        vin: String
+        capacity: String
+    }
+
+    VALUE_OBJECT(MovingCrewIdentifier){
+        movingCrewId: String
+    }
+
+    VALUE_OBJECT(MoverIdentifier) {
+        moverIdentifier: String
+    }
+    VALUE_OBJECT(ShipmentIdentifier){
+        shipmentId: String
+    }
+    Driver *---- ContactDetails
+    Movers o---- MoverIdentifier
+    MovingCrew o---- Movers
+    Shipment ----> MovingCrewIdentifier
+    Shipment *---- DepartureAddress
+    Shipment *---- ArrivalAddress
+    Tractor ----> TractorIdentifier
+    Trailer ----> TrailerIdentifier
+    MovingCrew ----> MovingCrewIdentifier
+    Mover ----> MoverIdentifier
+    Driver ----> DriverIdentifier
+    Shipment o---- TrailerIdentifier
+    Shipment o---- TractorIdentifier
+    Shipment ----> ShipmentIdentifier
+}
+
+Package "Inventory Sub-Domain" <<Rectangle>> #BBDEFB{
+
+    note "Invariant: [Every time an update is made or when the inventory is created, the current date must be the value for lastUpdated]" as inventoryInvariant1
+
+    AGGREGATE_ROOT(TruckInventory) #lightblue{
+        inventories: List<Inventories>
+    }
+    ENTITY(Inventory) #FFCA57{
+        room: String
+        lastUpdated: Date
+    }
+
+    VALUE_OBJECT(InventoryIdentifier){
+        inventoryId: String
+    }
+
+    VALUE_OBJECT(Inventories){
+        inventories: List<InventoryIdentifier>
+    }
+
+    VALUE_OBJECT(BoxList){
+        boxes: List<BoxIdentifier>
+    }
+
+    ENTITY(Box) #FFCA57 {
+        name: String
+        handling: list[enum]
+    }
+
+    VALUE_OBJECT(ItemList){
+        itemList: List<ItemIdentifier>
+    }
+
+    VALUE_OBJECT(BoxIdentifier) {
+        boxId: String
+    }
+
+    ENTITY(Item) #FFCA57 {
+        description: String
+        existingDammage: bool
+        handling: list[enum]
+        picture: blob[]
+    }
+
+    VALUE_OBJECT(ItemIdentifier){
+        itemId: String
+    }
+
+    'Relationship details
+    TruckInventory ----> ShipmentIdentifier
+    BoxList o---- BoxIdentifier
+    TruckInventory ----> TractorIdentifier
+    TruckInventory o---- Inventories
+    TruckInventory ----> TrailerIdentifier
+    Inventories o---- InventoryIdentifier
+    Inventory ----> InventoryIdentifier
+    Item ---=> ItemIdentifier
+    Box ----> BoxIdentifier
+    Box ----> ItemList
+    ItemList o---- ItemIdentifier
+    Inventory ----> BoxList
+    Inventory ----> ItemList
+}
+
+Package "Customer Sub-Domain" <<Rectangle>> #BBDEFB{
+    ENTITY(Customer) #FFCA57 {
+        firstName: String
+        lastName: String
+        email: String
+    }
+    VALUE_OBJECT(ContactDetails){
+        phoneNumber: String
+        email: String
+    }
+    VALUE_OBJECT(Address){
+        streetAddress: String
+        city: String
+        postalCode: String
+        province: String
+        country: String
+    }
+    VALUE_OBJECT(CustomerIdentifier){
+        customerId: String
+    }
+
+    'Relationship details
+    Customer ----> CustomerIdentifier
+    Customer *---- Address
+    Customer *---- ContactDetails
+    Shipment ----> CustomerIdentifier
+}
+
+Package "User Sub-Domain" <<Rectangle>> #FFCDD2{
+    AGGREGATE_ROOT(User) #lightblue{
+        username: String
+        password: String
+        type: Enum
+    }
+    VALUE_OBJECT(UserIdentifier){
+        userId: String
+    }
+    User ----> UserIdentifier
+}
+
+Package "Notification Service" <<Rectangle>> #BBDEFB{
+    ENTITY(Notification) #FFCA57 {
+        type: enum
+        message: String
+        urgency: enum
+        date: Date
+    }
+    VALUE_OBJECT(RecipientList){
+        recipients: List<UserIdentifier>
+    }
+
+    Notification ----> RecipientList
+    RecipientList o---- UserIdentifier
+}
+Package "Reports Service" <<Rectangle>> #BBDEFB{
+    AGGREGATE_ROOT(Report) #lightblue {
+        name: String
+        type: enum
+        generationDate: dateTime
+        validity: date
+    }
+    VALUE_OBJECT(ReportIdentifier){
+        reportId: String
+    }
+    Report ----> ReportIdentifier
+    Report ----> ShipmentIdentifier
+}
+@enduml

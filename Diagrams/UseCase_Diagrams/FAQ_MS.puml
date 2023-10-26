@@ -1,0 +1,39 @@
+@startuml
+
+left to right direction
+skinparam actorStyle awesome
+skinparam usecase {
+    BackgroundColor DarkSeaGreen
+    BorderColor DarkSlateGray
+    ArrowColor Black
+    ActorBorderColor black
+    ActorFontName Courier
+    ActorBackgroundColor<< Human >> Gold
+}
+
+actor  "Anonymous User" #Blue
+actor  "Logged in Customer" as User #Green
+actor  "Admin User" as Admin #Red
+
+rectangle System {
+  rectangle "FAQ Subsystem" as FAQ {
+    usecase "View all FAQ"
+    usecase "Post FAQ"
+    usecase "Modify FAQ"
+    usecase "Delete FAQ"
+
+  }
+
+}
+"Anonymous User" -[#Blue]-> "View all FAQ"
+User --|> "Anonymous User"
+Admin --|> "User"
+Admin -[#Red]-> "Post FAQ"
+Admin -[#Red]-> "Modify FAQ"
+Admin -[#Red]-> "Delete FAQ"
+
+
+
+
+
+@enduml

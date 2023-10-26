@@ -1,0 +1,22 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Context.puml
+title System Context Diagram for a Moving System
+Person(employee, "Employee", "Moving Company Employee")
+Person(loadingCrew, "Loading Crew", "Anonymous loading crew")
+Person(customer, "Customer", "Customer overseeing the move")
+Person(movingEstimator, "Moving Estimator", "Company Estimator to estimate the price of the move for the customer")
+Person(driver, "Driver", "Company driver")
+
+System_Ext(auth, "Authentication", "Authenticate's user and assigns user role")
+System(moving_system, "Moving System", "Allows employees, loading crew, customers and moving estimators to add, remove, and modify inventory. Generate's shipment manifiest as well as documents for users. Input's truck weight and location updates.")
+System_Ext(mail, "Gmail SMTP", "Sends notification to users")
+Rel(employee, moving_system, "Views customer move request, inputs a estimated price on the clients estimated weight and number of items.")
+Rel(loadingCrew, moving_system, "Enters and updates inventory items in the respective inventories with a picture and description.")
+Rel(customer, moving_system, "Keeps track of the truck location updates, adds or removes items from inventory, adds new inventories and overseees moving progress.")
+Rel(movingEstimator, moving_system, "Adds, updates and deletes items to the moving quote to give a more acurate quote for the customer.")
+Rel(driver, moving_system, "Add's and update's shipment weight, update's shipment location and generates shipment manifest.")
+Rel(moving_system,auth , "Authenticate's user and assigns user role.")
+Rel(moving_system, mail, "Mails notification to users updating them on shipment information.")
+
+SHOW_LEGEND()
+@enduml
