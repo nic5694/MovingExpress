@@ -52,6 +52,7 @@ Package "Inventory Sub-Domain" <<Rectangle>> #BBDEFB{
     ENTITY(Item) #FFCA57 {
         description: String
         existingDammage: bool
+        price: double
         handling: list[enum]
         picture: blob[]
     }
@@ -62,18 +63,18 @@ Package "Inventory Sub-Domain" <<Rectangle>> #BBDEFB{
 
     'Relationship details
     TruckInventory ----> ShipmentIdentifier
-    BoxList o---- BoxIdentifier
+    BoxList *---- BoxIdentifier
     TruckInventory ----> TractorIdentifier
     TruckInventory o---- Inventories
     TruckInventory ----> TrailerIdentifier
-    Inventories o---- InventoryIdentifier
+    Inventories *---- InventoryIdentifier
     Inventory ----> InventoryIdentifier
     Item ---=> ItemIdentifier
     Box ----> BoxIdentifier
     Box ----> ItemList
-    ItemList o---- ItemIdentifier
-    Inventory ----> BoxList
-    Inventory ----> ItemList
+    ItemList *---- ItemIdentifier
+    Inventory o---- BoxList
+    Inventory o---- ItemList
 }
 Package "User Sub-Domain" <<Rectangle>> #FFCDD2{
     AGGREGATE_ROOT(User) #lightblue{
@@ -230,11 +231,6 @@ Package "Customer Sub-Domain" <<Rectangle>> #BBDEFB{
     ENTITY(Customer) #FFCA57 {
         firstName: String
         lastName: String
-        email: String
-    }
-    VALUE_OBJECT(ContactDetails){
-        phoneNumber: String
-        email: String
     }
     VALUE_OBJECT(Address){
         streetAddress: String
