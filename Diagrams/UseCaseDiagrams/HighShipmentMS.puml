@@ -1,0 +1,71 @@
+@startuml
+
+left to right direction
+skinparam actorStyle awesome
+skinparam usecase {
+    BackgroundColor DarkSeaGreen
+    BorderColor DarkSlateGray
+    ArrowColor Black
+    ActorBorderColor black
+    ActorFontName Courier
+    ActorBackgroundColor<< Human >> Gold
+}
+
+actor Client as "Client" #LightBlue
+actor "Moving Estimator" as MovingEstimator #LightGreen
+actor "Truck Driver" as TruckDriver #Orange
+actor "Moving Crew" as MovingCrew #Purple
+actor Management as "Management" #Yellow
+actor "Claim's Employee" as ClaimsEmployee #Pink
+actor "Shipment Reviewer" as ShipmentReviewer #Blue
+actor  "Observer" as Observer #LightCyan
+
+rectangle "Moving Express System" {
+    rectangle UseCases {
+      usecase "Request a Quote" as UC1 #LightSeaGreen
+      usecase "Request Shipment" as UC2 #LightSeaGreen
+      usecase "Cancel Shipment" as UC3 #LightSeaGreen
+      usecase "Damage Claim" as UC4 #LightSeaGreen
+      usecase "Estimate Shipment" as UC5 #LightSeaGreen
+      usecase "Estimate Item Value" as UC6 #LightSeaGreen
+      usecase "overview shipment" as UC7 #LightSeaGreen
+      usecase "Transport Shipment" as UC8 #LightSeaGreen
+      usecase "Packs Shipment" as UC9 #LightSeaGreen
+      usecase "Load Shipment" as UC10 #LightSeaGreen
+      usecase "Unload Shipment" as UC11 #LightSeaGreen
+      usecase "Unpack Shipment" as UC12 #LightSeaGreen
+      usecase "Produce Analytics" as UC13 #LightSeaGreen
+    }
+}
+
+Client --|> Observer
+
+Client --> UC1
+Client --> UC3
+Client --> UC4
+Client --> UC9
+Client --> UC12
+
+Observer --> UC2
+Observer --> UC7
+
+MovingEstimator --> UC5
+MovingEstimator --> UC6
+
+TruckDriver --> UC8
+
+MovingCrew --> UC9
+MovingCrew --> UC10
+MovingCrew --> UC11
+MovingCrew --> UC12
+
+Management --> UC13
+
+UC4 <-- ClaimsEmployee
+UC2 <-- ShipmentReviewer
+UC3 <-- ShipmentReviewer
+UC5 <-- ShipmentReviewer
+UC7 <-- ShipmentReviewer
+
+@enduml
+

@@ -32,7 +32,7 @@ endwhile
 :Load items onto the truck;
 |Customer|
 :Customer provides a signature upon completion;
-if (Customer refuses) then (yes)
+if (Client refuses) then (yes)
 |System|
   :Cancel the entire shipping process;
   stop
