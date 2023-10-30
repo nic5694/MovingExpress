@@ -71,7 +71,7 @@ Package "Inventory Sub-Domain" <<Rectangle>> #BBDEFB{
     Inventory ----> InventoryIdentifier
     Item ---=> ItemIdentifier
     Box ----> BoxIdentifier
-    Box ----> ItemList
+    Box o---- ItemList
     ItemList *---- ItemIdentifier
     Inventory o---- BoxList
     Inventory o---- ItemList
@@ -118,7 +118,7 @@ Package "Reports Service" <<Rectangle>> #BBDEFB{
     Report ----> ShipmentIdentifier
 }
 
-Package "Claims Service"<<Rectangle>> #BBDEFB{
+Package "Claims Service"<<Rectangle>> #FFCDD2{
     AGGREGATE_ROOT(Claim) #lightblue {
         claimStatus: enum
         claimType: enum
