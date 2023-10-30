@@ -35,7 +35,7 @@ endwhile
 if (Client refuses) then (yes)
 |System|
   :Cancel the entire shipping process;
-  stop
+  end
 else (no)
   :Generate receipt and report with a tracking code;
 endif
@@ -60,7 +60,7 @@ if (Client accepts price?) then (yes)
   if (Client refuses) then (yes)
     |System|
     :Cancel the entire shipping process;
-    stop
+    end
   else (no)
     |Customer|
     :Payment process;

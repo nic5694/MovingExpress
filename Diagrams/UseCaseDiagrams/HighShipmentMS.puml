@@ -13,7 +13,7 @@ skinparam usecase {
 
 actor Client as "Client" #LightBlue
 actor "Moving Estimator" as MovingEstimator #LightGreen
-actor "Truck Driver" as TruckDriver #Orange
+actor "Van Driver" as VanDriver #Orange
 actor "Moving Crew" as MovingCrew #Purple
 actor Management as "Management" #Yellow
 actor "Claim's Employee" as ClaimsEmployee #Pink
@@ -52,7 +52,7 @@ Observer --> UC7
 MovingEstimator --> UC5
 MovingEstimator --> UC6
 
-TruckDriver --> UC8
+VanDriver --> UC8
 
 MovingCrew --> UC9
 MovingCrew --> UC10

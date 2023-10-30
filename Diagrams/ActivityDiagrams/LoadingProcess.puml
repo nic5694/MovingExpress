@@ -4,10 +4,12 @@
 start
 :Assign List to Customer;
 repeat
+  |Item List|
+  |Moving Company Movers|
   :Put a Sticker on Item or Box;
   |Item List|
   :Record Item/Box Information in List;
-  |Customer|
+  |Moving Company Movers|
   :Load Items/Boxes in List onto Truck;
   fork
     |Customer|
@@ -15,8 +17,10 @@ repeat
   fork again
     |Moving Company Movers|
     :Company Inspects Item/Box during Loading;
+    |Item List|
     :Check Item on List as Loaded;
   end fork
+  |Customer|
   while (Customer Requests Modification) is (yes)
     |Moving Company Movers|
     :Unload Item;
