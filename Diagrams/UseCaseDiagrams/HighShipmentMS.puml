@@ -13,59 +13,58 @@ skinparam usecase {
 
 actor Client as "Client" #LightBlue
 actor "Moving Estimator" as MovingEstimator #LightGreen
-actor "Van Driver" as VanDriver #Orange
+actor "Truck Driver" as VanDriver #Orange
 actor "Moving Crew" as MovingCrew #Purple
 actor Management as "Management" #Yellow
-actor "Claim's Employee" as ClaimsEmployee #Pink
 actor "Shipment Reviewer" as ShipmentReviewer #Blue
-actor  "Observer" as Observer #LightCyan
+actor "Observer" as Observer #LightCyan
 
 rectangle "Moving Express System" {
     rectangle UseCases {
-      usecase "Request a Quote" as UC1 #LightSeaGreen
-      usecase "Request Shipment" as UC2 #LightSeaGreen
-      usecase "Cancel Shipment" as UC3 #LightSeaGreen
-      usecase "Damage Claim" as UC4 #LightSeaGreen
-      usecase "Estimate Shipment" as UC5 #LightSeaGreen
-      usecase "Estimate Item Value" as UC6 #LightSeaGreen
-      usecase "overview shipment" as UC7 #LightSeaGreen
-      usecase "Transport Shipment" as UC8 #LightSeaGreen
-      usecase "Packs Shipment" as UC9 #LightSeaGreen
-      usecase "Load Shipment" as UC10 #LightSeaGreen
-      usecase "Unload Shipment" as UC11 #LightSeaGreen
-      usecase "Unpack Shipment" as UC12 #LightSeaGreen
-      usecase "Produce Analytics" as UC13 #LightSeaGreen
+      usecase "1.0 Request a Quote" as UC1 #LightSeaGreen
+      usecase "2.0 Request Shipment" as UC2 #LightSeaGreen
+      usecase "3.0 Estimate Item Value" as UC3 #LightSeaGreen
+      usecase "4.0 Estimate Shipment" as UC4 #LightSeaGreen
+      usecase "5.0 overview shipment" as UC5 #LightSeaGreen
+      usecase "8.0 Transport Shipment" as UC8 #LightSeaGreen
+      usecase "6.0 Packs Shipment" as UC6 #LightSeaGreen
+      usecase "7.0 Load Shipment" as UC7 #LightSeaGreen
+      usecase "9.0 Unload Shipment" as UC9 #LightSeaGreen
+      usecase "10.0 Unpack Shipment" as UC10 #LightSeaGreen
+      usecase "11.0 Shipment Reports" as UC11 #LightSeaGreen
+      usecase "12.0 Cancel Shipment" as UC12 #LightSeaGreen
     }
 }
 
 Client --|> Observer
 
-Client --> UC1
-Client --> UC3
-Client --> UC4
-Client --> UC9
-Client --> UC12
+Client ---> UC12
+Client ---> UC6
+Client ---> UC10
 
+Observer --> UC1
 Observer --> UC2
-Observer --> UC7
+Observer --> UC5
 
-MovingEstimator --> UC5
-MovingEstimator --> UC6
+MovingEstimator --> UC2
+MovingEstimator --> UC4
+MovingEstimator --> UC3
+MovingEstimator --> UC3
 
 VanDriver --> UC8
 
-MovingCrew --> UC9
-MovingCrew --> UC10
-MovingCrew --> UC11
-MovingCrew --> UC12
+MovingCrew -[#Orange]--> UC6
+MovingCrew -[#Orange]--> UC5
+MovingCrew -[#Orange]--> UC7
+MovingCrew -[#Orange]--> UC9
+MovingCrew -[#Orange]--> UC10
 
-Management --> UC13
+UC11 <-- Management
+VanDriver --> UC11
 
-UC4 <-- ClaimsEmployee
 UC2 <-- ShipmentReviewer
-UC3 <-- ShipmentReviewer
+UC1 <-- ShipmentReviewer
+UC12 <-- ShipmentReviewer
 UC5 <-- ShipmentReviewer
-UC7 <-- ShipmentReviewer
 
 @enduml
-
