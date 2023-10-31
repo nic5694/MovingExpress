@@ -6,13 +6,18 @@ hide circle
 !define VALUE_OBJECT(valueObjectName) class valueObjectName << Value Object >>
 !pragma useVerticalIf on
 skinparam dpi 350
+skinparam packageStyle rectangle
+skinparam rectangle {
+    BackgroundColor #f7f4eb
+    BorderColor Black
+}
 
 skinparam package {
     BackgroundColor<<Entity>> LightCyan
     BackgroundColor<<Aggregate Root>> LightGreen
     BackgroundColor<<Value Object>> LightGray
 }
-
+rectangle "Bounded Context" as BoundedContextMovingExpress #line.dashed {
 Package "Inventory Sub-Domain" <<Rectangle>> #BBDEFB{
 
     note "Invariant: [Every time an update is made or when the inventory is created, the current date must be the value for lastUpdated]" as inventoryInvariant1
@@ -141,6 +146,7 @@ Package "Claims Service"<<Rectangle>> #FFCDD2{
 
 Package "Shipment Sub-Domain" <<Rectangle>> #BBDEFB{
 
+    note "Invariant:  [The arrival address and departure address of the shipment must be different]" as Invariant2
     AGGREGATE_ROOT(Shipment) #lightblue{
         shipmentStatus: enum
     }
@@ -255,6 +261,6 @@ Package "Customer Sub-Domain" <<Rectangle>> #BBDEFB{
 }
 
 
-
+}
 
 @enduml
