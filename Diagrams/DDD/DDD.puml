@@ -5,6 +5,7 @@ hide circle
 !define AGGREGATE_ROOT(aggregateRootName) class aggregateRootName << Aggregate Root >>
 !define VALUE_OBJECT(valueObjectName) class valueObjectName << Value Object >>
 !pragma useVerticalIf on
+skinparam dpi 350
 
 skinparam package {
     BackgroundColor<<Entity>> LightCyan
@@ -62,19 +63,22 @@ Package "Inventory Sub-Domain" <<Rectangle>> #BBDEFB{
     }
 
     'Relationship details
-    TruckInventory ----> ShipmentIdentifier
-    BoxList *---- BoxIdentifier
-    TruckInventory ----> TractorIdentifier
-    TruckInventory o---- Inventories
-    TruckInventory ----> TrailerIdentifier
-    Inventories *---- InventoryIdentifier
-    Inventory ----> InventoryIdentifier
-    Item ---=> ItemIdentifier
-    Box ----> BoxIdentifier
-    Box o---- ItemList
+    TruckInventory -----> ShipmentIdentifier
+    BoxList *----- BoxIdentifier
+    TruckInventory -----> TractorIdentifier
+    TruckInventory o----- Inventories
+    TruckInventory -----> TrailerIdentifier
+    Inventories *----- InventoryIdentifier
+    Inventory -----> InventoryIdentifier
+    Item ----=> ItemIdentifier
+    Box -----> BoxIdentifier
+    Box o----- ItemList
     ItemList *---- ItemIdentifier
-    Inventory o---- BoxList
-    Inventory o---- ItemList
+   ''' Inventory *---- BoxList
+    Inventory "1"*----"0..*" BoxList 
+    Inventory "1"*----"0..*" ItemList
+    'Add cardinality'
+
 }
 Package "User Sub-Domain" <<Rectangle>> #FFCDD2{
     AGGREGATE_ROOT(User) #lightblue{
@@ -128,10 +132,10 @@ Package "Claims Service"<<Rectangle>> #FFCDD2{
     VALUE_OBJECT(ClaimIdentifier){
         claimId: String
     }
-    Claim ----> ClaimIdentifier
-    Claim ----> ShipmentIdentifier
-    Claim ----> CustomerIdentifier
-    Claim ----> ItemIdentifier
+    Claim ------> ClaimIdentifier
+    Claim ------> ShipmentIdentifier
+    Claim ------> CustomerIdentifier
+    Claim ------> ItemIdentifier
 }
 
 
@@ -209,20 +213,20 @@ Package "Shipment Sub-Domain" <<Rectangle>> #BBDEFB{
     VALUE_OBJECT(ShipmentIdentifier){
         shipmentId: String
     }
-    Driver *---- ContactDetails
-    Movers *---- MoverIdentifier
-    MovingCrew *---- Movers
-    Shipment ----> MovingCrewIdentifier
-    Shipment *---- DepartureAddress
-    Shipment *---- ArrivalAddress
-    Tractor ----> TractorIdentifier
-    Trailer ----> TrailerIdentifier
-    MovingCrew ----> MovingCrewIdentifier
-    Mover ----> MoverIdentifier
-    Driver ----> DriverIdentifier
-    Shipment ----> TrailerIdentifier
-    Shipment ----> TractorIdentifier
-    Shipment ----> ShipmentIdentifier
+    Driver *------ ContactDetails
+    Movers *------ MoverIdentifier
+    MovingCrew *------ Movers
+    Shipment ------> MovingCrewIdentifier
+    Shipment *------ DepartureAddress
+    Shipment *------ ArrivalAddress
+    Tractor ------> TractorIdentifier
+    Trailer ------> TrailerIdentifier
+    MovingCrew ------> MovingCrewIdentifier
+    Mover ------> MoverIdentifier
+    Driver ------> DriverIdentifier
+    Shipment --------> TrailerIdentifier
+    Shipment --------> TractorIdentifier
+    Shipment --------> ShipmentIdentifier
 }
 
 
