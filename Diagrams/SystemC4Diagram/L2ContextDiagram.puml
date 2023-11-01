@@ -29,6 +29,7 @@ AddRelTag("database_rel", $lineColor="dodgerblue",$legendText="Database Relation
 AddRelTag("u_rel", $lineColor="green",$legendText="User Interactions")
 AddRelTag("a_rel", $lineColor="Gray",$legendText="Application Relationships")
 AddRelTag("email_rel", $lineColor="orange",$legendText="Email Relationships")
+AddRelTag("render_rel", $lineColor="Pink",$legendText="Rendering Relationships")
 
 SHOW_PERSON_OUTLINE()
 Person(shipmentReviewer, "Shipment Reviewer", "Moving Company Employee")
@@ -44,24 +45,25 @@ rectangle " " as external{
 }
 
 System_Boundary(movingexpress_boundaryContext, "Moving Express System") {
-    Container(application, "Wep Application", "HTML", "Delivers the static content for the Single Page Application.", $sprite="html5", $tags="webApp")
+    Container(staticPage, "Wep Application", "HTML", "Delivers the static content for the Single Page Application.", $sprite="html5", $tags="webApp")
     Container(webPage, "Single-Page Application", "JavaScript, REACT JS", "Provides a GUI interface that contains all the functionalities of the Spring boot application. Uses React Router framework to handle the multiple pages. Uses multiple npm libraries to display and format content.", $sprite="react",$tags="webSite")
-    Container(api, "API Application", "Spring boot: Java", "Provides shipment management functionality and information for the moving company Moving Express via JSON/HTTPS API.", $sprite="java", $tags="service")
+    Container(api, "Moving Express API", "Spring boot: Java", "Provides shipment management functionality and information for the moving company Moving Express via JSON/HTTPS API.", $sprite="java", $tags="service")
     ContainerDb(database, "Database", "MySQL", "Stores client data, shipment information and user contact details", $sprite="mysql", $tags="storage")
 }
 
 
-Rel(customer, application, "Visits https//:movingexpress.com using", "HTTPS", $tags="u_rel")
+Rel(customer, staticPage, "Visits https//:movingexpress.com using", "HTTPS", $tags="u_rel")
 Rel(customer, webPage,"Requests quotes, views shipments, generates observer codes, updates and inserts inventory", $tags="u_rel")
-Rel(application, webPage,"Delivers to the customers web page", $tags="u_rel")
-Rel(movingEstimator, application, "Creates shipment, estimates shipment price, estimates item price and inserts inventory and updates", $tags="u_rel")
+Rel(staticPage, webPage,"Delivers to the customers web page", $tags="u_rel")
+Rel(movingEstimator, staticPage, "Creates shipment, estimates shipment price, estimates item price and inserts inventory and updates", $tags="u_rel")
 Rel(movingEstimator, webPage, "Visits https//:movingexpress.com using", "HTTPS", $tags="u_rel")
-Rel(shipmentReviewer, application, "Reviews shipment and views quote requests.", $tags="u_rel")
+Rel(shipmentReviewer, staticPage, "Reviews shipment and views quote requests.", $tags="u_rel")
 Rel(shipmentReviewer, webPage, "Visits https//:movingexpress.com using HTTPS", $tags="u_rel")
-Rel(loadingCrew, application, "Updates the inventory and views the inventiry", $tags="u_rel")
+Rel(loadingCrew, staticPage, "Updates the inventory and views the inventiry", $tags="u_rel")
 Rel(loadingCrew, webPage, "Visits https//:movingexpress.com using HTTPS", $tags="u_rel")
-Rel(driver, application, "Gnerates shipment manifiest, gnerates observer codes and updates truck status/location", $tags="u_rel")
+Rel(driver, staticPage, "Gnerates shipment manifiest, gnerates observer codes and updates truck status/location", $tags="u_rel")
 Rel(driver, webPage, "Visits https//:movingexpress.com using HTTPS", $tags="u_rel")
+Rel(staticPage, webPage, "Delivers to the browser", $tags="render_rel")
 
 Rel(webPage, api, "Requests data from", "HTTPS/JSON", $tags="a_rel")
 
