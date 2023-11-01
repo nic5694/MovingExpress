@@ -1,0 +1,84 @@
+@startuml
+!include <archimate/Archimate>
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!include DEVICONS/java.puml
+!include DEVICONS/mysql.puml
+!include DEVICONS/react.puml
+!include DEVICONS/html5.puml
+!include DEVICONS/aws.puml
+!define DEVICONS2 https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons2
+!include DEVICONS2/google.puml
+!include DEVICONS2/npm_original_wordmark.puml
+!define RECTANGLE_BORDER_COLOR white 
+
+skinparam rectangle {
+    BorderColor <<RECTANGLE_BORDER_COLOR>>
+}
+
+
+
+AddElementTag("service", $shape=EightSidedShape(), $bgColor="#557C99", $fontColor="white", $legendText="Service\neight sided")
+AddElementTag("amz_ext_service", $shape=EightSidedShape(), $bgColor="#232F3E", $fontColor="white" ,$legendText="External Service\neight sided")
+AddElementTag("gmail_ext_service", $shape=EightSidedShape(), $bgColor="#D93025", $fontColor="white" ,$legendText="External Service\neight sided")
+AddElementTag("storage", $shape=RoundedBoxShape(), $bgColor="#f29111", $fontColor="white", $legendText="Databases")
+AddElementTag("webSite", $shape=RoundedBoxShape(), $bgColor="#61DAFB", $fontColor="#333333", $legendText="Single-Page Application")
+AddElementTag("webApp", $shape=RoundedBoxShape(), $bgColor="#f06529", $fontColor="white", $legendText="Web Application")
+AddRelTag("external_rel", $lineColor="crimson",$legendText="API-Gateway relationships")
+AddRelTag("database_rel", $lineColor="dodgerblue",$legendText="Database Relationships")
+AddRelTag("s_rel", $lineColor="green",$legendText="Microservice Relationships")
+AddRelTag("email_rel", $lineColor="orange",$legendText="Email Relationships")
+
+SHOW_PERSON_OUTLINE()
+Person(shipmentReviewer, "Shipment Reviewer", "Moving Company Employee")
+Person(loadingCrew, "Loading Crew", "Anonymous loading crew")
+Person(customer, "Customer", "Customer overseeing the move")
+Person(movingEstimator, "Moving Estimator", "Company Estimator to estimates item value, estimates shipment cost and requests shipment")
+Person(driver, "Driver", "Company driver")
+rectangle " " as external{
+    rectangle " " as stack{
+    Container(auth, "Amazon Cognito Service", "SaaS", "AWS's Authentication systems.", $sprite="aws", $tags="amz_ext_service")
+    Container(email, "Gmail SMTP System", "Email Service", "The internal google emailing system.", $sprite="google", $tags="gmail_ext_service")
+    }
+}
+
+System_Boundary(movingexpress_boundaryContext, "Moving Express System") {
+    Container(application, "Wep Application", "HTML", "Delivers the static content for the Single Page Application.", $sprite="html5", $tags="webApp")
+    Container(webPage, "Single-Page Application", "JavaScript, REACT JS", "Provides a GUI interface that contains all the functionalities of the Spring boot application. Uses REACT Router to handle the multiple pages. Uses multiple npm libraries to display and format content.", $sprite="react",$tags="webSite")
+    Container(api, "API Application", "Spring boot: Java", "Provides shipment management functionality and information for the moving company Moving Express via JSON/HTTPS API.", $sprite="java", $tags="service")
+    ContainerDb(database, "Database", "MySQL", "Stores client data, shipment information and user contact details", $sprite="mysql", $tags="storage")
+}
+
+
+Rel(customer, application, "Visits https//:movingexpress.com using", "HTTPS", $tags="s_rel")
+Rel(customer, webPage,"Requests quotes, views shipments, generates observer codes, updates and inserts inventory", $tags="s_rel")
+Rel(application, webPage,"Delivers to the customers web page", $tags="s_rel")
+Rel(movingEstimator, application, "Creates shipment, estimates shipment price, estimates item price and inserts inventory and updates")
+Rel(movingEstimator, webPage, "Visits https//:movingexpress.com using", "HTTPS", $tags="s_rel")
+Rel(shipmentReviewer, application, "Reviews shipment and views quote requests.", $tags="s_rel")
+Rel(shipmentReviewer, webPage, "Visits https//:movingexpress.com using HTTPS", $tags="s_rel")
+Rel(loadingCrew, application, "Updates the inventory and views the inventiry", $tags="s_rel")
+Rel(loadingCrew, webPage, "Visits https//:movingexpress.com using HTTPS", $tags=s_rel")
+Rel(driver, application, "Gnerates shipment manifiest, gnerates observer codes and updates truck status/location", $tags="s_rel")
+Rel(driver, webPage, "Visits https//:movingexpress.com using HTTPS", $tags=s_rel")
+
+Rel(webPage, api, "Requests data from", "HTTPS/JSON", $tags="s_rel")
+
+Rel(api, email, "Send Email Using", "SMTP", $tags="external_rel")
+Rel(email, customer, "Sends email to","SMTP", $tags="email_rel")
+Rel(email, driver, "Sends email to","SMTP", $tags="email_rel")
+Rel(email, movingEstimator, "Sends email to","SMTP", $tags="email_rel")
+Rel(email, shipmentReviewer, "Sends email to","SMTP", $tags="email_rel")
+Rel(email, loadingCrew, "Sends email to","SMTP", $tags="email_rel")
+Rel_L(api, auth, "Authenticates users using", "0Auth2", $tags="external_rel")
+Rel_L(api, database, "Reads and writes via SQL/TCP", "JDBC", $tags="database_rel")
+
+api -[hidden]-> email
+api -[hidden]-> auth
+email -[hidden]-> auth
+api -[hidden]> email
+api -[hidden]> auth
+
+SHOW_LEGEND()
+
+@enduml
