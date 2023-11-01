@@ -19,8 +19,8 @@ skinparam rectangle {
 
 
 AddElementTag("service", $shape=EightSidedShape(), $bgColor="#557C99", $fontColor="white", $legendText="Service\neight sided")
-AddElementTag("amz_ext_service", $shape=EightSidedShape(), $bgColor="#232F3E", $fontColor="white" ,$legendText="External Service\neight sided")
-AddElementTag("gmail_ext_service", $shape=EightSidedShape(), $bgColor="#D93025", $fontColor="white" ,$legendText="External Service\neight sided")
+AddElementTag("amz_ext_service", $shape=EightSidedShape(), $bgColor="Gray", $fontColor="white" ,$legendText="External Service\neight sided")
+AddElementTag("gmail_ext_service", $shape=EightSidedShape(), $bgColor="Gray", $fontColor="white" ,$legendText="External Service\neight sided")
 AddElementTag("storage", $shape=RoundedBoxShape(), $bgColor="#f29111", $fontColor="white", $legendText="Databases")
 AddElementTag("webSite", $shape=RoundedBoxShape(), $bgColor="#61DAFB", $fontColor="#333333", $legendText="Single-Page Application")
 AddElementTag("webApp", $shape=RoundedBoxShape(), $bgColor="#f06529", $fontColor="white", $legendText="Web Application")
@@ -79,7 +79,7 @@ Rel_L(api, database, "Reads and writes via SQL/TCP", "JDBC", $tags="database_rel
 
 api -[hidden]-> email
 api -[hidden]-> auth
-email -[hidden]-> auth
+email -[hidden]> auth
 api -[hidden]> email
 api -[hidden]> auth
 
