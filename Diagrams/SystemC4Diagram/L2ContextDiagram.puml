@@ -10,7 +10,7 @@
 !define DEVICONS2 https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons2
 !include DEVICONS2/google.puml
 !include DEVICONS2/npm_original_wordmark.puml
-!define RECTANGLE_BORDER_COLOR white 
+!define RECTANGLE_BORDER_COLOR white
 
 skinparam rectangle {
     BorderColor <<RECTANGLE_BORDER_COLOR>>
@@ -33,7 +33,7 @@ AddRelTag("render_rel", $lineColor="Pink",$legendText="Rendering Relationships")
 
 SHOW_PERSON_OUTLINE()
 Person(shipmentReviewer, "Shipment Reviewer", "Moving Company Employee")
-Person(loadingCrew, "Loading Crew", "Anonymous loading crew")
+Person(movingCrew, "Moving Crew", "Moving crew")
 Person(customer, "Customer", "Customer overseeing the move")
 Person(movingEstimator, "Moving Estimator", "Company Estimator to estimates item value, estimates shipment cost and requests shipment")
 Person(driver, "Driver", "Company driver")
@@ -60,9 +60,9 @@ Rel(movingEstimator, staticPage, "Creates shipment, estimates shipment price, es
 Rel(movingEstimator, webPage, "Visits https//:movingexpress.com using", "HTTPS", $tags="u_rel")
 Rel(shipmentReviewer, staticPage, "Reviews shipment and views quote requests.", $tags="u_rel")
 Rel(shipmentReviewer, webPage, "Visits https//:movingexpress.com using HTTPS", $tags="u_rel")
-Rel(loadingCrew, staticPage, "Updates the inventory and views the inventiry", $tags="u_rel")
-Rel(loadingCrew, webPage, "Visits https//:movingexpress.com using HTTPS", $tags="u_rel")
-Rel(driver, staticPage, "Gnerates shipment manifiest, gnerates observer codes and updates truck status/location", $tags="u_rel")
+Rel(movingCrew, staticPage, "Updates the inventory and views the inventory", $tags="u_rel")
+Rel(movingCrew, webPage, "Visits https//:movingexpress.com using HTTPS", $tags="u_rel")
+Rel(driver, staticPage, "Generates shipment manifest, generate moving crew code, updates truck status/location", $tags="u_rel")
 Rel(driver, webPage, "Visits https//:movingexpress.com using HTTPS", $tags="u_rel")
 Rel(staticPage, webPage, "Delivers to the browser", $tags="render_rel")
 
@@ -73,7 +73,7 @@ Rel(customer, email , "Sends email to","SMTP", $tags="email_rel")
 Rel(driver, email,  "Sends email to","SMTP", $tags="email_rel")
 Rel(movingEstimator, email, "Sends email to","SMTP", $tags="email_rel")
 Rel(shipmentReviewer, email,  "Sends email to","SMTP", $tags="email_rel")
-Rel(loadingCrew, email,  "Sends email to","SMTP", $tags="email_rel")
+Rel(movingCrew, email,  "Sends email to","SMTP", $tags="email_rel")
 Rel_L(api, auth, "Authenticates users using", "0Auth2", $tags="external_rel")
 Rel_L(api, database, "Reads and writes via SQL/TCP", "JDBC", $tags="database_rel")
 
