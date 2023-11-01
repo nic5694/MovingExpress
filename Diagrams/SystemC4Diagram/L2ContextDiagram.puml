@@ -45,7 +45,7 @@ rectangle " " as external{
 
 System_Boundary(movingexpress_boundaryContext, "Moving Express System") {
     Container(application, "Wep Application", "HTML", "Delivers the static content for the Single Page Application.", $sprite="html5", $tags="webApp")
-    Container(webPage, "Single-Page Application", "JavaScript, REACT JS", "Provides a GUI interface that contains all the functionalities of the Spring boot application. Uses REACT Router to handle the multiple pages. Uses multiple npm libraries to display and format content.", $sprite="react",$tags="webSite")
+    Container(webPage, "Single-Page Application", "JavaScript, REACT JS", "Provides a GUI interface that contains all the functionalities of the Spring boot application. Uses React Router framework to handle the multiple pages. Uses multiple npm libraries to display and format content.", $sprite="react",$tags="webSite")
     Container(api, "API Application", "Spring boot: Java", "Provides shipment management functionality and information for the moving company Moving Express via JSON/HTTPS API.", $sprite="java", $tags="service")
     ContainerDb(database, "Database", "MySQL", "Stores client data, shipment information and user contact details", $sprite="mysql", $tags="storage")
 }
@@ -54,7 +54,7 @@ System_Boundary(movingexpress_boundaryContext, "Moving Express System") {
 Rel(customer, application, "Visits https//:movingexpress.com using", "HTTPS", $tags="u_rel")
 Rel(customer, webPage,"Requests quotes, views shipments, generates observer codes, updates and inserts inventory", $tags="u_rel")
 Rel(application, webPage,"Delivers to the customers web page", $tags="u_rel")
-Rel(movingEstimator, application, "Creates shipment, estimates shipment price, estimates item price and inserts inventory and updates")
+Rel(movingEstimator, application, "Creates shipment, estimates shipment price, estimates item price and inserts inventory and updates", $tags="u_rel")
 Rel(movingEstimator, webPage, "Visits https//:movingexpress.com using", "HTTPS", $tags="u_rel")
 Rel(shipmentReviewer, application, "Reviews shipment and views quote requests.", $tags="u_rel")
 Rel(shipmentReviewer, webPage, "Visits https//:movingexpress.com using HTTPS", $tags="u_rel")
