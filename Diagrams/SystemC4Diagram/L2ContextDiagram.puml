@@ -26,7 +26,8 @@ AddElementTag("webSite", $shape=RoundedBoxShape(), $bgColor="#61DAFB", $fontColo
 AddElementTag("webApp", $shape=RoundedBoxShape(), $bgColor="#f06529", $fontColor="white", $legendText="Web Application")
 AddRelTag("external_rel", $lineColor="crimson",$legendText="API-Gateway relationships")
 AddRelTag("database_rel", $lineColor="dodgerblue",$legendText="Database Relationships")
-AddRelTag("s_rel", $lineColor="green",$legendText="Microservice Relationships")
+AddRelTag("u_rel", $lineColor="green",$legendText="User Interactions")
+AddRelTag("a_rel", $lineColor="Gray",$legendText="Application Relationships")
 AddRelTag("email_rel", $lineColor="orange",$legendText="Email Relationships")
 
 SHOW_PERSON_OUTLINE()
@@ -50,19 +51,19 @@ System_Boundary(movingexpress_boundaryContext, "Moving Express System") {
 }
 
 
-Rel(customer, application, "Visits https//:movingexpress.com using", "HTTPS", $tags="s_rel")
-Rel(customer, webPage,"Requests quotes, views shipments, generates observer codes, updates and inserts inventory", $tags="s_rel")
-Rel(application, webPage,"Delivers to the customers web page", $tags="s_rel")
+Rel(customer, application, "Visits https//:movingexpress.com using", "HTTPS", $tags="u_rel")
+Rel(customer, webPage,"Requests quotes, views shipments, generates observer codes, updates and inserts inventory", $tags="u_rel")
+Rel(application, webPage,"Delivers to the customers web page", $tags="u_rel")
 Rel(movingEstimator, application, "Creates shipment, estimates shipment price, estimates item price and inserts inventory and updates")
-Rel(movingEstimator, webPage, "Visits https//:movingexpress.com using", "HTTPS", $tags="s_rel")
-Rel(shipmentReviewer, application, "Reviews shipment and views quote requests.", $tags="s_rel")
-Rel(shipmentReviewer, webPage, "Visits https//:movingexpress.com using HTTPS", $tags="s_rel")
-Rel(loadingCrew, application, "Updates the inventory and views the inventiry", $tags="s_rel")
-Rel(loadingCrew, webPage, "Visits https//:movingexpress.com using HTTPS", $tags=s_rel")
-Rel(driver, application, "Gnerates shipment manifiest, gnerates observer codes and updates truck status/location", $tags="s_rel")
-Rel(driver, webPage, "Visits https//:movingexpress.com using HTTPS", $tags=s_rel")
+Rel(movingEstimator, webPage, "Visits https//:movingexpress.com using", "HTTPS", $tags="u_rel")
+Rel(shipmentReviewer, application, "Reviews shipment and views quote requests.", $tags="u_rel")
+Rel(shipmentReviewer, webPage, "Visits https//:movingexpress.com using HTTPS", $tags="u_rel")
+Rel(loadingCrew, application, "Updates the inventory and views the inventiry", $tags="u_rel")
+Rel(loadingCrew, webPage, "Visits https//:movingexpress.com using HTTPS", $tags="u_rel")
+Rel(driver, application, "Gnerates shipment manifiest, gnerates observer codes and updates truck status/location", $tags="u_rel")
+Rel(driver, webPage, "Visits https//:movingexpress.com using HTTPS", $tags="u_rel")
 
-Rel(webPage, api, "Requests data from", "HTTPS/JSON", $tags="s_rel")
+Rel(webPage, api, "Requests data from", "HTTPS/JSON", $tags="a_rel")
 
 Rel(api, email, "Send Email Using", "SMTP", $tags="external_rel")
 Rel(email, customer, "Sends email to","SMTP", $tags="email_rel")
