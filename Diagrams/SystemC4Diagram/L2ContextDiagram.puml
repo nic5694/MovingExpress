@@ -37,6 +37,7 @@ Person(loadingCrew, "Loading Crew", "Anonymous loading crew")
 Person(customer, "Customer", "Customer overseeing the move")
 Person(movingEstimator, "Moving Estimator", "Company Estimator to estimates item value, estimates shipment cost and requests shipment")
 Person(driver, "Driver", "Company driver")
+
 rectangle " " as external{
     rectangle " " as stack{
     Container(auth, "Amazon Cognito Service", "SaaS", "AWS's Authentication systems.", $sprite="aws", $tags="amz_ext_service")
@@ -68,11 +69,11 @@ Rel(staticPage, webPage, "Delivers to the browser", $tags="render_rel")
 Rel(webPage, api, "Requests data from", "HTTPS/JSON", $tags="a_rel")
 
 Rel(api, email, "Send Email Using", "SMTP", $tags="external_rel")
-Rel(email, customer, "Sends email to","SMTP", $tags="email_rel")
-Rel(email, driver, "Sends email to","SMTP", $tags="email_rel")
-Rel(email, movingEstimator, "Sends email to","SMTP", $tags="email_rel")
-Rel(email, shipmentReviewer, "Sends email to","SMTP", $tags="email_rel")
-Rel(email, loadingCrew, "Sends email to","SMTP", $tags="email_rel")
+Rel(customer, email , "Sends email to","SMTP", $tags="email_rel")
+Rel(driver, email,  "Sends email to","SMTP", $tags="email_rel")
+Rel(movingEstimator, email, "Sends email to","SMTP", $tags="email_rel")
+Rel(shipmentReviewer, email,  "Sends email to","SMTP", $tags="email_rel")
+Rel(loadingCrew, email,  "Sends email to","SMTP", $tags="email_rel")
 Rel_L(api, auth, "Authenticates users using", "0Auth2", $tags="external_rel")
 Rel_L(api, database, "Reads and writes via SQL/TCP", "JDBC", $tags="database_rel")
 
