@@ -1,0 +1,85 @@
+@startuml
+
+!define TABLE(name) class name << (T,#FFAAAA) >>
+!define PRIMARY_KEY(field) field << PK >>
+!define FOREIGN_KEY(field) field << FK >>
+
+skinparam class {
+    BackgroundColor #f7f4eb
+    BorderColor Black
+}
+
+skinparam classAttribute {
+    BackgroundColor #f7f4eb
+    BorderColor Black
+}
+
+rectangle "MySQL" as BoundedContextMySQL #line.dashed {
+
+    package "Customer Sub Domain" {
+        TABLE(Customer) {
+            PRIMARY_KEY(customerId) INT AUTO_INCREMENT
+            firstName VARCHAR(255)
+            lastName VARCHAR(255)
+            email VARCHAR(255)
+            phoneNumber VARCHAR(15)
+        }
+    }
+
+    package "Inventory Sub Domain" {
+        TABLE(Truck) {
+            PRIMARY_KEY(VIN) VARCHAR(255)
+            capacity INT
+        }
+
+        TABLE(Inventory) {
+            PRIMARY_KEY(inventoryId) INT AUTO_INCREMENT
+            boxList TEXT
+            description TEXT
+        }
+
+        TABLE(Item) {
+            PRIMARY_KEY(itemId) INT AUTO_INCREMENT
+            price DECIMAL(10, 2)
+            picture TEXT
+            handlingInstructions TEXT
+        }
+    }
+
+    package "Moving Express" {
+        TABLE(Shipment) {
+            PRIMARY_KEY(shipmentId) INT AUTO_INCREMENT
+            shipmentStatus VARCHAR(255)
+            shipmentDepartureAddress TEXT
+            shipmentArrivalAddress TEXT
+            FOREIGN_KEY(truckIdentifier) VARCHAR(255)
+            movingCrews TEXT
+            FOREIGN_KEY(customerId) INT
+        }
+
+        TABLE(MovingCrew) {
+            PRIMARY_KEY(crewId) INT AUTO_INCREMENT
+            type VARCHAR(255)
+            movers TEXT
+        }
+
+        TABLE(Mover) {
+            PRIMARY_KEY(moverId) INT AUTO_INCREMENT
+            firstName VARCHAR(255)
+            lastName VARCHAR(255)
+            email VARCHAR(255)
+        }
+
+        TABLE(Driver) {
+            PRIMARY_KEY(driverId) INT AUTO_INCREMENT
+            firstName VARCHAR(255)
+            lastName VARCHAR(255)
+            email VARCHAR(255)
+            FOREIGN_KEY(shipmentId) INT
+        }
+    }
+
+    Customer "1" -- "0..n" Shipment : has
+    Truck "1" -- "0..n" Shipment : uses
+
+@enduml
