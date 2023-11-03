@@ -16,7 +16,6 @@ skinparam classAttribute {
 
 rectangle "MySQL" as BoundedContextMySQL #line.dashed {
 
-    package "Customer Sub Domain" {
         TABLE(Customer) {
             PRIMARY_KEY(customerId) INT AUTO_INCREMENT
             firstName VARCHAR(255)
@@ -24,9 +23,7 @@ rectangle "MySQL" as BoundedContextMySQL #line.dashed {
             email VARCHAR(255)
             phoneNumber VARCHAR(15)
         }
-    }
 
-    package "Inventory Sub Domain" {
         TABLE(Truck) {
             PRIMARY_KEY(VIN) VARCHAR(255)
             capacity INT
@@ -34,33 +31,45 @@ rectangle "MySQL" as BoundedContextMySQL #line.dashed {
 
         TABLE(Inventory) {
             PRIMARY_KEY(inventoryId) INT AUTO_INCREMENT
-            boxList TEXT
-            description TEXT
+            description VARCHAR(255)
         }
 
         TABLE(Item) {
             PRIMARY_KEY(itemId) INT AUTO_INCREMENT
             price DECIMAL(10, 2)
-            picture TEXT
-            handlingInstructions TEXT
+            picture BLOB
+            handlingInstructions VARCHAR(255)
+            FOREIGN_KEY(inventoryId) INT
         }
-    }
 
-    package "Moving Express" {
+        TABLE(Box) {
+            PRIMARY_KEY(boxId) INT AUTO_INCREMENT
+            picture BLOB
+            description VARCHAR(50)
+            handlingInstructions VARCHAR(255)
+            FOREIGN_KEY(inventoryId) INT
+        }
+
+        TABLE(Quote){
+            PRIMARY_KEY(quoteId) INT AUTO_INCREMENT
+            FOREIGN_KEY(customerId) INT
+            pickUpLocation VARCHAR(50)
+            dropOffDestination VARCHAR(50)
+        }
+
         TABLE(Shipment) {
             PRIMARY_KEY(shipmentId) INT AUTO_INCREMENT
             shipmentStatus VARCHAR(255)
-            shipmentDepartureAddress TEXT
-            shipmentArrivalAddress TEXT
+            shipmentDepartureAddress VARCHAR(255)
+            shipmentArrivalAddress VARCHAR(255)
             FOREIGN_KEY(truckIdentifier) VARCHAR(255)
-            movingCrews TEXT
             FOREIGN_KEY(customerId) INT
         }
 
         TABLE(MovingCrew) {
             PRIMARY_KEY(crewId) INT AUTO_INCREMENT
             type VARCHAR(255)
-            movers TEXT
+            FOREIGN_KEY(shipmentId) INT
         }
 
         TABLE(Mover) {
@@ -68,6 +77,7 @@ rectangle "MySQL" as BoundedContextMySQL #line.dashed {
             firstName VARCHAR(255)
             lastName VARCHAR(255)
             email VARCHAR(255)
+            FOREIGN_KEY(movingCrewId) INT
         }
 
         TABLE(Driver) {
@@ -77,9 +87,43 @@ rectangle "MySQL" as BoundedContextMySQL #line.dashed {
             email VARCHAR(255)
             FOREIGN_KEY(shipmentId) INT
         }
-    }
 
-    Customer "1" -- "0..n" Shipment : has
-    Truck "1" -- "0..n" Shipment : uses
+        TABLE(ShipmentReviewer) {
+            PRIMARY_KEY(shipmentReviewerId) INT AUTO_INCREMENT
+            firstName VARCHAR(255)
+            lastName VARCHAR(255)
+            email VARCHAR(255)
+        }
+
+        TABLE(Observer) {
+            PRIMARY_KEY(observerId) INT AUTO_INCREMENT
+            firstName VARCHAR(255)
+            lastName VARCHAR(255)
+            FOREIGN_KEY(shipmentId) INT
+        }
+
+        TABLE(Report) {
+            PRIMARY_KEY(reportId) INT AUTO_INCREMENT
+            name VARCHAR(50)
+            type VARCHAR(50)
+            date DATETIME
+            validity DATETIME
+        }
+}
+
+    Customer ||--|{ Shipment
+    Truck ||--o{ Shipment
+    Shipment ||--o{ MovingCrew
+    MovingCrew ||--o{ Mover
+    Shipment ||--o{ Observer
+    Shipment ||--o{ ShipmentReviewer
+    Driver ||--|| Truck
+    Inventory ||--o{ Box
+    Inventory ||--o{ Item
+    Box ||--o{ Item
+    Customer ||--o| Report
+    Observer ||--o| Report
+    Driver ||--|{ Report
+    Shipment ||--|{ Inventory
 
 @enduml
