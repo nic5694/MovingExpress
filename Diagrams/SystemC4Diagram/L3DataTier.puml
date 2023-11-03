@@ -14,7 +14,7 @@ skinparam classAttribute {
     BorderColor Black
 }
 
-rectangle "MySQL" as BoundedContextMySQL #line.dashed {
+Database "MySQL" as BoundedContextMySQL #f29111 {
 
     package "Customer Sub Domain" {
         TABLE(Customer) {

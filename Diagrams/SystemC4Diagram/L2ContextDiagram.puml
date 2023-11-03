@@ -47,7 +47,7 @@ rectangle " " as external{
 
 System_Boundary(movingexpress_boundaryContext, "Moving Express System") {
     Container(staticPage, "Wep Application", "HTML", "Delivers the static content for the Single Page Application.", $sprite="html5", $tags="webApp")
-    Container(webPage, "Single-Page Application", "JavaScript, REACT JS", "Provides a GUI interface that contains all the functionalities of the Spring boot application. Uses React Router framework to handle the multiple pages. Uses multiple npm libraries to display and format content.", $sprite="react",$tags="webSite")
+    Container(webPage, "Single-Page Application", "JavaScript, ReactJs", "Provides a GUI interface that contains all the functionalities of the Spring boot application. Uses React Router framework to handle the multiple pages. Uses multiple npm libraries to display and format content.", $sprite="react",$tags="webSite")
     Container(api, "Moving Express API", "Spring boot: Java", "Provides shipment management functionality and information for the moving company Moving Express via JSON/HTTPS API.", $sprite="java", $tags="service")
     ContainerDb(database, "Database", "MySQL", "Stores client data, shipment information and user contact details", $sprite="mysql", $tags="storage")
 }
@@ -68,18 +68,18 @@ Rel(staticPage, webPage, "Delivers to the browser", $tags="render_rel")
 
 Rel(webPage, api, "Requests data from", "HTTPS/JSON", $tags="a_rel")
 
-Rel(api, email, "Send Email Using", "SMTP", $tags="external_rel")
-Rel(customer, email , "Sends email to","SMTP", $tags="email_rel")
-Rel(driver, email,  "Sends email to","SMTP", $tags="email_rel")
-Rel(movingEstimator, email, "Sends email to","SMTP", $tags="email_rel")
-Rel(shipmentReviewer, email,  "Sends email to","SMTP", $tags="email_rel")
-Rel(movingCrew, email,  "Sends email to","SMTP", $tags="email_rel")
+Rel(email, api, "Send Email Using", "SMTP", $tags="external_rel")
+Rel(email,customer, "Sends email to","SMTP", $tags="email_rel")
+Rel(email, driver,  "Sends email to","SMTP", $tags="email_rel")
+Rel(email, movingEstimator, "Sends email to","SMTP", $tags="email_rel")
+Rel(email, shipmentReviewer,  "Sends email to","SMTP", $tags="email_rel")
+Rel(email, movingCrew,  "Sends email to","SMTP", $tags="email_rel")
 Rel_L(api, auth, "Authenticates users using", "0Auth2", $tags="external_rel")
 Rel_L(api, database, "Reads and writes via SQL/TCP", "JDBC", $tags="database_rel")
 
 api -[hidden]-> email
 api -[hidden]-> auth
-email -[hidden]> auth
+email -[hidden]-> auth
 api -[hidden]> email
 api -[hidden]> auth
 

@@ -1,0 +1,64 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!include DEVICONS/java.puml
+!include DEVICONS/mysql.puml
+!include DEVICONS/react.puml
+!include DEVICONS/html5.puml
+!include DEVICONS/aws.puml
+!define DEVICONS2 https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons2
+!include DEVICONS2/google.puml
+!include DEVICONS2/npm_original_wordmark.puml
+!include DEVICONS2/typescript.puml
+!include DEVICONS2/javascript.puml
+
+AddElementTag("service", $shape=square(), $bgColor="#557C99", $fontColor="white", $legendText="Service\square")
+AddElementTag("ext_service", $shape=sqaure(), $bgColor="Gray", $fontColor="white" ,$legendText="External Service\square")
+AddElementTag("SPA", $shape=RoundedBoxShape(), $bgColor="#61DAFB", $fontColor="#333333", $legendText="Single-Page Application")
+Container(auth, "Amazon Cognito Service", "SaaS", "AWS's Authentication systems.", $sprite="aws", $tags="ext_service")
+Container(email, "Gmail SMTP System", "Email Service", "The internal google emailing system.", $sprite="google", $tags="ext_service")
+
+Container(singlePageApp, "Single-Page Application", "JavaScript, ReactJs", "Proivdes all the moving system's functionality to the customers via their web browser.", $sprite="react", $tags="SPA")
+Rectangle "API" as API #line.dashed{
+    Container(securityFilter, "Security Filter", "Component: Spring Security Filter", "Filters all API requests.", $sprite="java", $tags="service")
+    Package "Customer"{
+        Container(customerController, "Customer Controller", "Component: Spring Boot REST Controller", "Provides customers with the ability to manage their account.", $sprite="java", $tags="service")
+        Container(customerService, "CustomerService", "Component: Sprint Boot Service" ,"Provides the functionalities to get, update, create and delete.", $sprite="java", $tags="service")
+        Container(customerRepository, "Customer Repository","Component: JPA Repository", "Makes requests to the database to fetch or update data.", $sprite="java", $tags="service")
+        customerController -[dashed]-> customerService : "**uses**"
+        customerService -[dashed]-> customerRepository : "**uses**"
+    }
+    Package "Inventory"{
+        Container(inventoryController, "Inventory Controller", "Component: Spring Boot REST Controller", "Provides customers with the ability to manage and view their inventories.", $sprite="java", $tags="service")
+        Container(inventoryService, "Inventory Service", "Component: Sprint Boot Service","Provides the functionalities to get, update, create and delete.", $sprite="java", $tags="service")
+        Container(inventoryRepository, "Inventory Repository","Component: JPA Repository", "Makes requests to the database to fetch or update data.", $sprite="java", $tags="service")
+        inventoryController -[dashed]-> inventoryService: "**uses**"
+        inventoryService -[dashed]-> inventoryRepository: "**uses**"
+    }
+    Package "Shipment"{
+        Container(shipmentController, "Shipment Controller", "Component: Spring Boot REST Controller", "Provides customers with the ability to manage and view their shipments.", $sprite="java", $tags="service")
+        Container(shipmentService, "ShipmentService","Component: Sprint Boot Service","Provides the functionalities to get, update, create and delete.", $sprite="java", $tags="service")
+        Container(shipmentRepository, "ShipmentRepository","Component: JPA Repository","Makes requests to the database to fetch or update data.", $sprite="java", $tags="service")
+        shipmentController -[dashed]-> shipmentService: "**uses**"
+        shipmentService -[dashed]-> shipmentRepository: "**uses**"
+    }
+    Package "Configuration"{
+        Package "Security"{
+            Container(springSecurityConfig, "Spring Security Configuration", "Component: Spring Boot Configuration Bean", "Configures Amazon Cognito usage in the system.", $sprite="java", $tags="service")
+            springSecurityConfig -[dashed]-> auth: "**Uses**\n[HTTPS/JSON]"
+        }
+        securityFilter -[dashed]-> springSecurityConfig: "**Is Configured by**"
+    }
+    Package "Notification Service"{
+        Container(notificationService, "Spring Notification Service", "Sends notification email to target adress.", $sprite="java", $tags="service")
+        notificationService -[dashed]-> email : "**Sends email using**\n[SMTP/TCP/IP]"
+    }
+        securityFilter -[dashed]-> inventoryController: "**Direct Request**"
+        securityFilter -[dashed]-> customerController: "**Direct Request**"
+        securityFilter -[dashed]-> shipmentController: "**Direct Request**"
+        shipmentService -[dashed]-> notificationService: "**uses**"
+        customerService -[dashed]-> notificationService: "**uses**"
+}
+singlePageApp -[dashed]-> securityFilter : "**Makes API calls to**\n[HTTPS/JSON]"
+SHOW_LEGEND()
+@enduml
