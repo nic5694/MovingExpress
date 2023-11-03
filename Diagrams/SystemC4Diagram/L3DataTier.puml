@@ -27,6 +27,7 @@ Database "MySQL" as BoundedContextMySQL #f29111 {
         TABLE(Truck) {
             PRIMARY_KEY(VIN) VARCHAR(255)
             capacity INT
+            trailerVIN VARCHAR(255)
         }
 
         TABLE(Inventory) {
@@ -112,10 +113,10 @@ Database "MySQL" as BoundedContextMySQL #f29111 {
 }
 
     Customer ||--|{ Shipment
-    Truck ||--o{ Shipment
+    Truck }|--|| Shipment
     Shipment ||--|{ MovingCrew
     MovingCrew ||--|{ Mover
-    Driver ||--|| Shipment
+    Driver }|--|| Shipment
     Shipment ||--o{ Observer
     Shipment ||--|{ ShipmentReviewer
     Driver ||--|| Truck
@@ -123,7 +124,6 @@ Database "MySQL" as BoundedContextMySQL #f29111 {
     Inventory ||--o{ Item
     Box ||--o{ Item
     Customer ||--o| Report
-    Observer ||--o| Report
     Driver ||--|{ Report
     Shipment ||--|{ Inventory
     Customer ||--|{ Quote
