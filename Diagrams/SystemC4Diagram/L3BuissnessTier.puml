@@ -53,6 +53,9 @@ Rectangle "API" as API #line.dashed{
         Container(notificationService, "Spring Notification Service", "Sends notification email to target adress.", $sprite="java", $tags="service")
         notificationService -[dashed]-> email : "**Sends email using**\n[SMTP/TCP/IP]"
     }
+    Package "Reports Service" {
+        Container(reportsService, "Spring Reports Service", "Component: Spring Reports Service", "Generates spwcific reports.", $sprite="java", $tags="service")
+    }
         securityFilter -[dashed]-> inventoryController: "**Direct Request**"
         securityFilter -[dashed]-> customerController: "**Direct Request**"
         securityFilter -[dashed]-> shipmentController: "**Direct Request**"

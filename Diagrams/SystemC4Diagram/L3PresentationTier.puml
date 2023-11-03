@@ -7,6 +7,7 @@
 !include DEVICONS/react.puml
 !include DEVICONS/html5.puml
 !include DEVICONS/aws.puml
+!include DEVICONS/javascript.puml
 !define DEVICONS2 https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons2
 !include DEVICONS2/google.puml
 !include DEVICONS2/npm_original_wordmark.puml
@@ -19,23 +20,24 @@ skinparam rectangle {
 AddElementTag("webApp", $shape=RoundedBoxShape(), $bgColor="#f06529", $fontColor="white", $legendText="Web Application")
 AddElementTag("webSite", $shape=RoundedBoxShape(), $bgColor="#61DAFB", $fontColor="#333333", $legendText="Single-Page Application")
 AddElementTag("library", $shape=RoundedBoxShape(), $bgColor="#82A5AA", $fontColor="white", $legendText="Libraries")
+AddElementTag("service", $shape=square(), $bgColor="#557C99", $fontColor="white", $legendText="Service\square")
 AddRelTag("a_rel", $lineColor="Gray",$legendText="Application Relationships")
 
-System_Boundary(ReactApplication, "Moving Express") {
+System_Boundary(ReactApplication, "ReactApplication") {
     Container(index, "Index Page", "HTML", "The entry point to the React Application.", $sprite="html5", $tags="webApp")
 
     rectangle "Components" as Components {
-        Container(landingpage, "Landing Page", "React JS", "Displays the landing page of the application.", $sprite="react", $tags="webSite")
-        Container(signuppage, "Signup Page", "React JS", "Handles user registration.", $sprite="react", $tags="webSite")
-        Container(loginpage, "Login Page", "React JS", "Handles user login.", $sprite="react", $tags="webSite")
-        Container(userhomepage, "User Home Page", "React JS", "Displays user dashboard.", $sprite="react", $tags="webSite")
-        Container(shipmentquote, "Shipment Quote", "React JS", "Provides shipment quotations.", $sprite="react", $tags="webSite")
-        Container(profilepage, "Profile Page", "React JS", "Manages user profile.", $sprite="react", $tags="webSite")
-        Container(contactuspage, "Contact Us Page", "React JS", "Provides contact information.", $sprite="react", $tags="webSite")
-        Container(shipmentspage, "Shipments Page", "React JS", "Displays all shipments.", $sprite="react", $tags="webSite")
-        Container(shipmentdetails, "Shipment Details", "React JS", "Provides detailed view of shipments.", $sprite="react", $tags="webSite")
-        Container(shipmentreviewer, "Shipment Reviewer", "React JS", "Reviews shipment details.", $sprite="react", $tags="webSite")
-        Container(shipmentestimator, "Shipment Estimator", "React JS", "Estimates shipment costs.", $sprite="react", $tags="webSite")
+        Container(landingpage, "Landing Page", "React JS", "Displays the landing page of the application.", $sprite="javascript", $tags="webSite")
+        Container(signuppage, "Signup Page", "React JS", "Handles user registration.", $sprite="javascript", $tags="webSite")
+        Container(loginpage, "Login Page", "React JS", "Handles user login.", $sprite="javascript", $tags="webSite")
+        Container(userhomepage, "User Home Page", "React JS", "Displays user dashboard.", $sprite="javascript", $tags="webSite")
+        Container(shipmentquote, "Shipment Quote", "React JS", "Provides shipment quotations.", $sprite="javascript", $tags="webSite")
+        Container(profilepage, "Profile Page", "React JS", "Manages user profile.", $sprite="javascript", $tags="webSite")
+        Container(contactuspage, "Contact Us Page", "React JS", "Provides contact information.", $sprite="javascript", $tags="webSite")
+        Container(shipmentspage, "Shipments Page", "React JS", "Displays all shipments.", $sprite="javascript", $tags="webSite")
+        Container(shipmentdetails, "Shipment Details", "React JS", "Provides detailed view of shipments.", $sprite="javascript", $tags="webSite")
+        Container(shipmentreviewer, "Shipment Reviewer", "React JS", "Reviews shipment details.", $sprite="javascript", $tags="webSite")
+        Container(shipmentestimator, "Shipment Estimator", "React JS", "Estimates shipment costs.", $sprite="javascript", $tags="webSite")
     }
 
     rectangle "Libraries" as Libraries {
@@ -44,6 +46,9 @@ System_Boundary(ReactApplication, "Moving Express") {
     }
 
 
+}
+rectangle "Services" as Services {
+    Container(movingExpress, "Moving Express", "", "Main endpoint for HTTP requests.", $tags="service", $sprite="java")
 }
 
 Rel(index, landingpage, "Starts with", $tags="a_rel")
@@ -65,13 +70,7 @@ Rel(shipmentdetails, userhomepage, "Back to shipments", $tags="a_rel")
 Rel(profilepage, userhomepage, "Back to home", $tags="a_rel")
 Rel(userhomepage, contactuspage, "Seeks support", $tags="a_rel")
 Rel(shipmentspage, profilepage, "Navigates to profile", $tags="a_rel")
-
 Rel(reactRouter, landingpage, "Handles navigation for", $tags="render_rel")
-
-rectangle "Services" as Services {
-    Container(movingExpress, "Moving Express", "Service", "Handles all backend operations.")
-}
-
 Rel(loginpage, movingExpress, "Makes login request to", $tags="a_rel")
 Rel(signuppage, movingExpress, "Makes signup request to", $tags="a_rel")
 Rel(shipmentspage, movingExpress, "Fetches shipment data from", $tags="a_rel")
@@ -86,9 +85,7 @@ Rel(shipmentdetails, axios, "Uses for HTTP requests", $tags="library_rel")
 Rel(profilepage, axios, "Uses for HTTP requests", $tags="library_rel")
 Rel(shipmentestimator, axios, "Uses for HTTP requests", $tags="library_rel")
 
-rectangle "Services" as Services {
-    Container(movingExpress, "Moving Express", "", "Main endpoint for HTTP requests.")
-}
+
 
 SHOW_LEGEND()
 @enduml

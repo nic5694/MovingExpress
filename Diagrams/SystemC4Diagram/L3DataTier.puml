@@ -81,5 +81,4 @@ Database "MySQL" as BoundedContextMySQL #f29111 {
 
     Customer "1" -- "0..n" Shipment : has
     Truck "1" -- "0..n" Shipment : uses
-
 @enduml
