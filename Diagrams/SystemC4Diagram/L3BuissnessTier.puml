@@ -62,6 +62,10 @@ Rectangle "API" as API #line.dashed{
         shipmentService -[dashed]-> notificationService: "**uses**"
         customerService -[dashed]-> notificationService: "**uses**"
 }
+ContainerDb(database, "Database", "MySQL", "Stores client data, shipment information and user contact details", $sprite="mysql", $tags="storage")
+inventoryRepository -[dashed]-> database: "**Makes calls via**\n[SQL/TCP]"
+shipmentRepository -[dashed]-> database: "**Makes calls via**\n[SQL/TCP]"
+customerRepository -[dashed]-> database: "**Makes calls via**\n[SQL/TCP]"
 singlePageApp -[dashed]-> securityFilter : "**Makes API calls to**\n[HTTPS/JSON]"
 SHOW_LEGEND()
 @enduml
