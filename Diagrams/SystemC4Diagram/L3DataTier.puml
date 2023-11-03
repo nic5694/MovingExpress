@@ -113,10 +113,11 @@ Database "MySQL" as BoundedContextMySQL #f29111 {
 
     Customer ||--|{ Shipment
     Truck ||--o{ Shipment
-    Shipment ||--o{ MovingCrew
-    MovingCrew ||--o{ Mover
+    Shipment ||--|{ MovingCrew
+    MovingCrew ||--|{ Mover
+    Driver ||--|| Shipment
     Shipment ||--o{ Observer
-    Shipment ||--o{ ShipmentReviewer
+    Shipment ||--|{ ShipmentReviewer
     Driver ||--|| Truck
     Inventory ||--o{ Box
     Inventory ||--o{ Item
@@ -125,5 +126,7 @@ Database "MySQL" as BoundedContextMySQL #f29111 {
     Observer ||--o| Report
     Driver ||--|{ Report
     Shipment ||--|{ Inventory
+    Customer ||--|{ Quote
+    Mover ||--o| Report
 
 @enduml
