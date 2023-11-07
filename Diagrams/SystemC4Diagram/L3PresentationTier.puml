@@ -12,6 +12,8 @@
 !include DEVICONS2/google.puml
 !include DEVICONS2/npm_original_wordmark.puml
 !define RECTANGLE_BORDER_COLOR white
+!include DEVICONS2/tailwindcss.puml
+!include DEVICONS2/typescript_original_wordmark.puml
 
 skinparam rectangle {
     BorderColor <<RECTANGLE_BORDER_COLOR>>
@@ -27,22 +29,23 @@ System_Boundary(ReactApplication, "ReactApplication") {
     Container(index, "Index Page", "HTML", "The entry point to the React Application.", $sprite="html5", $tags="webApp")
 
     rectangle "Components" as Components {
-        Container(landingpage, "Landing Page", "React JS", "Displays the landing page of the application.", $sprite="javascript", $tags="webSite")
-        Container(signuppage, "Signup Page", "React JS", "Handles user registration.", $sprite="javascript", $tags="webSite")
-        Container(loginpage, "Login Page", "React JS", "Handles user login.", $sprite="javascript", $tags="webSite")
-        Container(userhomepage, "User Home Page", "React JS", "Displays user dashboard.", $sprite="javascript", $tags="webSite")
-        Container(shipmentquote, "Shipment Quote", "React JS", "Provides shipment quotations.", $sprite="javascript", $tags="webSite")
-        Container(profilepage, "Profile Page", "React JS", "Manages user profile.", $sprite="javascript", $tags="webSite")
-        Container(contactuspage, "Contact Us Page", "React JS", "Provides contact information.", $sprite="javascript", $tags="webSite")
-        Container(shipmentspage, "Shipments Page", "React JS", "Displays all shipments.", $sprite="javascript", $tags="webSite")
-        Container(shipmentdetails, "Shipment Details", "React JS", "Provides detailed view of shipments.", $sprite="javascript", $tags="webSite")
-        Container(shipmentreviewer, "Shipment Reviewer", "React JS", "Reviews shipment details.", $sprite="javascript", $tags="webSite")
-        Container(shipmentestimator, "Shipment Estimator", "React JS", "Estimates shipment costs.", $sprite="javascript", $tags="webSite")
+        Container(landingpage, "Landing Page", "TSX", "Displays the landing page of the application.", $sprite="typescript", $tags="webSite")
+        Container(signuppage, "Signup Page", "TSX", "Handles user registration.", $sprite="typescript", $tags="webSite")
+        Container(loginpage, "Login Page", "TSX", "Handles user login.", $sprite="typescript", $tags="webSite")
+        Container(userhomepage, "User Home Page", "TSX", "Displays user dashboard.", $sprite="typescript", $tags="webSite")
+        Container(shipmentquote, "Shipment Quote", "TSX", "Provides shipment quotations.", $sprite="typescript", $tags="webSite")
+        Container(profilepage, "Profile Page", "TSX", "Manages user profile.", $sprite="typescript", $tags="webSite")
+        Container(contactuspage, "Contact Us Page", "TSX", "Provides contact information.", $sprite="typescript", $tags="webSite")
+        Container(shipmentspage, "Shipments Page", "TSX", "Displays all shipments.", $sprite="typescript", $tags="webSite")
+        Container(shipmentdetails, "Shipment Details", "TSX", "Provides detailed view of shipments.", $sprite="typescript", $tags="webSite")
+        Container(shipmentreviewer, "Shipment Reviewer", "TSX", "Reviews shipment details.", $sprite="typescript", $tags="webSite")
+        Container(shipmentestimator, "Shipment Estimator", "TSX", "Estimates shipment costs.", $sprite="typescript", $tags="webSite")
     }
 
     rectangle "Libraries" as Libraries {
         Container(reactRouter, "React Router", "", "Library for handling routing in React applications.", $sprite="npm_original_wordmark", $tags="library")
         Container(axios, "Axios", "", "Library for making HTTP requests.", $sprite="npm_original_wordmark", $tags="library")
+        Container(tailwind, "Tailwind", "", "utility-first CSS framework that provides pre-defined, composable classes for rapidly styling web elements, allowing tha ability to build and customize user interfaces efficiently.", $sprite="tailwindcss", $tags="library")
     }
 
 
