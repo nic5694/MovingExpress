@@ -10,6 +10,7 @@
 !define DEVICONS2 https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons2
 !include DEVICONS2/google.puml
 !include DEVICONS2/npm_original_wordmark.puml
+!include DEVICONS2/nextjs_line.puml
 !define RECTANGLE_BORDER_COLOR white
 
 skinparam rectangle {
@@ -47,7 +48,7 @@ rectangle " " as external{
 
 System_Boundary(movingexpress_boundaryContext, "Moving Express System") {
     Container(staticPage, "Wep Application", "HTML", "Delivers the static content for the Single Page Application.", $sprite="html5", $tags="webApp")
-    Container(webPage, "Single-Page Application", "JavaScript, ReactJs", "Provides a GUI interface that contains all the functionalities of the Spring boot application. Uses React Router framework to handle the multiple pages. Uses multiple npm libraries to display and format content.", $sprite="react",$tags="webSite")
+    Container(webPage, "Single-Page Application", "TypeScript, NextJs", "Provides a GUI interface that contains all the functionalities of the Spring boot application. Uses React Router framework to handle the multiple pages. Uses multiple npm libraries to display and format content.", $sprite="react",$tags="webSite")
     Container(api, "Moving Express API", "Spring boot: Java", "Provides shipment management functionality and information for the moving company Moving Express via JSON/HTTPS API.", $sprite="java", $tags="service")
     ContainerDb(database, "Database", "MySQL", "Stores client data, shipment information and user contact details", $sprite="mysql", $tags="storage")
 }

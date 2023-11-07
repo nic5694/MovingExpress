@@ -15,6 +15,7 @@
 AddElementTag("service", $shape=square(), $bgColor="#557C99", $fontColor="white", $legendText="Service\square")
 AddElementTag("ext_service", $shape=sqaure(), $bgColor="Gray", $fontColor="white" ,$legendText="External Service\square")
 AddElementTag("SPA", $shape=RoundedBoxShape(), $bgColor="#61DAFB", $fontColor="#333333", $legendText="Single-Page Application")
+AddElementTag("storage", $shape=RoundedBoxShape(), $bgColor="#f29111", $fontColor="white", $legendText="Databases")
 Container(auth, "Amazon Cognito Service", "SaaS", "AWS's Authentication systems.", $sprite="aws", $tags="ext_service")
 Container(email, "Gmail SMTP System", "Email Service", "The internal google emailing system.", $sprite="google", $tags="ext_service")
 
@@ -34,6 +35,7 @@ Rectangle "API" as API #line.dashed{
         Container(inventoryRepository, "Inventory Repository","Component: JPA Repository", "Makes requests to the database to fetch or update data.", $sprite="java", $tags="service")
         inventoryController -[dashed]-> inventoryService: "**uses**"
         inventoryService -[dashed]-> inventoryRepository: "**uses**"
+       
     }
     Package "Shipment"{
         Container(shipmentController, "Shipment Controller", "Component: Spring Boot REST Controller", "Provides customers with the ability to manage and view their shipments.", $sprite="java", $tags="service")
@@ -41,6 +43,9 @@ Rectangle "API" as API #line.dashed{
         Container(shipmentRepository, "ShipmentRepository","Component: JPA Repository","Makes requests to the database to fetch or update data.", $sprite="java", $tags="service")
         shipmentController -[dashed]-> shipmentService: "**uses**"
         shipmentService -[dashed]-> shipmentRepository: "**uses**"
+        shipmentService -[dashed]-> inventoryRepository: "**uses**"
+        shipmentService -[dashed]-> customerRepository: "**uses**"
+        shipmentService -[dashed]-> notificationService: "**uses**"
     }
     Package "Configuration"{
         Package "Security"{
@@ -62,6 +67,8 @@ Rectangle "API" as API #line.dashed{
         shipmentService -[dashed]-> notificationService: "**uses**"
         customerService -[dashed]-> notificationService: "**uses**"
 }
+inventoryService -[dashed]-> shipmentRepository: "**uses**"
+inventoryService -[dashed]-> customerRepository: "**uses**
 ContainerDb(database, "Database", "MySQL", "Stores client data, shipment information and user contact details", $sprite="mysql", $tags="storage")
 inventoryRepository -[dashed]-> database: "**Makes calls via**\n[SQL/TCP]"
 shipmentRepository -[dashed]-> database: "**Makes calls via**\n[SQL/TCP]"

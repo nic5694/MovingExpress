@@ -258,6 +258,7 @@ Package "Customer Sub-Domain" <<Rectangle>> #BBDEFB{
     Customer *---- Address
     Customer *---- ContactDetails
     Shipment ----> CustomerIdentifier
+    Customer ----* Shipment
 }
 
 
