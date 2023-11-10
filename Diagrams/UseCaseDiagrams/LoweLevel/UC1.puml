@@ -1,0 +1,47 @@
+@startuml
+
+left to right direction
+skinparam actorStyle awesome
+
+skinparam usecase {
+    BackgroundColor DarkSeaGreen
+    BorderColor DarkSlateGray
+    ArrowColor Black
+    ActorBorderColor black
+    ActorFontName Courier
+    ActorBackgroundColor<< Human >> Gold
+}
+
+actor Client as "Client" #LightBlue
+actor "Moving Estimator" as MovingEstimator #LightGreen
+actor "Truck Driver" as VanDriver #Orange
+actor "Moving Crew" as MovingCrew #Purple
+actor Management as "Management" #Yellow
+actor "Shipment Reviewer" as ShipmentReviewer #Blue
+actor "Observer" as Observer #LightCyan
+
+rectangle "Moving Express System" {
+    rectangle UseCases {
+      usecase "1.0 Request a Quote" as UC1 #LightSeaGreen
+      usecase "Cancel Quote" as UC1_1
+      usecase "Verify Cancellation Quote Request" as UC1_2
+
+      note "If user clicks cancel quote button" as N1
+    }
+}
+
+UC1_1 <. UC1_2 : <<include>>
+
+Client --|> Observer
+Client --> UC1_1
+
+Observer --> UC1
+
+UC1_1 <-- ShipmentReviewer
+UC1_2 <-- ShipmentReviewer
+UC1 <-- ShipmentReviewer
+
+UC1 <.. N1 : <<extends>>
+N1 .. (UC1_1)
+
+@enduml

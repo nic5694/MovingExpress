@@ -1,0 +1,43 @@
+@startuml
+
+left to right direction
+skinparam actorStyle awesome
+skinparam usecase {
+    BackgroundColor DarkSeaGreen
+    BorderColor DarkSlateGray
+    ArrowColor Black
+    ActorBorderColor black
+    ActorFontName Courier
+    ActorBackgroundColor<< Human >> Gold
+}
+
+actor Client as "Client" #LightBlue
+actor "Moving Estimator" as MovingEstimator #LightGreen
+actor "Truck Driver" as VanDriver #Orange
+actor "Moving Crew" as MovingCrew #Purple
+actor Management as "Management" #Yellow
+actor "Shipment Reviewer" as ShipmentReviewer #Blue
+actor "Observer" as Observer #LightCyan
+
+rectangle "Moving Express System" {
+    rectangle UseCases {
+      usecase "4.0 Estimate Shipment" as UC4 #LightSeaGreen
+      usecase "Manage Shipment" as UC4_1
+      usecase "Verify Shipment Estimation" as UC4_2
+
+      note "If user wants to manage the shipment information they have so far" as N1
+    }
+}
+
+UC4 <. N1 : <<exclude>>
+UC4 <. UC4_2 : <<include>>
+N1 .. (UC4_1)
+
+Client --|> Observer
+Observer --> UC4_1
+
+MovingEstimator --> UC4
+
+UC4_2 <-- ShipmentReviewer
+
+@enduml
