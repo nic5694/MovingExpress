@@ -79,8 +79,8 @@ rectangle "Moving Express System" {
 Client --> UC3
 MovingEstimator --> UC3
 
-UC3 --> UC2 : <<Includes>>
-UC3 --> UC4 : <<Includes>>
+UC3 ..> UC2 : <<Includes>>
+UC3 ..> UC4 : <<Includes>>
 
 UC3 <.. N1 : <<Extends>>
 N1 .. (UC3_1)
