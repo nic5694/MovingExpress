@@ -12,10 +12,7 @@ skinparam usecase {
 }
 
 actor Client as "Client" #LightBlue
-actor "Moving Estimator" as MovingEstimator #LightGreen
-actor "Truck Driver" as VanDriver #Orange
 actor "Moving Crew" as MovingCrew #Purple
-actor Management as "Management" #Yellow
 actor "Shipment Reviewer" as ShipmentReviewer #Blue
 actor "Observer" as Observer #LightCyan
 
