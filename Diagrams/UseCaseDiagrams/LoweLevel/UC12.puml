@@ -23,10 +23,8 @@ rectangle "Moving Express System" {
      usecase "5.0 Overview Shipment" as UC5 #LightSeaGreen
      usecase "12.0 Cancel Shipment" as UC12 #LightSeaGreen
      usecase "12.1 Refund Process" as UC12_1 #LightSeaGreen
-     usecase "12.2 Notify All Parties" as UC12_2 #LightSeaGreen
 
-     note "Optional if applicable based on policy" as N1
-     note "Optional but necessary for communication" as N2
+     note "Optional if applicable based on policy and circumstances" as N1
    }
 }
 
@@ -34,14 +32,12 @@ Client --> UC12
 
 ShipmentReviewer --> UC12
 
-UC12 --> UC2 : <<Includes>>
-UC12 --> UC5 : <<Includes>>
+UC12 ..> UC2 : <<Includes>>
+UC12 ..> UC5 : <<Includes>>
 
 UC12 <.. N1 : <<Extends>>
 N1 .. (UC12_1)
 
-UC12 <.. N2 : <<Extends>>
-N2 .. (UC12_2)
 
 
 

@@ -27,7 +27,7 @@ rectangle "Moving Express System" {
      usecase "11.1 Manage Shipment Report Data" as UC11_1 #LightSeaGreen
 
 
-     note "This step is optional and depends on the need for editing the report" as N2
+     note "Optional if user needs to edit the reports" as N2
 
    }
 }
@@ -37,7 +37,7 @@ Management --> UC11
 VanDriver --> UC11
 UC5 <--- Client
 
-UC11 --> UC5 : <<Includes>>
+UC11 ..> UC5 : <<Includes>>
 
 UC11 <.. N2 : <<Extends>>
 N2 .. (UC11_1)

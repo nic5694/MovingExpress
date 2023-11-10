@@ -28,7 +28,7 @@ rectangle "Moving Express System" {
      usecase "11.0 Generate Shipment Reports" as UC11 #LightSeaGreen
      usecase "8.1 Track Shipment" as UC8_1 #LightSeaGreen
 
-     note "Optional for real-time updates" as N1
+     note "Optional if user requests for real-time updates" as N1
    }
 }
 
@@ -40,9 +40,9 @@ UC7 <--[#Purple]- MovingCrew
 UC9 <--- Client
 UC7 <--- Client
 
-UC8 --> UC7 : <<Includes>>
-UC8 --> UC9 : <<Includes>>
-UC8 --> UC11 : <<Includes>>
+UC8 ..> UC7 : <<Includes>>
+UC8 ..> UC9 : <<Includes>>
+UC8 ..> UC11 : <<Includes>>
 
 UC8 <.. N1 : <<Extends>>
 N1 .. (UC8_1)
