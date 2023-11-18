@@ -22,7 +22,7 @@ actor Client as "Client" #LightBlue
 
 rectangle "Moving Express System" {
    rectangle "UseCase 11" {
-     usecase "5.0 overview shipment" as UC5 #LightSeaGreen
+     usecase "5.0 Monitor shipment" as UC5 #LightSeaGreen
      usecase "11.0 Generate Shipment Reports" as UC11 #LightSeaGreen
      usecase "11.1 Manage Shipment Report Data" as UC11_1 #LightSeaGreen
 

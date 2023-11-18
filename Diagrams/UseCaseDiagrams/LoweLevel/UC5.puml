@@ -18,7 +18,7 @@ actor "Observer" as Observer #LightCyan
 
 rectangle "Moving Express System" {
     rectangle UseCases {
-      usecase "5.0 Overview shipment" as UC5 #LightSeaGreen
+      usecase "5.0 Monitor shipment" as UC5 #LightSeaGreen
       usecase "Manage Shipment" as UC5_1
       usecase "Assign Observer Permissions" as UC5_2
 

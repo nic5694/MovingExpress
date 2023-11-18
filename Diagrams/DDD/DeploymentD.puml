@@ -1,0 +1,35 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Deployment.puml
+
+LAYOUT_TOP_DOWN()
+
+' Define deployment nodes
+node "Web Browser" {
+  [Single-Page Application] as SPA
+}
+
+node "Web Application Server" {
+  [Spring Boot Application] as SBA
+}
+
+node "Authentication Service" {
+  [Amazon Cognito] as Cognito
+  [Auth0] as Auth0
+}
+
+node "Email Service" {
+  [Gmail SMTP System] as GmailSMTP
+}
+
+database "MySQL Database" {
+  [Database] as DB
+}
+
+' Define relationships
+SPA --> SBA : "Makes API calls to"
+SBA --> DB : "Connects to\n[JDBC]"
+SBA --> Cognito : "Authenticates with\n[OAuth2/OpenID]"
+SBA --> Auth0 : "Authenticates with\n[OAuth2/OpenID]"
+SBA --> GmailSMTP : "Sends emails\n[SMTP]"
+
+@enduml

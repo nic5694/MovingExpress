@@ -25,7 +25,7 @@ rectangle "Moving Express System" {
       usecase "2.0 Request Shipment" as UC2 #LightSeaGreen
       usecase "3.0 Estimate Item Value" as UC3 #LightSeaGreen
       usecase "4.0 Estimate Shipment" as UC4 #LightSeaGreen
-      usecase "5.0 Overview shipment" as UC5 #LightSeaGreen
+      usecase "5.0 Monitor shipment" as UC5 #LightSeaGreen
       usecase "8.0 Transport Shipment" as UC8 #LightSeaGreen
       usecase "6.0 Packs Shipment" as UC6 #LightSeaGreen
       usecase "7.0 Load Shipment" as UC7 #LightSeaGreen
