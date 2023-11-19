@@ -17,7 +17,8 @@ skinparam classAttribute {
 Database "MySQL" as BoundedContextMySQL #f29111 {
 
         TABLE(Customer) {
-            PRIMARY_KEY(customerId) INT AUTO_INCREMENT
+            PRIMARY_KEY(Id) INT AUTO_INCREMENT
+            clientId VARCHAR(255) UNIQUE NOT NULL
             firstName VARCHAR(255)
             lastName VARCHAR(255)
             email VARCHAR(255)
@@ -25,26 +26,31 @@ Database "MySQL" as BoundedContextMySQL #f29111 {
         }
 
         TABLE(Truck) {
-            PRIMARY_KEY(VIN) VARCHAR(255)
+            PRIMARY_KEY(Id) VARCHAR(255)
+            vin VARCHAR(255) UNIQUE NOT NULL
             capacity INT
             trailerVIN VARCHAR(255)
         }
 
         TABLE(Inventory) {
-            PRIMARY_KEY(inventoryId) INT AUTO_INCREMENT
+            PRIMARY_KEY(Id) INT AUTO_INCREMENT
+            inventoryId VARCHAR(255) UNIQUE NOT NULL
+            FOREIGN_KEY(shipmentId) INT
             description VARCHAR(255)
         }
 
         TABLE(Item) {
-            PRIMARY_KEY(itemId) INT AUTO_INCREMENT
+            PRIMARY_KEY(Id) INT AUTO_INCREMENT
+            itemId VARCHAR(255) UNIQUE NOT NULL
             price DECIMAL(10, 2)
             picture BLOB
             handlingInstructions VARCHAR(255)
-            FOREIGN_KEY(inventoryId) INT
+            FOREIGN_KEY(inventoryId) VARCHAR(255)
         }
 
         TABLE(Box) {
-            PRIMARY_KEY(boxId) INT AUTO_INCREMENT
+            PRIMARY_KEY(Id) INT AUTO_INCREMENT
+            boxId VARCHAR(255) UNIQUE NOT NULL
             picture BLOB
             description VARCHAR(50)
             handlingInstructions VARCHAR(255)
@@ -52,37 +58,42 @@ Database "MySQL" as BoundedContextMySQL #f29111 {
         }
 
         TABLE(Quote){
-            PRIMARY_KEY(quoteId) INT AUTO_INCREMENT
-            FOREIGN_KEY(customerId) INT
+            PRIMARY_KEY(Id) INT AUTO_INCREMENT
+            quoteId VARCHAR(255) UNIQUE NOT NULL
+            FOREIGN_KEY(customerId) VARCHAR(255)
             pickUpLocation VARCHAR(50)
             dropOffDestination VARCHAR(50)
         }
 
         TABLE(Shipment) {
-            PRIMARY_KEY(shipmentId) INT AUTO_INCREMENT
+            PRIMARY_KEY(Id) INT AUTO_INCREMENT
+            shipmentId VARCHAR(255) UNIQUE NOT NULL
             shipmentStatus VARCHAR(255)
             shipmentDepartureAddress VARCHAR(255)
             shipmentArrivalAddress VARCHAR(255)
             FOREIGN_KEY(truckIdentifier) VARCHAR(255)
-            FOREIGN_KEY(customerId) INT
+            FOREIGN_KEY(customerId) VARCHAR(255)
         }
 
         TABLE(MovingCrew) {
-            PRIMARY_KEY(crewId) INT AUTO_INCREMENT
+            PRIMARY_KEY(Id) INT AUTO_INCREMENT
+            crewId VARCHAR(255) UNIQUE NOT NULL
             type VARCHAR(255)
-            FOREIGN_KEY(shipmentId) INT
+            FOREIGN_KEY(shipmentId) VARCHAR(255)
         }
 
         TABLE(Mover) {
-            PRIMARY_KEY(moverId) INT AUTO_INCREMENT
+            PRIMARY_KEY(Id) INT AUTO_INCREMENT
+            moverId VARCHAR(255) UNIQUE NOT NULL
             firstName VARCHAR(255)
             lastName VARCHAR(255)
             email VARCHAR(255)
-            FOREIGN_KEY(movingCrewId) INT
+            FOREIGN_KEY(movingCrewId) VARCHAR(255)
         }
 
         TABLE(Driver) {
-            PRIMARY_KEY(driverId) INT AUTO_INCREMENT
+            PRIMARY_KEY(Id) INT AUTO_INCREMENT
+            driverId VARCHAR(255) UNIQUE NOT NULL
             firstName VARCHAR(255)
             lastName VARCHAR(255)
             email VARCHAR(255)
@@ -90,21 +101,24 @@ Database "MySQL" as BoundedContextMySQL #f29111 {
         }
 
         TABLE(ShipmentReviewer) {
-            PRIMARY_KEY(shipmentReviewerId) INT AUTO_INCREMENT
+            PRIMARY_KEY(Id) INT AUTO_INCREMENT
+            shipmentReviewerId VARCHAR(255)
             firstName VARCHAR(255)
             lastName VARCHAR(255)
             email VARCHAR(255)
         }
 
         TABLE(Observer) {
-            PRIMARY_KEY(observerId) INT AUTO_INCREMENT
+            PRIMARY_KEY(Id) INT AUTO_INCREMENT
+            observerId VARCHAR(255) UNIQUE NOT NULL
             firstName VARCHAR(255)
             lastName VARCHAR(255)
-            FOREIGN_KEY(shipmentId) INT
+            FOREIGN_KEY(shipmentId) VARCHAR(255)
         }
 
         TABLE(Report) {
-            PRIMARY_KEY(reportId) INT AUTO_INCREMENT
+            PRIMARY_KEY(Id) INT AUTO_INCREMENT
+            reportId VARCHAR(255) UNIQUE NOT NULL
             name VARCHAR(50)
             type VARCHAR(50)
             date DATETIME
