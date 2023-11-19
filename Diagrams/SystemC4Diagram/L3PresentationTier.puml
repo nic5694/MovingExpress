@@ -6,14 +6,13 @@
 !include DEVICONS/mysql.puml
 !include DEVICONS/react.puml
 !include DEVICONS/html5.puml
-!include DEVICONS/aws.puml
 !include DEVICONS/javascript.puml
 !define DEVICONS2 https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons2
 !include DEVICONS2/google.puml
 !include DEVICONS2/npm_original_wordmark.puml
 !define RECTANGLE_BORDER_COLOR white
 !include DEVICONS2/tailwindcss.puml
-!include DEVICONS2/typescript_original_wordmark.puml
+!include DEVICONS2/typescript.puml
 
 skinparam rectangle {
     BorderColor <<RECTANGLE_BORDER_COLOR>>

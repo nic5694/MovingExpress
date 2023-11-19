@@ -5,32 +5,34 @@
 !include DEVICONS/mysql.puml
 !include DEVICONS/react.puml
 !include DEVICONS/html5.puml
-!include DEVICONS/aws.puml
 !define DEVICONS2 https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons2
 !include DEVICONS2/google.puml
 !include DEVICONS2/npm_original_wordmark.puml
 !include DEVICONS2/typescript.puml
 !include DEVICONS2/javascript.puml
+!define SPRITES https://raw.githubusercontent.com/plantuml-stdlib/gilbarbara-plantuml-sprites/v1.1/sprites
+!include SPRITES/auth0.puml
+
 
 AddElementTag("service", $shape=square(), $bgColor="#557C99", $fontColor="white", $legendText="Service\square")
 AddElementTag("ext_service", $shape=sqaure(), $bgColor="Gray", $fontColor="white" ,$legendText="External Service\square")
 AddElementTag("SPA", $shape=RoundedBoxShape(), $bgColor="#61DAFB", $fontColor="#333333", $legendText="Single-Page Application")
 AddElementTag("storage", $shape=RoundedBoxShape(), $bgColor="#f29111", $fontColor="white", $legendText="Databases")
-Container(auth, "Amazon Cognito Service", "SaaS", "AWS's Authentication systems.", $sprite="aws", $tags="ext_service")
+Container(auth, "Auth0", "SaaS", "Easy and adaptable authorisation and authentication platform.", $sprite="auth0", $tags="ext_service")
 Container(email, "Gmail SMTP System", "Email Service", "The internal google emailing system.", $sprite="google", $tags="ext_service")
 
-Container(singlePageApp, "Single-Page Application", "JavaScript, ReactJs", "Proivdes all the moving system's functionality to the customers via their web browser.", $sprite="react", $tags="SPA")
+Container(singlePageApp, "Single-Page Application", "TypeScript, ReactJs", "Proivdes all the moving system's functionality to the users via their web browser.", $sprite="react", $tags="SPA")
 Rectangle "API" as API #line.dashed{
     Container(securityFilter, "Security Filter", "Component: Spring Security Filter", "Filters all API requests.", $sprite="java", $tags="service")
     Package "Customer"{
-        Container(customerController, "Customer Controller", "Component: Spring Boot REST Controller", "Provides customers with the ability to manage their account.", $sprite="java", $tags="service")
+        Container(customerController, "Customer Controller", "Component: Spring Boot REST Controller", "Provides users with the ability to manage their account.", $sprite="java", $tags="service")
         Container(customerService, "CustomerService", "Component: Sprint Boot Service" ,"Provides the functionalities to get, update, create and delete.", $sprite="java", $tags="service")
         Container(customerRepository, "Customer Repository","Component: JPA Repository", "Makes requests to the database to fetch or update data.", $sprite="java", $tags="service")
         customerController -[dashed]-> customerService : "**uses**"
         customerService -[dashed]-> customerRepository : "**uses**"
     }
     Package "Inventory"{
-        Container(inventoryController, "Inventory Controller", "Component: Spring Boot REST Controller", "Provides customers with the ability to manage and view their inventories.", $sprite="java", $tags="service")
+        Container(inventoryController, "Inventory Controller", "Component: Spring Boot REST Controller", "Provides users with the ability to manage and view their inventories.", $sprite="java", $tags="service")
         Container(inventoryService, "Inventory Service", "Component: Sprint Boot Service","Provides the functionalities to get, update, create and delete.", $sprite="java", $tags="service")
         Container(inventoryRepository, "Inventory Repository","Component: JPA Repository", "Makes requests to the database to fetch or update data.", $sprite="java", $tags="service")
         inventoryController -[dashed]-> inventoryService: "**uses**"
@@ -38,14 +40,20 @@ Rectangle "API" as API #line.dashed{
        
     }
     Package "Shipment"{
-        Container(shipmentController, "Shipment Controller", "Component: Spring Boot REST Controller", "Provides customers with the ability to manage and view their shipments.", $sprite="java", $tags="service")
-        Container(shipmentService, "ShipmentService","Component: Sprint Boot Service","Provides the functionalities to get, update, create and delete.", $sprite="java", $tags="service")
+        Container(shipmentController, "Shipment Controller", "Component: Spring Boot REST Controller", "Provides users with the ability to manage and view their shipments.", $sprite="java", $tags="service")
+        Container(driverController, "Driver Controller", "Component: Spring Boot REST Controller", "Provides company employees to manage drivers and view their information.", $sprite="java", $tags="service")
+        Container(shipmentService, "Shipment Service","Component: Sprint Boot Service","Provides the functionalities to get, update, create and delete.", $sprite="java", $tags="service")
+        Container(driverService, "Driver Service", "Component: Sprint Boot Service", "Provides the functionalities to get, update, create and delete.", $sprite="java", $tags="service")
         Container(shipmentRepository, "ShipmentRepository","Component: JPA Repository","Makes requests to the database to fetch or update data.", $sprite="java", $tags="service")
+        Container(driverRepository, "Driver Repository", "Component: JPA Repository", "Makes requests to the database to fetch or update data.", $sprite="java", $tags="service")
         shipmentController -[dashed]-> shipmentService: "**uses**"
         shipmentService -[dashed]-> shipmentRepository: "**uses**"
         shipmentService -[dashed]-> inventoryRepository: "**uses**"
         shipmentService -[dashed]-> customerRepository: "**uses**"
-        shipmentService -[dashed]-> notificationService: "**uses**"
+        driverController -[dashed]-> driverService: "**uses**"
+        driverService -[dashed]-> driverRepository: "**uses**"
+        shipmentService -[dashed]-> driverRepository: "**uses**"
+      
     }
     Package "Configuration"{
         Package "Security"{
@@ -54,8 +62,8 @@ Rectangle "API" as API #line.dashed{
         }
         securityFilter -[dashed]-> springSecurityConfig: "**Is Configured by**"
     }
-    Package "Notification Service"{
-        Container(notificationService, "Spring Notification Service", "Sends notification email to target adress.", $sprite="java", $tags="service")
+    Package "Notification"{
+        Container(notificationService, "Spring Notification Service", "Sends notification email to target adress.","testing the new thing", $sprite="java", $tags="service")
         notificationService -[dashed]-> email : "**Sends email using**\n[SMTP/TCP/IP]"
     }
     Package "Reports Service" {
@@ -64,8 +72,10 @@ Rectangle "API" as API #line.dashed{
         securityFilter -[dashed]-> inventoryController: "**Direct Request**"
         securityFilter -[dashed]-> customerController: "**Direct Request**"
         securityFilter -[dashed]-> shipmentController: "**Direct Request**"
-        shipmentService -[dashed]-> notificationService: "**uses**"
-        customerService -[dashed]-> notificationService: "**uses**"
+        customerService -[dashed]--> notificationService: "**uses**"
+        shipmentService -[dashed]--> notificationService: "**uses**"
+        inventoryService -[dashed]-> reportsService: "**uses**"
+        shipmentService -[dashed]-> reportsService: "**uses**
 }
 inventoryService -[dashed]-> shipmentRepository: "**uses**"
 inventoryService -[dashed]-> customerRepository: "**uses**
