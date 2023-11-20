@@ -49,7 +49,7 @@ node "Docker Container Database \n[Deployment Node: Docker]" {
 
 ' Define relationships
 spa -[dashed]-> api : "Makes API calls to"
-api -[dashed]-> database : "Connects to\n[JDBC]"
+api -[dashed]-> database : "Connects via SQL/TCP\n[JDBC]"
 api -[dashed]-> auth : "Authenticates with\n[OAuth2/OpenID]"
 api -[dashed]-> email : "Sends emails\n[SMTP/TCP/IP]"
 webApp -[dashed]-> spa : "Delivers static content to the SPA"
