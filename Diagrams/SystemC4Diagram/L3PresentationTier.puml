@@ -44,7 +44,6 @@ System_Boundary(ReactApplication, "ReactApplication") {
     rectangle "Libraries" as Libraries {
         Container(reactRouter, "React Router", "", "Library for handling routing in React applications.", $sprite="npm_original_wordmark", $tags="library")
         Container(axios, "Axios", "", "Library for making HTTP requests.", $sprite="npm_original_wordmark", $tags="library")
-        Container(tailwind, "Tailwind", "", "utility-first CSS framework that provides pre-defined, composable classes for rapidly styling web elements, allowing tha ability to build and customize user interfaces efficiently.", $sprite="tailwindcss", $tags="library")
     }
 
 
