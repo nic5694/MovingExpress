@@ -2,39 +2,45 @@
 
 left to right direction
 skinparam actorStyle awesome
+
+skinparam note {
+ FontSize 10
+}
 skinparam usecase {
-    BackgroundColor DarkSeaGreen
-    BorderColor DarkSlateGray
-    ArrowColor Black
-    ActorBorderColor black
-    ActorFontName Courier
-    ActorBackgroundColor<< Human >> Gold
+   BackgroundColor DarkSeaGreen
+   BorderColor DarkSlateGray
+   ArrowColor Black
+   ActorBorderColor black
+   ActorBackgroundColor<< Human >> Gold
 }
 
-actor Client as "Client" #LightBlue
 actor "Moving Estimator" as MovingEstimator #LightGreen
-actor "Shipment Reviewer" as ShipmentReviewer #Blue
-actor "Observer" as Observer #LightCyan
+actor Client as "Client" #LightBlue
 
 rectangle "Moving Express System" {
-    rectangle UseCases {
-      usecase "4.0 Estimate Shipment" as UC4 #LightSeaGreen
-      usecase "Manage Shipment" as UC4_1
-      usecase "Verify Shipment Estimation" as UC4_2
+   rectangle "UseCase 3 & 4" {
+     usecase "2.0 Request Shipment" as UC2 #LightSeaGreen
+     usecase "4.0 Estimate Shipment" as UC4 #LightSeaGreen
+     usecase "3.0 Estimate Item Value" as UC3 #LightSeaGreen
+     usecase "3.1 Manage Safety Options" as UC3_1 #LightSeaGreen
 
-      note "If user wants to manage the shipment information they have so far" as N1
-    }
+     note "Optional for additional safety protocols" as N1
+     note "Optional for items with ambiguous value" as N2
+
+   }
 }
 
-UC4 <. N1 : <<exclude>>
-UC4 <. UC4_2 : <<include>>
-N1 .. (UC4_1)
-
-Client --|> Observer
-Observer --> UC4_1
-
+Client --> UC4
 MovingEstimator --> UC4
 
-UC4_2 <-- ShipmentReviewer
+UC4 ..> UC2 : <<Includes>>
+
+UC4 <.. N2 : <<Extends>>
+N2 .. (UC3)
+
+UC3 <.. N1 : <<Extends>>
+N1 .. (UC3_1)
+
+
 
 @enduml
