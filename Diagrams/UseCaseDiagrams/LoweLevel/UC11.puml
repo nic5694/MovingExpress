@@ -33,9 +33,10 @@ rectangle "Moving Express System" {
 }
 
 
+Client --[#Blue]-> UC11
 Management --> UC11
 VanDriver --> UC11
-UC5 <--- Client
+UC5 <-[#Blue]-- Client
 
 UC11 ..> UC5 : <<Includes>>
 

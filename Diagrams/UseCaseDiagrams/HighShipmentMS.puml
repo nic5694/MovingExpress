@@ -51,16 +51,18 @@ MovingEstimator --> UC2
 MovingEstimator --> UC4
 MovingEstimator --> UC3
 
-VanDriver --> UC8
+VanDriver -[#Purple]-> UC8
 
-MovingCrew -[#Orange]--> UC6
-MovingCrew -[#Orange]--> UC5
-MovingCrew -[#Orange]--> UC7
-MovingCrew -[#Orange]--> UC9
-MovingCrew -[#Orange]--> UC10
+MovingCrew -[#Orange]-> UC6
+MovingCrew -[#Orange]-> UC5
+MovingCrew -[#Orange]-> UC7
+MovingCrew -[#Orange]-> UC9
+MovingCrew -[#Orange]-> UC10
 
+Client --> UC11
 UC11 <-- Management
-VanDriver --> UC11
+VanDriver --[#Purple]-> UC11
+
 
 UC2 <-- ShipmentReviewer
 UC1 <-- ShipmentReviewer
