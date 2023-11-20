@@ -45,8 +45,6 @@ System_Boundary(ReactApplication, "ReactApplication") {
         Container(reactRouter, "React Router", "", "Library for handling routing in React applications.", $sprite="npm_original_wordmark", $tags="library")
         Container(axios, "Axios", "", "Library for making HTTP requests.", $sprite="npm_original_wordmark", $tags="library")
     }
-
-
 }
 rectangle "Services" as Services {
     Container(movingExpress, "Moving Express", "", "Main endpoint for HTTP requests.", $tags="service", $sprite="java")
@@ -57,8 +55,6 @@ Rel(landingpage, loginpage, "Navigates to", $tags="a_rel")
 Rel(landingpage, contactuspage, "Navigates to", $tags="a_rel")
 Rel(landingpage, shipmentquote, "Navigates to", $tags="a_rel")
 Rel(landingpage, signuppage, "Navigates to", $tags="a_rel")
-Rel(landingpage, shipmentreviewer, "Navigates to", $tags="a_rel")
-Rel(landingpage, shipmentestimator, "Navigates to", $tags="a_rel")
 
 Rel(loginpage, userhomepage, "After Login", $tags="a_rel")
 Rel(signuppage, userhomepage, "After Signup", $tags="a_rel")
@@ -71,6 +67,8 @@ Rel(shipmentdetails, userhomepage, "Back to shipments", $tags="a_rel")
 Rel(profilepage, userhomepage, "Back to home", $tags="a_rel")
 Rel(userhomepage, contactuspage, "Seeks support", $tags="a_rel")
 Rel(shipmentspage, profilepage, "Navigates to profile", $tags="a_rel")
+Rel(userhomepage, shipmentreviewer, "Navigates to Shipment Reviewer", $tags="a_rel")
+Rel(userhomepage, shipmentestimator, "Navigates to Shipment Estimator", $tags="a_rel")
 Rel(reactRouter, landingpage, "Handles navigation for", $tags="render_rel")
 Rel(loginpage, movingExpress, "Makes login request to", $tags="a_rel")
 Rel(signuppage, movingExpress, "Makes signup request to", $tags="a_rel")
@@ -78,6 +76,7 @@ Rel(shipmentspage, movingExpress, "Fetches shipment data from", $tags="a_rel")
 Rel(shipmentdetails, movingExpress, "Fetches specific shipment data from", $tags="a_rel")
 Rel(profilepage, movingExpress, "Fetches and updates user profile from", $tags="a_rel")
 Rel(shipmentestimator, movingExpress, "Requests shipment estimate from", $tags="a_rel")
+Rel(shipmentreviewer, movingExpress, "Requests shipment review from", $tags="a_rel")
 
 Rel(loginpage, axios, "Uses for HTTP requests", $tags="library_rel")
 Rel(signuppage, axios, "Uses for HTTP requests", $tags="library_rel")
@@ -85,8 +84,7 @@ Rel(shipmentspage, axios, "Uses for HTTP requests", $tags="library_rel")
 Rel(shipmentdetails, axios, "Uses for HTTP requests", $tags="library_rel")
 Rel(profilepage, axios, "Uses for HTTP requests", $tags="library_rel")
 Rel(shipmentestimator, axios, "Uses for HTTP requests", $tags="library_rel")
-
-
+Rel(shipmentreviewer, axios, "Uses for HTTP requests", $tags="library_rel")
 
 SHOW_LEGEND()
 @enduml
