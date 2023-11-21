@@ -39,12 +39,12 @@ rectangle "Moving Express System" {
 Client --|> Observer
 
 Client ---> UC12
+Client --> UC1
 Client ---> UC6
 Client ---> UC3
 Client ---> UC2
 Client ---> UC10
 
-Observer --> UC1
 Observer --> UC5
 
 MovingEstimator --> UC2
