@@ -1,20 +1,18 @@
 version: 2.1
 
-orbs:
-  java: circleci/openjdk@0.13.0
-
 jobs:
   build:
     docker:
-      - image: cimg/base:2021.10
+      - image: cimg/openjdk:17.0 # Java 17 Docker image
+    working_directory: ~/MovingExpress
     steps:
-      - checkout
-      - java/install-jdk:
-          jdk-version: 11
+        - checkout
+        - run: echo "Running the build"
+          name: build spring boot application
+          command: ./gradlew clean build
 
 workflows:
   version: 2
   build:
     jobs:
-      - build:
-          config-path: backend/.circleci/config.yml  # Specify the path to your CircleCI configuration file
+      - build
