@@ -31,6 +31,4 @@ workflows:
   version: 2
   build:
     jobs:
-      - build:
-        config-path: backend/.circleci/config.yml  # Specify the path to your CircleCI configuration file
-
+      - build
