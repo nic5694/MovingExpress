@@ -7,9 +7,9 @@ jobs:
     working_directory: ~/MovingExpress
     steps:
         - checkout
-        - run: echo "Running the build"
-          name: build spring boot application
-          command: ./gradlew clean build
+        - run:
+            name: build spring boot application
+            command: ./gradlew clean build
 
 workflows:
   version: 2
