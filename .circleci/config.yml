@@ -11,6 +11,9 @@ jobs:
       - checkout
 
       - restore_cache:
+          -keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            - v1-dependencies-
           key: gradle-{{ checksum "build.gradle" }}-{{ checksum "settings.gradle" }}
 
       - run:
@@ -21,7 +24,8 @@ jobs:
       - save_cache:
           paths:
             - ~/.gradle
-          key: gradle-{{ checksum "build.gradle" }}-{{ checksum "settings.gradle" }}
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+      - run: gradle test
 
 workflows:
   version: 2
