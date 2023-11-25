@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/openjdk:17.0.9 # Java 17 Docker image
+      - image: cimg/openjdk:17.0 # Java 17 Docker image
 
     working_directory: ~/backend
 
