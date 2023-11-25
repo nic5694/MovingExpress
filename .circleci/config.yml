@@ -11,7 +11,7 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: gradle-{{ checksum "build.gradle.kts" }}-{{ checksum "settings.gradle.kts" }}
+          key: gradle-{{ checksum "build.gradle" }}-{{ checksum "settings.gradle" }}
 
       - run:
           name: Build and test Spring Boot application
@@ -21,7 +21,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.gradle
-          key: gradle-{{ checksum "build.gradle.kts" }}-{{ checksum "settings.gradle.kts" }}
+          key: gradle-{{ checksum "build.gradle" }}-{{ checksum "settings.gradle" }}
 
   deploy:
     docker:
