@@ -5,7 +5,7 @@ jobs:
     docker:
       - image: cimg/openjdk:17.0 # Java 17 Docker image
 
-    working_directory: ~/backend
+    working_directory: ~/MovingExpress/backend
 
     steps:
       - checkout
@@ -20,14 +20,14 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle
+            - ~/backend/.gradle
           key: gradle-{{ checksum "build.gradle" }}-{{ checksum "settings.gradle" }}
 
   deploy:
     docker:
-      - image: circleci/openjdk:17-jdk
+      - image: cimg/openjdk:17.0
 
-    working_directory: ~/repo
+    working_directory: ~/MovingExpress/backend
 
     steps:
       - checkout
