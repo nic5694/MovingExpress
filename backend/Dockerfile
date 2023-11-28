@@ -9,7 +9,7 @@ EXPOSE 8080
 FROM openjdk:17
 ARG JAR_FILE=build/libs/*.jar
 COPY --from=builder /usr/src/app/${JAR_FILE} app.jar
-RUN microdnf update \
-   && microdnf install curl \
-    && microdnf install jq
+#RUN microdnf update \
+#   && microdnf install curl \
+#    && microdnf install jq
 ENTRYPOINT ["java", "-jar", "/app.jar"]
