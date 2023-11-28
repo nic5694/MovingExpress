@@ -58,7 +58,8 @@ okta:
   oauth2:
     issuer: https://movingexpress.us.auth0.com/
     client-id: a9qWMiI6F273lcGJYjBhzN1ZPCBfgS3q
-    client-secret: ${CLIENT_SECRET}
+    client-secret: mcOpX5xdNvjGwBBzYi2CzopjuoZSggc8mRpYFj8vXCDpi8HpIk6m6vtLNRwBJ_6W
 
 server.port: 8080
 spring.datasource.hikari.initializationFailTimeout: 60000
+
