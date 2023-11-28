@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS Inventory (
 CREATE TABLE IF NOT EXISTS Item (
     id INT AUTO_INCREMENT PRIMARY KEY,
     itemId VARCHAR(36) UNIQUE NOT NULL,
-    type ENUM('NORMAL', 'BOX') NOT NULL,
+    type ENUM('Item', 'BOX') NOT NULL,
     price DECIMAL(10, 2),
     picture BLOB,
     description VARCHAR(255),
