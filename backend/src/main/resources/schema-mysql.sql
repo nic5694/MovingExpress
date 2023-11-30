@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS Driver (
     driverId VARCHAR(36) UNIQUE NOT NULL,
     firstName VARCHAR(255),
     lastName VARCHAR(255),
+    phoneNumber VARCHAR(15)
     email VARCHAR(255) UNIQUE,
     shipmentId VARCHAR(36),
     FOREIGN KEY (shipmentId) REFERENCES Shipment(shipmentId)
