@@ -38,10 +38,11 @@ CREATE TABLE IF NOT EXISTS Inventory (
 CREATE TABLE IF NOT EXISTS Item (
     id INT AUTO_INCREMENT PRIMARY KEY,
     itemId VARCHAR(36) UNIQUE NOT NULL,
-    type ENUM('ITEM', 'BOX','ITEMS','BOXES') NOT NULL,
+    itemName VARCHAR(255) NOT NULL,
+    type ENUM('ITEM', 'BOX') NOT NULL,
     price DECIMAL(10, 2),
-    picture BLOB,
     description VARCHAR(255),
+    weight DOUBLE NULL,
     handlingInstructions VARCHAR(255),
     inventoryId VARCHAR(36),
     FOREIGN KEY (inventoryId) REFERENCES Inventory(inventoryId)
@@ -50,11 +51,18 @@ CREATE TABLE IF NOT EXISTS Item (
 CREATE TABLE IF NOT EXISTS Quote (
     id INT AUTO_INCREMENT PRIMARY KEY,
     quoteId VARCHAR(36) UNIQUE NOT NULL,
-    pickUpLocation VARCHAR(50),
-    dropOffDestination VARCHAR(50),
+    pickUpLocation VARCHAR(255),
+    dropOffDestination VARCHAR(255),
+    buildingTypePickUp VARCHAR(255),
+    numberOfRoomsPickUp INT,
+    hasElevatorPickUp BOOLEAN,
+    buildingTypeDropOff VARCHAR(255),
+    numberOfRoomsDropOff INT,
+    hasElevatorDropOff BOOLEAN,
     clientEmail VARCHAR(255),
     FOREIGN KEY (clientEmail) REFERENCES Client(email)
     );
+
 
 CREATE TABLE IF NOT EXISTS MovingCrew (
     id INT AUTO_INCREMENT PRIMARY KEY,
