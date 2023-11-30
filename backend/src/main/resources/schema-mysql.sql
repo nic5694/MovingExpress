@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS Item (
     FOREIGN KEY (inventoryId) REFERENCES Inventory(inventoryId)
     );
 
-CREATE TABLE IF NOT EXISTS Quotes (
+CREATE TABLE IF NOT EXISTS Quote (
     id INT AUTO_INCREMENT PRIMARY KEY,
     quoteId VARCHAR(36) UNIQUE NOT NULL,
     pickUpAddress VARCHAR(255),
@@ -64,7 +64,9 @@ CREATE TABLE IF NOT EXISTS Quotes (
     numberOfRoomsDropOff INT,
     hasElevatorDropOff BOOLEAN,
     clientEmail VARCHAR(255),
-    FOREIGN KEY (clientEmail) REFERENCES Client(email)
+    movingEstimatorId VARCHAR(36),
+    FOREIGN KEY (clientEmail) REFERENCES Client(email),
+    FOREIGN KEY (movingEstimatorId) REFERENCES MovingEstimator(estimatorId)
     );
 
 
