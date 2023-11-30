@@ -48,11 +48,15 @@ CREATE TABLE IF NOT EXISTS Item (
     FOREIGN KEY (inventoryId) REFERENCES Inventory(inventoryId)
     );
 
-CREATE TABLE IF NOT EXISTS Quote (
+CREATE TABLE IF NOT EXISTS Quotes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     quoteId VARCHAR(36) UNIQUE NOT NULL,
-    pickUpLocation VARCHAR(255),
-    dropOffDestination VARCHAR(255),
+    pickUpAddress VARCHAR(255),
+    pickupCity VARCHAR(255),
+    pickupPostalCode VARCHAR(10),
+    dropOffAddress VARCHAR(255),
+    dropoffCity VARCHAR(255),
+    dropoffPostalCode VARCHAR(10),
     buildingTypePickUp VARCHAR(255),
     numberOfRoomsPickUp INT,
     hasElevatorPickUp BOOLEAN,
