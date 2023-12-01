@@ -60,7 +60,7 @@ okta:
     client-id: a9qWMiI6F273lcGJYjBhzN1ZPCBfgS3q
     client-secret: mcOpX5xdNvjGwBBzYi2CzopjuoZSggc8mRpYFj8vXCDpi8HpIk6m6vtLNRwBJ_6W
     audience: https://movingexpress/api/
-
+    groups-claim: https://movingexpress.com/roles
 
 server.port: 8080
 spring.datasource.hikari.initializationFailTimeout: 60000
