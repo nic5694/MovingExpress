@@ -3,7 +3,7 @@ import logo from '../Images/ME_Logo_Blck.png'
 
 function Footer() {
   return (
-    <div className="bg-companyYellow gap-20 flex md:pl-[10%] py-[100px] xsm:justify-center md:justify-normal" >
+    <div className="bg-companyYellow gap-20 flex pl-[5%] py-[75px]" >
         <div className="hidden md:block">
             <img src={logo} className='w-52' />
         </div>
