@@ -30,10 +30,11 @@ else User is not logged in
 end
 activate QuotePage
 
-User -> QuotePage : Provide email and quote details
+QuotePage -> User : Display quote form
+User -> QuotePage : Provide quote information (email, quote details)
 activate QuotePage
 
-QuotePage -> QuoteController : POST /quote (email, quote details)
+QuotePage -> QuoteController : POST /quote (quote details)
 activate QuoteController
 
 QuoteController -> QuoteService : createQuote()
