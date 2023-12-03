@@ -1,4 +1,4 @@
-package com.example.backend.config.auth.filters;
+package com.example.backend.config.security.filters;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,6 +29,9 @@ public class ResponseHeaderFilter implements Filter {
         httpResponse.setHeader(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, max-age=0, must-revalidate");
         httpResponse.setHeader(HttpHeaders.PRAGMA, "no-cache");
         httpResponse.setIntHeader(HttpHeaders.EXPIRES, 0);
+
+
+
 
         chain.doFilter(request, response);
     }

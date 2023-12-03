@@ -1,4 +1,4 @@
-package com.example.backend.config.auth;
+package com.example.backend.config;
 
 import lombok.Value;
 

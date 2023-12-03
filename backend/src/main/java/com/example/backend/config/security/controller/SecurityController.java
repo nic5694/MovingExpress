@@ -1,4 +1,4 @@
-package com.example.backend.config;
+package com.example.backend.config.security.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
