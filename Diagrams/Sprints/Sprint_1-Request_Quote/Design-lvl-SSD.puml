@@ -30,11 +30,11 @@ else User is not logged in
 end
 activate QuotePage
 
-QuotePage -> User : Display quote form
-User -> QuotePage : Provide quote information (email, quote details)
+QuotePage --> User : Display quote form
+User -> QuotePage : Fill up quote details Form
 activate QuotePage
 
-QuotePage -> QuoteController : POST /quote (quote details)
+QuotePage -> QuoteController : POST /quote
 activate QuoteController
 
 QuoteController -> QuoteService : createQuote()
@@ -45,19 +45,19 @@ activate QuoteRepository
 
 QuoteRepository -> Database : INSERT INTO quotes
 activate Database
-Database -> QuoteRepository : Success
+Database --> QuoteRepository : Success
 deactivate Database
 
-QuoteRepository -> QuoteService : Quote saved
+QuoteRepository --> QuoteService : Quote saved
 deactivate QuoteRepository
 
-QuoteService -> QuoteController : QuoteResponse
+QuoteService --> QuoteController : QuoteResponse
 deactivate QuoteService
 
-QuoteController -> QuotePage : Show success message
+QuoteController --> QuotePage : Show success message
 deactivate QuoteController
 
-QuotePage -> User : 'Quote Sent Successfully' message
+QuotePage --> User : 'Quote Sent Successfully' message
 deactivate QuotePage
 
 @enduml
