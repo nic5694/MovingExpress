@@ -1,0 +1,62 @@
+@startuml
+title Request Quote Use Case Sequence Diagram
+
+actor User
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant LandingPage as "<<View>>\nLandingPage"
+participant QuotePage as "<<View>>\nQuotePage"
+participant UserProfile as "<<View>>\nUserProfile"
+participant QuoteController as "<<Controller>>\nQuoteController"
+participant QuoteService as "<<Service>>\nQuoteService"
+participant QuoteRepository as "<<Repository>>\nQuoteRepository"
+participant Database as "<<Database>>\nDatabase"
+
+User -> ReactApplication : Access website
+activate ReactApplication
+
+ReactApplication -> LandingPage : render()
+activate LandingPage
+
+alt User is logged in
+    LandingPage -> UserProfile : Navigate to profile after login
+    deactivate LandingPage
+    activate UserProfile
+    UserProfile -> QuotePage : Select 'Request Quote'
+    deactivate UserProfile
+else User is not logged in
+    LandingPage -> QuotePage : Select 'Shipment Quote'
+    deactivate LandingPage
+end
+activate QuotePage
+
+User -> QuotePage : Provide email and quote details
+activate QuotePage
+
+QuotePage -> QuoteController : POST /quote (email, quote details)
+activate QuoteController
+
+QuoteController -> QuoteService : createQuote()
+activate QuoteService
+
+QuoteService -> QuoteRepository : save(quoteData)
+activate QuoteRepository
+
+QuoteRepository -> Database : INSERT INTO quotes
+activate Database
+Database -> QuoteRepository : Success
+deactivate Database
+
+QuoteRepository -> QuoteService : Quote saved
+deactivate QuoteRepository
+
+QuoteService -> QuoteController : QuoteResponse
+deactivate QuoteService
+
+QuoteController -> QuotePage : Show success message
+deactivate QuoteController
+
+QuotePage -> User : 'Quote Sent Successfully' message
+deactivate QuotePage
+
+@enduml
