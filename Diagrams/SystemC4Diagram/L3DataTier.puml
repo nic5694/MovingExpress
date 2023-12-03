@@ -16,7 +16,7 @@ skinparam classAttribute {
 
 Database "MySQL" as BoundedContextMySQL #f29111 {
 
-        TABLE(Customer) {
+        TABLE(Client) {
             PRIMARY_KEY(id) INT AUTO_INCREMENT
             clientId VARCHAR(36) UNIQUE NOT NULL
             firstName VARCHAR(255)
@@ -28,7 +28,7 @@ Database "MySQL" as BoundedContextMySQL #f29111 {
         TABLE(Truck) {
             PRIMARY_KEY(id) INT AUTO_INCREMENT
             vin VARCHAR(17) UNIQUE NOT NULL
-            capacity INT
+            capacity DOUBLE
         }
 
         TABLE(Inventory) {
@@ -41,17 +41,11 @@ Database "MySQL" as BoundedContextMySQL #f29111 {
         TABLE(Item) {
             PRIMARY_KEY(id) INT AUTO_INCREMENT
             itemId VARCHAR(36) UNIQUE NOT NULL
+            itemName VARCHAR(255) NOT NULL
+            type ENUM('ITEM', 'BOX') NOT NULL
             price DECIMAL(10, 2)
-            picture BLOB
-            handlingInstructions VARCHAR(255)
-            FOREIGN_KEY(inventoryId) VARCHAR(36)
-        }
-
-        TABLE(Box) {
-            PRIMARY_KEY(id) INT AUTO_INCREMENT
-            boxId VARCHAR(36) UNIQUE NOT NULL
-            picture BLOB
-            description VARCHAR(50)
+            description VARCHAR(255)
+            weight DOUBLE
             handlingInstructions VARCHAR(255)
             FOREIGN_KEY(inventoryId) VARCHAR(36)
         }
@@ -59,9 +53,23 @@ Database "MySQL" as BoundedContextMySQL #f29111 {
         TABLE(Quote){
             PRIMARY_KEY(id) INT AUTO_INCREMENT
             quoteId VARCHAR(36) UNIQUE NOT NULL
-            pickUpLocation VARCHAR(50)
-            dropOffDestination VARCHAR(50)
-            FOREIGN_KEY(customerId) VARCHAR(36)
+            pickUpAddress VARCHAR(255)
+            pickupCity VARCHAR(255)
+            pickupPostalCode VARCHAR(10)
+            dropOffAddress VARCHAR(255)
+            dropoffCity VARCHAR(255)
+            dropoffPostalCode VARCHAR(10)
+            buildingTypePickUp VARCHAR(255)
+            numberOfRoomsPickUp INT
+            hasElevatorPickUp BOOLEAN
+            buildingTypeDropOff VARCHAR(255)
+            numberOfRoomsDropOff INT
+            hasElevatorDropOff BOOLEAN
+            clientEmail VARCHAR(255)
+            movingEstimatorId VARCHAR(36)
+            FOREIGN_KEY(clientEmail) VARCHAR(255)
+            FOREIGN_KEY(movingEstimatorId) VARCHAR(36)
+            FOREIGN_KEY(shipmentId) VARCHAR(36)
         }
 
         TABLE(Shipment) {
@@ -71,23 +79,14 @@ Database "MySQL" as BoundedContextMySQL #f29111 {
             shipmentDepartureAddress VARCHAR(255)
             shipmentArrivalAddress VARCHAR(255)
             FOREIGN_KEY(vin) VARCHAR(17)
-            FOREIGN_KEY(customerId) VARCHAR(36)
+            FOREIGN_KEY(clientId) VARCHAR(36)
         }
 
         TABLE(MovingCrew) {
             PRIMARY_KEY(id) INT AUTO_INCREMENT
-            crewId VARCHAR(36) UNIQUE NOT NULL
+            movingCrewId VARCHAR(36) UNIQUE NOT NULL
             type VARCHAR(255)
             FOREIGN_KEY(shipmentId) VARCHAR(36)
-        }
-
-        TABLE(Mover) {
-            PRIMARY_KEY(id) INT AUTO_INCREMENT
-            moverId VARCHAR(36) UNIQUE NOT NULL
-            firstName VARCHAR(255)
-            lastName VARCHAR(255)
-            email VARCHAR(255)
-            FOREIGN_KEY(movingCrewId) VARCHAR(36)
         }
 
         TABLE(Driver) {
@@ -95,6 +94,7 @@ Database "MySQL" as BoundedContextMySQL #f29111 {
             driverId VARCHAR(36) UNIQUE NOT NULL
             firstName VARCHAR(255)
             lastName VARCHAR(255)
+            phoneNumber VARCHAR(15)
             email VARCHAR(255)
             FOREIGN_KEY(shipmentId) VARCHAR(36)
         }
@@ -105,6 +105,7 @@ Database "MySQL" as BoundedContextMySQL #f29111 {
             firstName VARCHAR(255)
             lastName VARCHAR(255)
             email VARCHAR(255)
+            phoneNumber VARCHAR(15)
         }
 
         TABLE(Observer) {
@@ -112,6 +113,17 @@ Database "MySQL" as BoundedContextMySQL #f29111 {
             observerId VARCHAR(36) UNIQUE NOT NULL
             firstName VARCHAR(255)
             lastName VARCHAR(255)
+            email VARCHAR(255)
+            FOREIGN_KEY(shipmentId) VARCHAR(36)
+        }
+
+        TABLE(MovingEstimator) {
+            PRIMARY_KEY(id) INT AUTO_INCREMENT
+            estimatorId VARCHAR(36) UNIQUE NOT NULL
+            firstName VARCHAR(255)
+            lastName VARCHAR(255)
+            email VARCHAR(255)
+            phoneNumber VARCHAR(15)
             FOREIGN_KEY(shipmentId) VARCHAR(36)
         }
 
@@ -125,21 +137,20 @@ Database "MySQL" as BoundedContextMySQL #f29111 {
         }
 }
 
-    Customer ||--|{ Shipment
+    Client ||--|{ Shipment
     Truck }|--|| Shipment
     Shipment ||--|{ MovingCrew
-    MovingCrew ||--|{ Mover
+    MovingCrew ||--o| Report
     Driver }|--|| Shipment
     Shipment ||--o{ Observer
     Shipment ||--|{ ShipmentReviewer
     Driver ||--|| Truck
-    Inventory ||--o{ Box
     Inventory ||--o{ Item
-    Box ||--o{ Item
-    Customer ||--o| Report
-    Driver ||--|{ Report
+    Client ||--o| Report
     Shipment ||--|{ Inventory
-    Customer ||--|{ Quote
-    Mover ||--o| Report
+    Client ||--|{ Quote
+    Quote ||--|{ Shipment
+    MovingEstimator ||--|{ Quote
+    MovingEstimator ||--o| Report
 
 @enduml
