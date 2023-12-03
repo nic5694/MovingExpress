@@ -7,35 +7,35 @@ const Profile = () => {
 
     // useEffect(() => {
     //     const getUserMetadata = async () => {
-    //         const domain = "movingexpress.us.auth0.com";
+    //         const domain = 'movingexpress.us.auth0.com'
     //
     //         try {
     //             const accessToken = await getAccessTokenSilently({
     //                 authorizationParams: {
     //                     audience: `https://${domain}/api/v2/`,
-    //                     scope: "read:current_user",
+    //                     scope: 'read:current_user',
     //                 },
-    //             });
+    //             })
     //             //@ts-ignore
-    //             const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user.sub}`;
+    //             const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user.sub}`
     //
     //             const metadataResponse = await fetch(userDetailsByIdUrl, {
     //                 headers: {
     //                     Authorization: `Bearer ${accessToken}`,
     //                 },
-    //             });
+    //             })
     //
-    //             const { user_metadata } = await metadataResponse.json();
+    //             const { user_metadata } = await metadataResponse.json()
     //
-    //             setUserMetadata(user_metadata);
+    //             setUserMetadata(user_metadata)
     //         } catch (e) {
     //             // @ts-ignore
-    //             console.log(e.message);
+    //             console.log(e.message)
     //         }
-    //     };
+    //     }
     //
-    //     getUserMetadata();
-    // }, [getAccessTokenSilently, user?.sub]);
+    //     getUserMetadata()
+    // }, [getAccessTokenSilently, user?.sub])
 
     return (
         isAuthenticated && (
