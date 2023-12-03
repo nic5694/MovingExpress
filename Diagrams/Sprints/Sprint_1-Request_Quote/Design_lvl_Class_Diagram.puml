@@ -27,17 +27,14 @@ package "shipmentsubdomain" {
         enum ContactMethod {
             EMAIL
             PHONE
-            POST
         }
 
         enum Country {
             USA
             CANADA
-            MEXICO
-            // Other countries...
         }
 
-        class DestinationAddress {
+        class Address {
             - line1 : String
             - line2 : String
             - city : String
@@ -45,12 +42,10 @@ package "shipmentsubdomain" {
             - country : Country
         }
 
-        class PickupAddress {
-            - line1 : String
-            - line2 : String
-            - city : String
-            - postalCode : String
-            - country : Country
+        class PickupAddress extends Address {
+        }
+
+        class DestinationAddress extends Address {
         }
 
         class Quote {
@@ -82,11 +77,15 @@ package "shipmentsubdomain" {
 
     package "presentationlayer" {
         class QuoteRequest {
-            // Fields representing the quote request data structure.
+            - contactDetails : ContactDetails
+            - pickupAddress : PickupAddress
+            - destinationAddress : DestinationAddress
         }
 
         class QuoteResponse {
-            // Fields representing the quote response data structure.
+            - quoteId : String
+            - estimatedPrice : double
+            - estimatedTime : String
         }
 
         class ShipmentController {
@@ -95,7 +94,6 @@ package "shipmentsubdomain" {
         }
     }
 
-    ShipmentController -right-> QuoteService : uses <<
     QuoteServiceImpl -down-|> QuoteService : implements
     QuoteServiceImpl -down-> QuoteRepository : uses
     QuoteServiceImpl -down-> QuoteRequestMapper : uses
@@ -107,6 +105,9 @@ package "shipmentsubdomain" {
     Quote -up-^ PickupAddress : has
     Quote -up-^ DestinationAddress : has
     Quote -up-^ QuoteIdentifier : has
+    ContactDetails -[hidden]right-> ContactMethod : uses
+    Address -[hidden]right-> Country : uses
+    ShipmentController -right-> QuoteService : uses
 }
 
 @enduml
