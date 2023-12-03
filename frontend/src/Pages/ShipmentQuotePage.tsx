@@ -39,22 +39,22 @@ function ShipmentQuotePage() {
                   <div className='flex flex-row flex-wrap gap-5'>
 
                     <div className='flex flex-col gap-1'>
-                      <input type="text" className='border border-[lightgray] text-sm h-[35px] px-4 rounded-sm' placeholder='First Name'/>
+                      <input type="text" className='border border-[lightgray] text-sm h-[35px] px-4 rounded-sm' id='FirstNameInput' name='FirstNameInput' placeholder='First Name'/>
                       <label style={{fontFamily : "Bebas Neue, cursive"}} className='text-[#696969] text-sm'>First Name</label>
                     </div>
 
                     <div className='flex flex-col gap-1'>
-                      <input type="text" className='border border-[lightgray] text-sm h-[35px] px-4 rounded-sm' placeholder='Last Name'/>
+                      <input type="text" className='border border-[lightgray] text-sm h-[35px] px-4 rounded-sm' id='LastNameInput' name='LastNameInput' placeholder='Last Name'/>
                       <label style={{fontFamily : "Bebas Neue, cursive"}} className='text-[#696969] text-sm'>Last Name</label>
                     </div>
 
                     <div className='flex flex-col gap-1'>
-                      <input type="email" className='border border-[lightgray] text-sm h-[35px] px-4 rounded-sm' placeholder='E-Mail'/>
+                      <input type="email" className='border border-[lightgray] text-sm h-[35px] px-4 rounded-sm' id='EmailInput' name='EmailInput' placeholder='E-Mail'/>
                       <label style={{fontFamily : "Bebas Neue, cursive"}} className='text-[#696969] text-sm'>E-Mail</label>
                     </div>
 
                     <div className='flex flex-col gap-1'>
-                      <input type="text" className='border border-[lightgray] text-sm  h-[35px] px-4 rounded-sm py-1' placeholder='Phone Number'/>
+                      <input type="text" className='border border-[lightgray] text-sm  h-[35px] px-4 rounded-sm py-1' name='PhoneNumberInput' id='PhoneNumberInput' placeholder='Phone Number'/>
                       <label style={{fontFamily : "Bebas Neue, cursive"}} className='text-[#696969] text-sm'>Phone Number</label>
                     </div>
 
@@ -63,7 +63,7 @@ function ShipmentQuotePage() {
                   <div className='flex gap-5 flex-wrap'>
 
                     <div className='flex flex-col gap-1'>
-                      <input type="date" className='border border-[lightgray] w-[200px] rounded-sm px-4 py-1'/>
+                      <input type="date" className='border border-[lightgray] w-[200px] rounded-sm px-4 py-1' name='MovingDateInput' id='MovingDateInput'/>
                       <label style={{fontFamily : "Bebas Neue, cursive"}} className='text-[#696969] text-sm'>Expected Moving Date</label>
                     </div>
 
@@ -73,17 +73,17 @@ function ShipmentQuotePage() {
                       <div className='flex gap-5'>
                         
                         <label className='flex gap-1'>
-                          <input type="radio" name="contact" value="email"/>
+                          <input type="radio" name="contact" id='EmailValue' value="email"/>
                           <span>E-Mail</span>
                         </label>
                         
                         <label className='flex gap-1'>
-                          <input type="radio" name="contact" value="phonenumber"/>
+                          <input type="radio" name="contact" id='PhoneNumberValue' value="phonenumber"/>
                           <span>Phone Number</span>
                         </label>
                         
                         <label className='flex gap-1'>
-                          <input type="radio" name="contact" value="both"/>
+                          <input type="radio" name="contact" id='BothValue' value="both"/>
                           <span>Both</span>
                         </label>
 
@@ -94,7 +94,7 @@ function ShipmentQuotePage() {
                   </div>
                   
                   <div>
-                    <textarea className="w-[100%] border-[lightgray] h-[100px] border text-sm px-3 py-3 rounded-sm" placeholder='Additional comments / instrcutions (Specific hours, crane required...)'/>
+                    <textarea className="w-[100%] border-[lightgray] h-[100px] border text-sm px-3 py-3 rounded-sm" placeholder='Additional comments / instrcutions (Specific hours, crane required...)' id='AdditionalCommentsInput' name='AdditionalCommentsInput'/>
                   </div>
 
               </div>
@@ -112,26 +112,26 @@ function ShipmentQuotePage() {
               <div className='bg-white shadow-lg border rounded-md flex flex-col gap-5 px-10 py-10'> 
                   
                 <div className='flex flex-col gap-1'>
-                  <input type="text" className='border border-[lightgray] text-sm  h-[35px] px-4 rounded-sm py-1 w-[85%]' placeholder='Pick Up Address'/>
+                  <input type="text" className='border border-[lightgray] text-sm  h-[35px] px-4 rounded-sm py-1 w-[85%]' placeholder='Pick Up Address' id='PickUpAddressInput' name='PickUpAddressInput'/>
                   <label style={{fontFamily : "Bebas Neue, cursive"}} className='text-[#696969] text-sm'>Pick up address</label>
                 </div>
 
                 <div className="flex gap-5 flex-wrap">
                   <div className='flex flex-col gap-1'>
-                    <input type="text" className='border border-[lightgray] text-sm  h-[35px] px-4 rounded-sm py-1 w-[300px]' placeholder='City'/>
+                    <input type="text" className='border border-[lightgray] text-sm  h-[35px] px-4 rounded-sm py-1 w-[300px]' id='CityInputP' name='CityInputP' placeholder='City'/>
                     <label style={{fontFamily : "Bebas Neue, cursive"}} className='text-[#696969] text-sm'>city</label>
                   </div>
 
                   <div className='flex flex-col gap-1'>
-                    <input type="text" className='border border-[lightgray] text-sm  h-[35px] px-4 rounded-sm py-1 w-[300px]' placeholder='Postal Code'/>
+                    <input type="text" className='border border-[lightgray] text-sm  h-[35px] px-4 rounded-sm py-1 w-[300px]' id='PostalCodeInputP' name='PostalCodeInputP' placeholder='Postal Code'/>
                     <label style={{fontFamily : "Bebas Neue, cursive"}} className='text-[#696969] text-sm'>Postal Code</label>
                   </div>
 
                   <div className='flex flex-col gap-1'>
-                    <select className='border border-[lightgray] py-1 px-1'>
+                    <select id='CountrySelectInputP'  className='border border-[lightgray] py-1 px-1'>
                       <optgroup>
-                        <option value="CA">CA</option>
-                        <option value="USA">USA</option>
+                        <option id='CanadaOptionP' value="CA">CA</option>
+                        <option id='USAOptionP'  value="USA">USA</option>
                       </optgroup>
                     </select>
                     <label style={{fontFamily : "Bebas Neue, cursive"}} className='text-[#696969] text-sm'>Country</label>
@@ -140,20 +140,20 @@ function ShipmentQuotePage() {
 
                 <div className="flex gap-5 flex-wrap">
                   <div className='flex flex-col gap-1'>
-                    <select className='border border-[lightgray] py-1 px-1 w-[200px]'>
+                    <select id='BuildingTypeSelectInputP' className='border border-[lightgray] py-1 px-1 w-[200px]'>
                       <optgroup>
-                        <option value="null"></option>
-                        <option value="house">House</option>
-                        <option value="villa">Villa</option>
-                        <option value="condo">Condo</option>
-                        <option value="Appartment">Appartment</option>
+                        <option id='nullP' value="null"></option>
+                        <option id='HouseP' value="house">House</option>
+                        <option id='VillaP' value="villa">Villa</option>
+                        <option id='CondoP' value="condo">Condo</option>
+                        <option id='ApartmentP' value="Apartment">Apartment</option>
                       </optgroup>
                     </select>
                     <label style={{fontFamily : "Bebas Neue, cursive"}} className='text-[#696969] text-sm'>building type</label>
                   </div>
 
                   <div className='flex flex-col gap-1'>
-                    <input type="number" className='border border-[lightgray] text-sm  h-[35px] px-4 rounded-sm py-1' placeholder='0'/>
+                    <input type="number" className='border border-[lightgray] text-sm  h-[35px] px-4 rounded-sm py-1' placeholder='0' id='NumberOfRoomsInputP' name='NumberOfRoomsInputP'/>
                     <label style={{fontFamily : "Bebas Neue, cursive"}} className='text-[#696969] text-sm'>No. of rooms</label>
                   </div>
 
@@ -163,12 +163,12 @@ function ShipmentQuotePage() {
                       <div className='flex gap-5'>
                         
                         <label className='flex gap-1'>
-                          <input type="radio" name="elevatorP" value="yes"/>
+                          <input type="radio" name="elevatorP" id='YesOptionP' value="yes"/>
                           <span>Yes</span>
                         </label>
                         
                         <label className='flex gap-1'>
-                          <input type="radio" name="elevatorP" value="no"/>
+                          <input type="radio" name="elevatorP" id='NoOptionP' value="no"/>
                           <span>No</span>
                         </label>
                     
@@ -195,26 +195,26 @@ function ShipmentQuotePage() {
               <div className='bg-white shadow-lg border rounded-md flex flex-col gap-5 px-10 py-10'> 
                   
                 <div className='flex flex-col gap-1'>
-                  <input type="text" className='border border-[lightgray] text-sm  h-[35px] px-4 rounded-sm py-1 w-[85%]' placeholder='Drop Off Address'/>
+                  <input type="text" className='border border-[lightgray] text-sm  h-[35px] px-4 rounded-sm py-1 w-[85%]' placeholder='Drop Off Address' name='DropOffAddressInput' id='DropOffAddressInput'/>
                   <label style={{fontFamily : "Bebas Neue, cursive"}} className='text-[#696969] text-sm'>Drop Off address</label>
                 </div>
 
                 <div className="flex gap-5 flex-wrap">
                   <div className='flex flex-col gap-1'>
-                    <input type="text" className='border border-[lightgray] text-sm  h-[35px] px-4 rounded-sm py-1 w-[300px]' placeholder='City'/>
+                    <input type="text" className='border border-[lightgray] text-sm  h-[35px] px-4 rounded-sm py-1 w-[300px]' placeholder='City' name='CityInputD' id='CityInputD'/>
                     <label style={{fontFamily : "Bebas Neue, cursive"}} className='text-[#696969] text-sm'>city</label>
                   </div>
 
                   <div className='flex flex-col gap-1'>
-                    <input type="text" className='border border-[lightgray] text-sm  h-[35px] px-4 rounded-sm py-1 w-[300px]' placeholder='Postal Code'/>
+                    <input type="text" className='border border-[lightgray] text-sm  h-[35px] px-4 rounded-sm py-1 w-[300px]' placeholder='Postal Code' id='PostalCodeInputD' name='PostalCodeInputD'/>
                     <label style={{fontFamily : "Bebas Neue, cursive"}} className='text-[#696969] text-sm'>Postal Code</label>
                   </div>
 
                   <div className='flex flex-col gap-1'>
-                    <select className='border border-[lightgray] py-1 px-1'>
+                    <select id='CountrySelectInputD' className='border border-[lightgray] py-1 px-1'>
                       <optgroup>
-                        <option value="CA">CA</option>
-                        <option value="USA">USA</option>
+                        <option id='CanadaOptionD' value="CA">CA</option>
+                        <option id='USAOptionD' value="USA">USA</option>
                       </optgroup>
                     </select>
                     <label style={{fontFamily : "Bebas Neue, cursive"}} className='text-[#696969] text-sm'>Country</label>
@@ -223,20 +223,20 @@ function ShipmentQuotePage() {
 
                 <div className="flex gap-5 flex-wrap">
                   <div className='flex flex-col gap-1'>
-                    <select className='border border-[lightgray] py-1 px-1 w-[200px]'>
+                    <select id='BuildingTypeSelectInputD' className='border border-[lightgray] py-1 px-1 w-[200px]'>
                       <optgroup>
-                        <option value="null"></option>
-                        <option value="house">House</option>
-                        <option value="villa">Villa</option>
-                        <option value="condo">Condo</option>
-                        <option value="Appartment">Appartment</option>
+                        <option id='nullD' value="null"></option>
+                        <option id='HouseD' value="house">House</option>
+                        <option id='VillaD' value="villa">Villa</option>
+                        <option id='CondoD' value="condo">Condo</option>
+                        <option id='ApartmentD' value="Apartment">Apartment</option>
                       </optgroup>
                     </select>
                     <label style={{fontFamily : "Bebas Neue, cursive"}} className='text-[#696969] text-sm'>building type</label>
                   </div>
 
                   <div className='flex flex-col gap-1'>
-                    <input type="number" className='border border-[lightgray] text-sm  h-[35px] px-4 rounded-sm py-1' placeholder='0'/>
+                    <input type="number" className='border border-[lightgray] text-sm  h-[35px] px-4 rounded-sm py-1' placeholder='0' name='NumberOfRoomsInputD' id='NumberOfRoomsInputD'/>
                     <label style={{fontFamily : "Bebas Neue, cursive"}} className='text-[#696969] text-sm'>No. of rooms</label>
                   </div>
 
@@ -246,12 +246,12 @@ function ShipmentQuotePage() {
                     <div className='flex gap-5'>
                       
                       <label className='flex gap-1'>
-                        <input type="radio" name="elevatorD" value="yes"/>
+                        <input type="radio" name="elevatorD" id='YesOptionD' value="yes"/>
                         <span>Yes</span>
                       </label>
                       
                       <label className='flex gap-1'>
-                        <input type="radio" name="elevatorD" value="no"/>
+                        <input type="radio" name="elevatorD" id='NoOptionD' value="no"/>
                         <span>No</span>
                       </label>
                   
@@ -270,12 +270,12 @@ function ShipmentQuotePage() {
               <div className="flex gap-5">
 
                 <div className='flex flex-col gap-1 w-[60%] sm:w-[40%] md:w-[30%]'>
-                  <input style={{height: "35px"}} type="text" className='border px-6 text-sm rounded-sm' placeholder='Enter Shipment Name' />
+                  <input style={{height: "35px"}} type="text" className='border px-6 text-sm rounded-sm' placeholder='Enter Shipment Name' name='ShipmentNameInput' id='ShipmentNameInput' />
                   <label style={{fontFamily : "Bebas Neue, cursive"}} className='text-[#696969]'>Shipment Name</label>
                 </div>
 
                 <div>
-                  <button className="text-white text-[13px] bg-companyYellow px-10 py-2 rounded-md shadow-md" style={{fontFamily : "Bebas Neue, cursive"}}>Request Quote</button>
+                  <button type="submit" className="text-white text-[13px] bg-companyYellow px-10 py-2 rounded-md shadow-md" style={{fontFamily : "Bebas Neue, cursive"}} name='RequestQuoteBtn' id='RequestQuoteBtn'>Request Quote</button>
                 </div>
 
               </div>

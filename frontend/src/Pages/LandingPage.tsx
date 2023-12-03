@@ -42,7 +42,7 @@ function LandingPage() {
           </div>
 
           <div >
-            <a href="/ShipmentQuote" style={{fontFamily : "Bebas Neue, cursive"}} className="text-white bg-companyYellow px-6 py-2 rounded-full">Shipment Quote</a>
+            <a href="/ShipmentQuote" style={{fontFamily : "Bebas Neue, cursive"}} id="shipmentQuoteBtn" className="text-white bg-companyYellow px-6 py-2 rounded-full">Shipment Quote</a>
           </div>
           
         </div>
