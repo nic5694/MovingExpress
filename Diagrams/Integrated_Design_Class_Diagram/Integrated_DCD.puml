@@ -1,27 +1,113 @@
 @startuml
-'https://plantuml.com/class-diagram
+title Request Quote Class Diagram within the Shipment Subdomain
 
-abstract class AbstractList
-abstract AbstractCollection
-interface List
-interface Collection
+package "shipmentsubdomain" {
 
-List <|-- AbstractList
-Collection <|-- AbstractCollection
+    package "businesslayer" {
+        interface QuoteService {
+            + createQuote(quoteRequest: QuoteRequest) : QuoteResponse
+        }
 
-Collection <|- List
-AbstractCollection <|- AbstractList
-AbstractList <|-- ArrayList
+        class QuoteServiceImpl {
+            - quoteRepository : QuoteRepository
+            - quoteRequestMapper : QuoteRequestMapper
+            - quoteResponseMapper : QuoteResponseMapper
+            + createQuote(quoteRequest: QuoteRequest) : QuoteResponse
+        }
+    }
 
-class ArrayList {
-Object[] elementData
-size()
-}
+    package "datalayer" {
+        class ContactDetails {
+            - name : String
+            - email : String
+            - phoneNumber : String
+            - preferredContactMethod : ContactMethod
+        }
 
-enum TimeUnit {
-DAYS
-HOURS
-MINUTES
+        enum ContactMethod {
+            EMAIL
+            PHONE
+        }
+
+        enum Country {
+            USA
+            CANADA
+        }
+
+        class Address {
+            - line1 : String
+            - line2 : String
+            - city : String
+            - postalCode : String
+            - country : Country
+        }
+
+        class PickupAddress extends Address {
+        }
+
+        class DestinationAddress extends Address {
+        }
+
+        class Quote {
+            - id : int
+            - contactDetails : ContactDetails
+            - pickupAddress : PickupAddress
+            - destinationAddress : DestinationAddress
+            - quoteIdentifier : QuoteIdentifier
+        }
+
+        class QuoteIdentifier {
+            - quoteId : String
+        }
+
+        interface QuoteRepository {
+            + save(quote: Quote) : Quote
+        }
+    }
+
+    package "datamapperlayer" {
+        interface QuoteRequestMapper {
+            + toQuote(quoteRequest: QuoteRequest) : Quote
+        }
+
+        interface QuoteResponseMapper {
+            + toQuoteResponse(quote: Quote) : QuoteResponse
+        }
+    }
+
+    package "presentationlayer" {
+        class QuoteRequest {
+            - contactDetails : ContactDetails
+            - pickupAddress : PickupAddress
+            - destinationAddress : DestinationAddress
+        }
+
+        class QuoteResponse {
+            - quoteId : String
+            - estimatedPrice : double
+            - estimatedTime : String
+        }
+
+        class ShipmentController {
+            - quoteService : QuoteService
+            + requestQuote(quoteRequest: QuoteRequest) : QuoteResponse
+        }
+    }
+
+    QuoteServiceImpl -down-|> QuoteService : implements
+    QuoteServiceImpl -down-> QuoteRepository : uses
+    QuoteServiceImpl -down-> QuoteRequestMapper : uses
+    QuoteServiceImpl -down-> QuoteResponseMapper : uses
+    QuoteRequestMapper <-left- Quote : data conversion
+    QuoteResponseMapper -left-> Quote : data conversion
+    QuoteRepository -[hidden]-> Quote : data persistence
+    Quote -up-^ ContactDetails : has
+    Quote -up-^ PickupAddress : has
+    Quote -up-^ DestinationAddress : has
+    Quote -up-^ QuoteIdentifier : has
+    ContactDetails -[hidden]right-> ContactMethod : uses
+    Address -[hidden]right-> Country : uses
+    ShipmentController -right-> QuoteService : uses
 }
 
 @enduml
