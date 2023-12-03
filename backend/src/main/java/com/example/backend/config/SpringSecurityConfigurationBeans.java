@@ -12,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
@@ -38,16 +37,15 @@ public class SpringSecurityConfigurationBeans {
     @Value("${okta.oauth2.client-id}")
     private String clientId;
     private final String frontendDomain = "http://localhost:3000";
-    private final String begginingFrontendUrl = "http://localhost:3000/";
+
     private final ObjectMapper objectMapper;
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                         //endpoint with the required authorities
-                        .requestMatchers("/api/v1/movingexpress/public").permitAll()
-                        .requestMatchers("/api/v1/movingexpress/private").authenticated()
-                        .requestMatchers("/api/v1/movingexpress/private-scoped").authenticated()
+                        .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET,"/api/v1/movingexpress/public")).permitAll()
+                        .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET,"/api/v1/movingexpress/private")).authenticated()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandling -> {
@@ -66,7 +64,6 @@ public class SpringSecurityConfigurationBeans {
                                 response.setStatus(HttpStatus.OK.value());
                             });
                 })
-                .cors(AbstractHttpConfigurer::disable)
                 .csrf(httpSecurityCsrfConfigurer -> {
                     httpSecurityCsrfConfigurer.ignoringRequestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.POST,"/api/v1/movingexpress/logout"));
                 });

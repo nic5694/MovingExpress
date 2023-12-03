@@ -1,11 +1,10 @@
 import React from 'react'
-import LoginLogout from '../Components/LoginLogout'
-import Profile from './Profile'
 import axios from 'axios'
+axios.defaults.withCredentials = true
 function LandingPage() {
     const retreiveDataTestPrivate = () => {
         axios
-            .get('http://localhost:8080/api/private')
+            .get('http://localhost:8080/api/v1/movingexpress/public')
             .then((response) => {
                 console.log(response)
             })
@@ -15,17 +14,7 @@ function LandingPage() {
     }
     const retreiveDataTestPrivateScoped = () => {
         axios
-            .get('http://localhost:8080/api/private-scoped')
-            .then((response) => {
-                console.log(response)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    }
-    const retreiveDetials = () => {
-        axios
-            .get('http://localhost:8080/api/info')
+            .get('http://localhost:8080/api/v1/movingexpress/private')
             .then((response) => {
                 console.log(response)
             })
@@ -37,17 +26,24 @@ function LandingPage() {
     return (
         <>
             <h1>Hello this is the accessible to the public, React!</h1>
-            <button onClick={retreiveDataTestPrivate}>Test Private</button>
+            <button onClick={retreiveDataTestPrivate}>Test Public</button>
             <br />
             <button onClick={retreiveDataTestPrivateScoped}>
                 Test Private Scoped
             </button>
             <br />
-            <button onClick={retreiveDetials}>Test Details</button>
+            <a href="http://localhost:8080/oauth2/authorization/okta">Login</a>
+
             <br />
-            <LoginLogout />
+            <form
+                method={'post'}
+                action={'http://localhost:8080/api/v2/movingexpress/logout'}
+            >
+                <button type={'submit'}>Logout</button>
+            </form>
+
             {/*@ts-ignore*/}
-            <Profile />
+
             {/*<a href="http://localhost:8080/oauth2/authorization/okta">Login</a>*/}
             <br />
         </>

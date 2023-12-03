@@ -40,27 +40,21 @@ spring:
         auto-quote-keyword: true
 ---
 #for docker
-spring:
-  datasource:
-    url: jdbc:mysql://mysql1/MovingSystem-DB
-    username: user
-    password: pwd
+#spring:
+#  datasource:
+#    url: jdbc:mysql://mysql1/MovingSystem-DB
+#    username: user
+#    password: pwd
+#
+#  config:
+#    activate:
+#      on-profile: docker
+#  sql:
+#    init:
+#      platform: mysql
+#      mode: always
 
-  config:
-    activate:
-      on-profile: docker
-  sql:
-    init:
-      platform: mysql
-      mode: always
 
-okta:
-  oauth2:
-    issuer: https://movingexpress.us.auth0.com/
-    client-id: a9qWMiI6F273lcGJYjBhzN1ZPCBfgS3q
-    client-secret: mcOpX5xdNvjGwBBzYi2CzopjuoZSggc8mRpYFj8vXCDpi8HpIk6m6vtLNRwBJ_6W
-    audience: https://movingexpress/api/
-    groups-claim: https://movingexpress.com/roles
 
 server.port: 8080
 spring.datasource.hikari.initializationFailTimeout: 60000
