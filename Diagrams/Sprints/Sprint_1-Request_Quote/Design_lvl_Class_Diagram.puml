@@ -6,6 +6,10 @@ package "shipmentsubdomain" {
     package "businesslayer" {
         interface QuoteService {
             + createQuote(quoteRequest: QuoteRequest) : QuoteResponse
+            + cancelQuote(quoteId: String) : boolean
+            + updateQuoteStatus(quoteId: String, status: String) : boolean
+            + updateQuote(quoteRequest: QuoteRequest) : QuoteResponse
+            + deleteQuote(quoteId: String) : boolean
         }
 
         class QuoteServiceImpl {
@@ -13,6 +17,10 @@ package "shipmentsubdomain" {
             - quoteRequestMapper : QuoteRequestMapper
             - quoteResponseMapper : QuoteResponseMapper
             + createQuote(quoteRequest: QuoteRequest) : QuoteResponse
+            + cancelQuote(quoteId: String) : boolean
+            + updateQuoteStatus(quoteId: String, status: String) : boolean
+            + updateQuote(quoteRequest: QuoteRequest) : QuoteResponse
+            + deleteQuote(quoteId: String) : boolean
         }
     }
 
@@ -54,6 +62,7 @@ package "shipmentsubdomain" {
             - pickupAddress : PickupAddress
             - destinationAddress : DestinationAddress
             - quoteIdentifier : QuoteIdentifier
+            - status : String
         }
 
         class QuoteIdentifier {
@@ -62,6 +71,9 @@ package "shipmentsubdomain" {
 
         interface QuoteRepository {
             + save(quote: Quote) : Quote
+            + delete(quoteId: String) : boolean
+            + update(quote: Quote) : Quote
+            + findById(quoteId: String) : Quote
         }
     }
 
@@ -77,20 +89,43 @@ package "shipmentsubdomain" {
 
     package "presentationlayer" {
         class QuoteRequest {
-            - contactDetails : ContactDetails
-            - pickupAddress : PickupAddress
-            - destinationAddress : DestinationAddress
+            - pickupStreetAddress : String
+            - pickupCity : String
+            - pickupProvince : String
+            - pickupCountry : Country
+            - pickupPostalCode : String
+            - pickupRoomNumber : int
+            - pickupElevator : boolean
+            - pickupBuildingType : String
+            - destinationStreetAddress : String
+            - destinationCity : String
+            - destinationProvince : String
+            - destinationCountry : Country
+            - destinationPostalCode : String
+            - destinationRoomNumber : int
+            - destinationElevator : boolean
+            - destinationBuildingType : String
+            - firstName : String
+            - lastName : String
+            - emailAddress : String
+            - phoneNumber : String
+            - contactMethod : ContactMethod
+            - expectedMovingDate : String
+            - comment : String
         }
 
         class QuoteResponse {
             - quoteId : String
             - estimatedPrice : double
             - estimatedTime : String
+            - status : String
         }
 
         class ShipmentController {
             - quoteService : QuoteService
             + requestQuote(quoteRequest: QuoteRequest) : QuoteResponse
+            + cancelQuote(quoteId: String) : boolean
+            + updateQuote(quoteRequest: QuoteRequest) : QuoteResponse
         }
     }
 
@@ -98,16 +133,18 @@ package "shipmentsubdomain" {
     QuoteServiceImpl -down-> QuoteRepository : uses
     QuoteServiceImpl -down-> QuoteRequestMapper : uses
     QuoteServiceImpl -down-> QuoteResponseMapper : uses
-    QuoteRequestMapper <-left- Quote : data conversion
-    QuoteResponseMapper -left-> Quote : data conversion
+    QuoteRequestMapper -left- Quote : data conversion
+    QuoteResponseMapper -right- Quote : data conversion
     QuoteRepository -[hidden]-> Quote : data persistence
     Quote -up-^ ContactDetails : has
     Quote -up-^ PickupAddress : has
     Quote -up-^ DestinationAddress : has
     Quote -up-^ QuoteIdentifier : has
-    ContactDetails -[hidden]right-> ContactMethod : uses
-    Address -[hidden]right-> Country : uses
+    ContactDetails -right-> ContactMethod : uses
+    Address -up-^ Country : uses
     ShipmentController -right-> QuoteService : uses
+    ShipmentController -down-> QuoteRequest : uses
+    ShipmentController -down-> QuoteResponse : uses
 }
 
 @enduml
