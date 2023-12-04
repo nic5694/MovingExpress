@@ -2,18 +2,15 @@ package com.example.backend.shipmentsubdomain.presentationlayer;
 
 import com.example.backend.shipmentsubdomain.businesslayer.QuoteService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/v1/quotes")
+@RequestMapping("api/v1/movingexpress/quotes")
 @RequiredArgsConstructor
 public class QuoteController {
     private final QuoteService quoteService;
 
-    @PostMapping()
+    @PostMapping("/request")
     public QuoteResponse addQuote(@RequestBody QuoteRequest quoteRequest){
         return quoteService.addQuote(quoteRequest);
     }
