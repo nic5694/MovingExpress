@@ -1,7 +1,7 @@
 @startuml
-title Request Quote Use Case Sequence Diagram
+title Client Request Quote Sequence Diagram
 
-actor User
+actor Client
 
 participant ReactApplication as "<<View>>\nReactApplication"
 participant LandingPage as "<<View>>\nLandingPage"
@@ -12,26 +12,26 @@ participant QuoteService as "<<Service>>\nQuoteService"
 participant QuoteRepository as "<<Repository>>\nQuoteRepository"
 participant Database as "<<Database>>\nDatabase"
 
-User -> ReactApplication : Access website
+Client -> ReactApplication : Access website
 activate ReactApplication
 
 ReactApplication -> LandingPage : render()
 activate LandingPage
 
-alt User is logged in
+alt Client is logged in
     LandingPage -> UserHomePage : Navigate to profile after login
     deactivate LandingPage
     activate UserHomePage
     UserHomePage -> ShipmentQuotePage : Select 'Request Quote'
     deactivate UserHomePage
-else User is not logged in
+else Client is not logged in
     LandingPage -> ShipmentQuotePage : Select 'Shipment Quote'
     deactivate LandingPage
 end
 activate ShipmentQuotePage
 
-ShipmentQuotePage --> User : Display quote form
-User -> ShipmentQuotePage : Fill up quote details Form
+ShipmentQuotePage --> Client : Display quote form
+Client -> ShipmentQuotePage : Fill up quote details Form
 activate ShipmentQuotePage
 
 ShipmentQuotePage -> QuoteController : POST /quote
@@ -57,7 +57,7 @@ deactivate QuoteService
 QuoteController --> ShipmentQuotePage : Show success message
 deactivate QuoteController
 
-ShipmentQuotePage --> User : 'Quote Sent Successfully' message
+ShipmentQuotePage --> Client : 'Quote Sent Successfully' message
 deactivate ShipmentQuotePage
 
 @enduml
