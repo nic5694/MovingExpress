@@ -3,10 +3,11 @@ package com.example.backend.shipmentsubdomain.datalayer;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name="Quote")
+@Table(name="quotes")
 @Data
 public class Quote {
     @Id
@@ -22,19 +23,22 @@ public class Quote {
     private ContactDetails contactDetails;
     @Enumerated(EnumType.STRING)
     private ContactMethod contactMethod;
-    private Date date;
+    private LocalDate expectedMovingDate;
+    private LocalDateTime initiationDate;
     private String comment;
+    private MovingEstimatorIdentifier movingEstimatorIdentifier;
 
     public Quote(){
         this.quoteIdentifier=new QuoteIdentifier();
     }
 
-    public Quote(PickupAddress pickupAddress, DestinationAddress destinationAddress, ContactDetails contactDetails, Date date, ContactMethod contactMethod, String comment) {
+    public Quote(PickupAddress pickupAddress, DestinationAddress destinationAddress, ContactDetails contactDetails, ContactMethod contactMethod, LocalDate expectedMovingDate,  String comment) {
         this.quoteIdentifier = new QuoteIdentifier();
         this.pickupAddress = pickupAddress;
         this.destinationAddress = destinationAddress;
         this.contactDetails = contactDetails;
-        this.date=date;
+        this.expectedMovingDate=expectedMovingDate;
+        this.initiationDate=LocalDateTime.now();
         this.contactMethod=contactMethod;
         this.comment=comment;
     }

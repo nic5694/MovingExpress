@@ -8,6 +8,8 @@ import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class QuoteServiceImpl implements QuoteService{
@@ -39,12 +41,13 @@ public class QuoteServiceImpl implements QuoteService{
 
         ContactDetails contactDetails = new ContactDetails(quoteRequest.getFirstName(),
                 quoteRequest.getLastName(),
-                quoteRequest.getPhoneNumber(),
-                quoteRequest.getEmailAddress());
+                quoteRequest.getEmailAddress(),
+                quoteRequest.getPhoneNumber());
 
         quote.setPickupAddress(pickupAddress);
         quote.setDestinationAddress(destinationAddress);
         quote.setContactDetails(contactDetails);
+        quote.setInitiationDate(LocalDateTime.now());
 
         Quote savedQuote=quoteRepository.save(quote);
         return quoteResponseMapper.entityToResponseModel(savedQuote);

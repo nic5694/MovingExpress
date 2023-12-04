@@ -13,7 +13,9 @@ public interface QuoteRequestMapper {
             @Mapping(target = "quoteIdentifier", ignore = true),
             @Mapping(target = "pickupAddress", ignore = true),
             @Mapping(target = "destinationAddress", ignore = true),
-            @Mapping(target = "contactDetails", ignore = true)
+            @Mapping(target = "contactDetails", ignore = true),
+            @Mapping(target = "movingEstimatorIdentifier", ignore=true),
+            @Mapping(target = "initiationDate", ignore = true)
     })
     Quote requestModelToEntity(QuoteRequest quoteRequest);
 }

@@ -19,13 +19,13 @@ services:
 
   mysql1:
     image: mysql:5.7
-    container_name: MovingSystem-DB
+    container_name: movingsystem-db
     platform: linux/amd64 # for M1 Macs
     ports:
       - "3310:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=rootpwd
-      - MYSQL_DATABASE=MovingSystem-DB
+      - MYSQL_DATABASE=movingsystem-db
       - MYSQL_USER=user
       - MYSQL_PASSWORD=pwd
     volumes:

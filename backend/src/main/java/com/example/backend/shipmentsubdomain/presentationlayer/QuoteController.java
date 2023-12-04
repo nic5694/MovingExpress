@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/v1/shipments")
+@RequestMapping("api/v1/quotes")
 @RequiredArgsConstructor
-public class ShipmentController {
+public class QuoteController {
     private final QuoteService quoteService;
 
     @PostMapping()

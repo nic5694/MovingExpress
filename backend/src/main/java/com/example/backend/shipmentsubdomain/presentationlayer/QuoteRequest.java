@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Value;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Value
 @Builder
@@ -31,9 +32,9 @@ public class QuoteRequest {
     private String destinationBuildingType;
     private String firstName;
     private String lastName;
-    private String phoneNumber;
     private String emailAddress;
+    private String phoneNumber;
+    private LocalDate expectedMovingDate;
     private ContactMethod contactMethod;
-    private Date date;
     private String comment;
 }

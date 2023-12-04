@@ -13,6 +13,6 @@ import lombok.Value;
 public class ContactDetails {
     private String firstName;
     private String lastName;
-    private String phoneNumber;
     private String emailAddress;
+    private String phoneNumber;
 }

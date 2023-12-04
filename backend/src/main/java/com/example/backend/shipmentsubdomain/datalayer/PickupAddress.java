@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PickupAddress {
-    private String streetAddress;
-    private String city;
-    private String province;
-    private Country country;
-    private String postalCode;
-    private int roomNumber;
-    private boolean elevator;
-    private String buildingType;
+    private String pickupStreetAddress;
+    private String pickupCity;
+    private String pickupProvince;
+    private Country pickupCountry;
+    private String pickupPostalCode;
+    private int pickupRoomNumber;
+    private boolean pickupElevator;
+    private String pickupBuildingType;
 }
