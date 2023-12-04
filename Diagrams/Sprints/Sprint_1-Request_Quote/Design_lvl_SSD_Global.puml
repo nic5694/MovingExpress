@@ -8,11 +8,12 @@ participant ReactApplication as "<<View>>\nReactApplication"
 participant LandingPage as "<<View>>\nLandingPage"
 participant ShipmentQuotePage as "<<View>>\nShipmentQuotePage"
 participant UserHomePage as "<<View>>\nUserHomePage"
+participant AdminHomePage as "<<View>>\nAdminHomePage"
 participant QuoteController as "<<Controller>>\nQuoteController"
 participant QuoteService as "<<Service>>\nQuoteService"
 participant QuoteRepository as "<<Repository>>\nQuoteRepository"
 participant Database as "<<Database>>\nDatabase"
-participant AdminPage as "<<View>>\nAdminPage"
+participant ShipmentQuotes as "<<View>>\nShipmentQuotes"
 
 == Client Sequence ==
 Client -> ReactApplication : Access website
@@ -64,40 +65,72 @@ ShipmentQuotePage --> Client : 'Quote Sent Successfully' message
 deactivate ShipmentQuotePage
 
 == Admin Sequence ==
-Admin -> ReactApplication : Access Admin Panel
+Admin -> ReactApplication : Access website
 activate ReactApplication
 
-ReactApplication -> AdminPage : render()
-activate AdminPage
+ReactApplication -> LandingPage : render()
+activate LandingPage
 
-AdminPage --> Admin : Display quotes management options
-Admin -> AdminPage : Select action (Edit/Delete/Review)
-activate AdminPage
+LandingPage -> AdminHomePage : Admin logs in
+deactivate LandingPage
+activate AdminHomePage
 
-AdminPage -> QuoteController : Admin actions (Edit/Delete/Review)
+AdminHomePage -> ShipmentQuotes : Access Shipment Quotes
+deactivate AdminHomePage
+activate ShipmentQuotes
+
+ShipmentQuotes --> Admin : Display quotes management options (View/Edit/Delete/Review/Accept)
+Admin -> ShipmentQuotes : Select action (View/Edit/Delete/Review/Accept)
+activate ShipmentQuotes
+
+ShipmentQuotes -> QuoteController : Admin actions (View/Edit/Delete/Review/Accept)
 activate QuoteController
 
 QuoteController -> QuoteService : processAdminAction()
 activate QuoteService
 
-QuoteService -> QuoteRepository : updateQuoteData()
-activate QuoteRepository
+alt Action is View
+    QuoteService -> QuoteRepository : retrieveQuotes()
+    activate QuoteRepository
 
-QuoteRepository -> Database : UPDATE quotes
-activate Database
-Database --> QuoteRepository : Update Success
-deactivate Database
+    QuoteRepository -> Database : SELECT quotes
+    activate Database
+    Database --> QuoteRepository : Quotes Data
+    deactivate Database
 
-QuoteRepository --> QuoteService : Action completed
-deactivate QuoteRepository
+    QuoteRepository --> QuoteService : Quotes Retrieved
+    deactivate QuoteRepository
+else Action is Accept
+    QuoteService -> QuoteRepository : markQuoteAsAccepted()
+    activate QuoteRepository
+
+    QuoteRepository -> Database : UPDATE quotes status
+    activate Database
+    Database --> QuoteRepository : Update Success
+    deactivate Database
+
+    QuoteRepository --> QuoteService : Action completed
+    deactivate QuoteRepository
+else Action is Edit/Delete/Review
+    QuoteService -> QuoteRepository : updateQuoteData()
+    activate QuoteRepository
+
+    QuoteRepository -> Database : UPDATE quotes
+    activate Database
+    Database --> QuoteRepository : Update Success
+    deactivate Database
+
+    QuoteRepository --> QuoteService : Action completed
+    deactivate QuoteRepository
+end
 
 QuoteService --> QuoteController : AdminResponse
 deactivate QuoteService
 
-QuoteController --> AdminPage : Show result message
+QuoteController --> ShipmentQuotes : Show result/response message
 deactivate QuoteController
 
-AdminPage --> Admin : 'Action Completed' message
-deactivate AdminPage
+ShipmentQuotes --> Admin : 'Action Completed' or 'Quotes Displayed' message
+deactivate ShipmentQuotes
 
 @enduml
