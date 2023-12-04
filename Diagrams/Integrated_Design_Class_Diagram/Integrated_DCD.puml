@@ -17,7 +17,8 @@ package "movingexpresssubdomain" {
 
             class ShipmentServiceImpl {
                 - shipmentRepository : ShipmentRepository
-                - shipmentMapper : ShipmentMapper
+                - shipmentRequestMapper : ShipmentRequestMapper
+                - shipmentResponseMapper : ShipmentResponseMapper
                 + getAllShipments() : List<ShipmentResponse>
                 + getShipmentDetails(shipmentId: String) : ShipmentResponse
                 + createShipmentFromQuote(quoteId: String) : ShipmentResponse
@@ -150,11 +151,12 @@ package "movingexpresssubdomain" {
         }
 
         package "datamapperlayer" {
-            interface ShipmentMapper {
-                + toShipmentModel(shipment: Shipment) : ShipmentResponse
+            interface ShipmentRequestMapper {
                 + toShipmentEntity(shipmentCreateRequest: ShipmentCreateRequest) : Shipment
-                + toShipmentEntityFromQuote(quoteId: String) : Shipment
-                + updateEntity(shipmentUpdateRequest: ShipmentUpdateRequest, shipment: Shipment): Shipment
+            }
+
+            interface ShipmentResponseMapper {
+                + toShipmentModel(shipment: Shipment) : ShipmentResponse
             }
 
             interface QuoteRequestMapper {
@@ -273,8 +275,10 @@ package "movingexpresssubdomain" {
 
         ' Relationships
         ShipmentServiceImpl -down-> ShipmentRepository : uses
-        ShipmentServiceImpl -down-> ShipmentMapper : uses
-        ShipmentMapper -right-> Shipment : maps
+        ShipmentServiceImpl -down-> ShipmentRequestMapper : uses
+        ShipmentServiceImpl -down-> ShipmentResponseMapper : uses
+        ShipmentRequestMapper -left-> Shipment : maps
+        ShipmentResponseMapper -right-> Shipment : maps
         ShipmentRepository -[hidden]-> Shipment : stores
         Shipment -up-^ ShipmentIdentifier : identified by
         Shipment -up-^ ShipmentStatus : has status
@@ -283,9 +287,7 @@ package "movingexpresssubdomain" {
         ShipmentController -down-> ShipmentResponse : manages
         ShipmentController -down-> ShipmentCreateRequest : receives
         ShipmentController -down-> ShipmentUpdateRequest : receives
-        ShipmentMapper -up-^ ShipmentResponse : maps
-        ShipmentMapper -up-^ ShipmentCreateRequest : maps
-        ShipmentMapper -up-^ ShipmentUpdateRequest : maps
+
         QuoteServiceImpl -down-|> QuoteService : implements
         QuoteServiceImpl -down-> QuoteRepository : uses
         QuoteServiceImpl -down-> QuoteRequestMapper : uses
@@ -307,7 +309,8 @@ package "movingexpresssubdomain" {
         QuoteRequestMapper -up-^ QuoteRequest : uses
         QuoteResponseMapper -up-^ QuoteResponse : uses
         Shipment -up-- Quote : associated with
-    }
+
 }
+
 @enduml
 
