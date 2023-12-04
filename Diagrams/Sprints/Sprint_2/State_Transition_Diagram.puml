@@ -1,0 +1,48 @@
+@startuml
+title Shipment Process State Transition Diagram
+
+skinparam shadowing false
+skinparam ArrowColor Black
+skinparam StateBackgroundColor PaleGreen
+skinparam StateBorderColor Black
+
+[*] --> QuoteRequested
+QuoteRequested --> QuoteUnderReview : Quote Submitted
+QuoteUnderReview -down-> QuoteRejected : Review Rejected
+QuoteUnderReview -down-> QuoteAccepted : Review Approved
+QuoteAccepted -right-> ShipmentCreated : Create Shipment Record
+ShipmentCreated -down-> ShipmentLoaded : Load Items
+ShipmentLoaded --> InTransit : Departure
+InTransit -down-> InCustoms : Enter Customs
+InCustoms -right-> InTransit : Clear Customs
+InTransit -down-> ShipmentDelivered : Arrival at Destination
+ShipmentDelivered --> [*] : Delivery Complete
+
+ShipmentCreated -up-> ShipmentCancelled : Cancellation Requested
+ShipmentLoaded -up-> ShipmentCancelled : Cancellation Requested
+InTransit -up-> ShipmentCancelled : Cancellation Requested
+InCustoms -up-> ShipmentCancelled : Cancellation Requested
+ShipmentCancelled --> [*] : Cancellation Processed
+
+state QuoteUnderReview {
+    [*] --> ReviewInProgress
+    ReviewInProgress --> QuoteUpdated : Update by Estimator/Reviewer
+    QuoteUpdated --> ReviewInProgress : Further Review
+    ReviewInProgress --> [*] : Review Complete
+}
+
+state InCustoms {
+    [*] --> CustomsInspection
+    CustomsInspection --> AwaitingClearance : Awaiting Approval
+    AwaitingClearance --> CustomsCleared : Clearance Granted
+    CustomsCleared --> [*] : Exit Customs
+}
+
+state ShipmentCancelled {
+    [*] --> CancellationProcessing
+    CancellationProcessing --> InventoryCleared : Clear Inventory
+    InventoryCleared --> ObserverCodesRemoved : Remove Observer Codes
+    ObserverCodesRemoved --> [*] : Cancellation Complete
+}
+
+@enduml
