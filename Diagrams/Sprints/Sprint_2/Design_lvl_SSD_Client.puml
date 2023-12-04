@@ -1,0 +1,103 @@
+@startuml
+title Client Shipment Request Sequence Diagram
+
+actor Client
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant LandingPage as "<<View>>\nLandingPage"
+participant UserHomePage as "<<View>>\nUserHomePage"
+participant ShipmentsPage as "<<View>>\nShipmentsPage"
+participant ShipmentDetailsPage as "<<View>>\nShipmentDetailsPage"
+participant ShipmentController as "<<Controller>>\nShipmentController"
+participant ShipmentService as "<<Service>>\nShipmentService"
+participant ShipmentRepository as "<<Repository>>\nShipmentRepository"
+participant Database as "<<Database>>\nDatabase"
+
+Client -> ReactApplication : Access website
+activate ReactApplication
+
+ReactApplication -> LandingPage : render()
+activate LandingPage
+
+LandingPage -> UserHomePage : Client logs in
+deactivate LandingPage
+activate UserHomePage
+
+UserHomePage -> ShipmentsPage : Click 'Shipments' link
+deactivate UserHomePage
+activate ShipmentsPage
+
+ShipmentsPage -> ShipmentController : GET /clientShipments
+activate ShipmentController
+
+ShipmentController -> ShipmentService : getClientShipments()
+activate ShipmentService
+
+ShipmentService -> ShipmentRepository : findAllByClientId()
+activate ShipmentRepository
+
+ShipmentRepository -> Database : SELECT * FROM shipments
+activate Database
+Database --> ShipmentRepository : Shipments
+deactivate Database
+
+ShipmentRepository --> ShipmentService : Shipments
+deactivate ShipmentRepository
+
+ShipmentService --> ShipmentController : ShipmentsResponse
+deactivate ShipmentService
+
+ShipmentController --> ShipmentsPage : Display shipments
+deactivate ShipmentController
+
+ShipmentsPage -> ShipmentDetailsPage : Click on shipment ID
+deactivate ShipmentsPage
+activate ShipmentDetailsPage
+
+alt Print Shipment Report
+    ShipmentDetailsPage -> ShipmentController : GET /printReport
+    activate ShipmentController
+    ShipmentController -> ShipmentService : generateReport()
+    activate ShipmentService
+    ShipmentService --> Client : Download Report as PDF
+    deactivate ShipmentService
+    deactivate ShipmentController
+else Update Shipment Status
+    ShipmentDetailsPage -> ShipmentController : PUT /updateStatus
+    activate ShipmentController
+    ShipmentController -> ShipmentService : updateStatus()
+    activate ShipmentService
+    ShipmentService -> ShipmentRepository : updateStatus()
+    activate ShipmentRepository
+    ShipmentRepository -> Database : UPDATE shipment
+    activate Database
+    Database --> ShipmentRepository : Success
+    deactivate Database
+    ShipmentRepository --> ShipmentService : Success
+    deactivate ShipmentRepository
+    ShipmentService --> ShipmentController : SuccessResponse
+    deactivate ShipmentService
+    ShipmentController --> ShipmentDetailsPage : Show status update confirmation
+    deactivate ShipmentController
+else Cancel Shipment
+    ShipmentDetailsPage -> ShipmentController : DELETE /cancelShipment
+    activate ShipmentController
+    ShipmentController -> ShipmentService : cancelShipment()
+    activate ShipmentService
+    ShipmentService -> ShipmentRepository : delete()
+    activate ShipmentRepository
+    ShipmentRepository -> Database : DELETE FROM shipment
+    activate Database
+    Database --> ShipmentRepository : Success
+    deactivate Database
+    ShipmentRepository --> ShipmentService : Success
+    deactivate ShipmentRepository
+    ShipmentService --> ShipmentController : SuccessResponse
+    deactivate ShipmentService
+    ShipmentController --> ShipmentDetailsPage : Show cancellation confirmation message
+    deactivate ShipmentController
+    ShipmentDetailsPage --> Client : 'Shipment Canceled Successfully'
+    deactivate ShipmentDetailsPage
+end
+
+@enduml
