@@ -2,63 +2,6 @@
 
 left to right direction
 skinparam actorStyle awesome
-skinparam usecase {
-    BackgroundColor DarkSeaGreen
-    BorderColor DarkSlateGray
-    ArrowColor Black
-    ActorBorderColor black
-    ActorFontName Courier
-    ActorBackgroundColor<< Human >> Gold
-}
-
-actor Client as "Client" #LightBlue
-actor "Moving Estimator" as MovingEstimator #LightGreen
-actor "Truck Driver" as VanDriver #Orange
-actor "Moving Crew" as MovingCrew #Purple
-actor Management as "Management" #Yellow
-actor "Shipment Reviewer" as ShipmentReviewer #Blue
-actor "Observer" as Observer #LightCyan
-
-rectangle "Moving Express System" {
-    rectangle UseCases {
-      usecase "2.0 Request Shipment" as UC2 #LightSeaGreen
-      usecase "Request quote" as UC2_1
-      usecase "Manage Shipment" as UC2_2
-      usecase "Cancel Shipment" as UC2_3
-      usecase "Verify Cancellation Shipment Request" as UC2_4
-
-      note "If user wants to manage the shipment information they have so far" as N2
-      note "If user clicks cancel shipment button" as N1
-    }
-}
-
-UC2 <. UC2_1 : <<include>>
-UC2 <. N2 : <<extends>>
-UC2 <.. N1 : <<extends>>
-N1 .. (UC2_3)
-N2 .. (UC2_2)
-UC2_3 <. UC2_4 : <<include>>
-
-Client --|> Observer
-Client --> UC2_1
-Client --> UC2_3
-Observer --> UC2_2
-
-Observer --> UC2
-
-MovingEstimator --> UC2
-
-UC2_3 <-- ShipmentReviewer
-UC2_4 <-- ShipmentReviewer
-UC2 <-- ShipmentReviewer
-
-@enduml
-
-
-@startuml
-
-left to right direction
-skinparam actorStyle awesome
 
 skinparam note {
  FontSize 10
@@ -110,7 +53,6 @@ N1 .. (UC12)
 UC2 <.. N2 : <<Extends>>
 N2 .. (UC2_1)
 
-UC12 ..> UC2 : <<Includes>>
 UC12 <.. N3 : <<Extends>>
 N3 .. (UC12_1)
 
