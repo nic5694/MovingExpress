@@ -1,0 +1,103 @@
+@startuml
+title Request Quote Use Case Sequence Diagram
+
+actor Client
+actor "Shipment Reviewer / Moving Estimator" as Admin
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant LandingPage as "<<View>>\nLandingPage"
+participant ShipmentQuotePage as "<<View>>\nShipmentQuotePage"
+participant UserHomePage as "<<View>>\nUserHomePage"
+participant QuoteController as "<<Controller>>\nQuoteController"
+participant QuoteService as "<<Service>>\nQuoteService"
+participant QuoteRepository as "<<Repository>>\nQuoteRepository"
+participant Database as "<<Database>>\nDatabase"
+participant AdminPage as "<<View>>\nAdminPage"
+
+== Client Sequence ==
+Client -> ReactApplication : Access website
+activate ReactApplication
+
+ReactApplication -> LandingPage : render()
+activate LandingPage
+
+alt Client is logged in
+    LandingPage -> UserHomePage : Navigate to profile after login
+    deactivate LandingPage
+    activate UserHomePage
+    UserHomePage -> ShipmentQuotePage : Select 'Request Quote'
+    deactivate UserHomePage
+else Client is not logged in
+    LandingPage -> ShipmentQuotePage : Select 'Shipment Quote'
+    deactivate LandingPage
+end
+activate ShipmentQuotePage
+
+ShipmentQuotePage --> Client : Display quote form
+Client -> ShipmentQuotePage : Fill up quote details Form
+activate ShipmentQuotePage
+
+ShipmentQuotePage -> QuoteController : POST /quote
+activate QuoteController
+
+QuoteController -> QuoteService : createQuote()
+activate QuoteService
+
+QuoteService -> QuoteRepository : save(quoteData)
+activate QuoteRepository
+
+QuoteRepository -> Database : INSERT INTO quotes
+activate Database
+Database --> QuoteRepository : Success
+deactivate Database
+
+QuoteRepository --> QuoteService : Quote saved
+deactivate QuoteRepository
+
+QuoteService --> QuoteController : QuoteResponse
+deactivate QuoteService
+
+QuoteController --> ShipmentQuotePage : Show success message
+deactivate QuoteController
+
+ShipmentQuotePage --> Client : 'Quote Sent Successfully' message
+deactivate ShipmentQuotePage
+
+== Admin Sequence ==
+Admin -> ReactApplication : Access Admin Panel
+activate ReactApplication
+
+ReactApplication -> AdminPage : render()
+activate AdminPage
+
+AdminPage --> Admin : Display quotes management options
+Admin -> AdminPage : Select action (Edit/Delete/Review)
+activate AdminPage
+
+AdminPage -> QuoteController : Admin actions (Edit/Delete/Review)
+activate QuoteController
+
+QuoteController -> QuoteService : processAdminAction()
+activate QuoteService
+
+QuoteService -> QuoteRepository : updateQuoteData()
+activate QuoteRepository
+
+QuoteRepository -> Database : UPDATE quotes
+activate Database
+Database --> QuoteRepository : Update Success
+deactivate Database
+
+QuoteRepository --> QuoteService : Action completed
+deactivate QuoteRepository
+
+QuoteService --> QuoteController : AdminResponse
+deactivate QuoteService
+
+QuoteController --> AdminPage : Show result message
+deactivate QuoteController
+
+AdminPage --> Admin : 'Action Completed' message
+deactivate AdminPage
+
+@enduml
