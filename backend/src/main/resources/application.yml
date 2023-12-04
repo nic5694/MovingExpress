@@ -16,6 +16,7 @@ logging:
     com.example: DEBUG # package name
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.security: DEBUG
 ---
 # for H2 tests
 spring:

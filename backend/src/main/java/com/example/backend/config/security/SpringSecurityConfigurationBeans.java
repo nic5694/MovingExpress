@@ -1,6 +1,8 @@
 package com.example.backend.config.security;
+
 import com.example.backend.config.ErrorMessge;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,11 +45,10 @@ public class SpringSecurityConfigurationBeans {
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                        //endpoint with the required authorities
+                        .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/v1/movingexpress/quotes/request")).permitAll()
 //                        .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/v1/movingexpress/public")).permitAll()
 //                        .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/v1/movingexpress/private")).authenticated()
-                          .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/v1/movingexpress/quotes/request")).permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .exceptionHandling(exceptionHandling -> {
                     exceptionHandling.authenticationEntryPoint(authenticationEntryPoint());
@@ -59,9 +60,20 @@ public class SpringSecurityConfigurationBeans {
                 })
                 .oauth2ResourceServer(jwt -> jwt.jwt(withDefaults()))
                 .logout(logout -> {
-                    logout.logoutUrl("/api/v1/movingexpress/logout")
+                    logout
+                            .logoutUrl("/api/v1/movingexpress/logout")
                             .addLogoutHandler(logoutHandler())
                             .logoutSuccessHandler((request, response, authentication) -> {
+
+                                Arrays.stream(request.getCookies()).toList().forEach(cookie -> {
+                                    if (!cookie.getName().equals("JSESSIONID")) {
+                                        Cookie newCookie = new Cookie(cookie.getName(), "");
+                                        newCookie.setMaxAge(0);
+                                        newCookie.setPath("/");
+                                        response.addCookie(newCookie);
+
+                                    }
+                                });
                                 response.setStatus(HttpStatus.OK.value());
                             });
                 })
@@ -75,14 +87,16 @@ public class SpringSecurityConfigurationBeans {
     public CorsConfigurationSource corsConfigurationSource() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         final CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin(Arrays.toString(new String[]{"http://localhost:3000", "http://localhost:8080"}));
+        config.addAllowedOrigin("*"); // Allow requests from any origin
+//        config.addAllowedOrigin(Arrays.toString(new String[]{"http://localhost:3000", "http://localhost:8080"}));
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:8080"));
         config.addAllowedMethod("GET");
         config.addAllowedMethod("PUT");
         config.addAllowedMethod("POST");
         config.addAllowedMethod("DELETE");
-//        config.addAllowedHeader("*");
+        config.addAllowedHeader("*");
         config.addAllowedHeader("Authorization");
+        config.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", config);
         return source;
     }

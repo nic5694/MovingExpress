@@ -4,13 +4,16 @@ import com.example.backend.shipmentsubdomain.businesslayer.QuoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
-@RequestMapping("api/v1/movingexpress/quotes")
+@RequestMapping(path = "api/v1/movingexpress/quotes")
+@CrossOrigin(origins = "http://localhost:3000",allowCredentials = "true")
 @RequiredArgsConstructor
 public class QuoteController {
     private final QuoteService quoteService;
 
-    @PostMapping("/request")
+    @ResponseStatus(org.springframework.http.HttpStatus.CREATED)
+    @GetMapping(value = "/request")
     public QuoteResponse addQuote(@RequestBody QuoteRequest quoteRequest){
         return quoteService.addQuote(quoteRequest);
     }
