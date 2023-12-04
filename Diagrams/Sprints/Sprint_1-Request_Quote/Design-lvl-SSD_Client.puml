@@ -1,5 +1,5 @@
 @startuml
-title Client Request Quote Sequence Diagram
+title Client Actions in Request Quote Sequence Diagram
 
 actor Client
 
@@ -22,9 +22,10 @@ alt Client is logged in
     LandingPage -> UserHomePage : Navigate to profile after login
     deactivate LandingPage
     activate UserHomePage
+
     UserHomePage -> ShipmentQuotePage : Select 'Request Quote'
     deactivate UserHomePage
-else Client is not logged in
+else
     LandingPage -> ShipmentQuotePage : Select 'Shipment Quote'
     deactivate LandingPage
 end
@@ -59,5 +60,59 @@ deactivate QuoteController
 
 ShipmentQuotePage --> Client : 'Quote Sent Successfully' message
 deactivate ShipmentQuotePage
+
+alt Client is logged in (Post-Quote Creation)
+    UserHomePage -> QuoteController : View Quote Status
+    activate QuoteController
+
+    QuoteController -> QuoteService : retrieveQuoteStatus()
+    activate QuoteService
+
+    QuoteService -> QuoteRepository : SELECT quote
+    activate QuoteRepository
+
+    QuoteRepository -> Database : Query quote data
+    activate Database
+    Database --> QuoteRepository : Query Results
+    deactivate Database
+
+    QuoteRepository --> QuoteService : Quote Status
+    deactivate QuoteRepository
+
+    QuoteService --> QuoteController : QuoteStatusResponse
+    deactivate QuoteService
+
+    QuoteController --> UserHomePage : Display Quote Status
+    deactivate QuoteController
+
+    UserHomePage --> Client : Show Quote Status
+    deactivate UserHomePage
+
+    UserHomePage -> QuoteController : Edit Quote
+    activate QuoteController
+
+    QuoteController -> QuoteService : editQuote()
+    activate QuoteService
+
+    QuoteService -> QuoteRepository : UPDATE quote
+    activate QuoteRepository
+
+    QuoteRepository -> Database : Update quote data
+    activate Database
+    Database --> QuoteRepository : Update Results
+    deactivate Database
+
+    QuoteRepository --> QuoteService : Update Confirmation
+    deactivate QuoteRepository
+
+    QuoteService --> QuoteController : EditResponse
+    deactivate QuoteService
+
+    QuoteController --> UserHomePage : Edit Confirmation
+    deactivate QuoteController
+
+    UserHomePage --> Client : Show Edit Confirmation
+    deactivate UserHomePage
+end
 
 @enduml
