@@ -1,1 +1,0 @@
-INSERT INTO Quote VALUES (NULL, 'abc123', '123 Main St', 'Cityville', 'Provinceville', 'Countryland', 'A1B2C3', 4, TRUE, 'Apartment', '456 Side St', 'Townsville', 'Regionville', 'Countryland', 'X1Y2Z3', 7, FALSE, 'House', 'Alice', 'Johnson', 'alice.j@example.com', '5551234567', 'email', '2023-12-15', 'This is a dummy comment.', NULL);

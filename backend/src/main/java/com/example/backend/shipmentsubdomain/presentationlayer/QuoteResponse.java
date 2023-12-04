@@ -2,7 +2,8 @@ package com.example.backend.shipmentsubdomain.presentationlayer;
 
 import com.example.backend.shipmentsubdomain.datalayer.ContactMethod;
 
-import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.example.backend.shipmentsubdomain.datalayer.Country;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.Value;
 @Builder
 public class QuoteResponse {
     private String quoteId;
+    private String movingEstimatorId=null;
     private String pickupStreetAddress;
     private String pickupCity;
     private String pickupProvince;
@@ -35,6 +37,7 @@ public class QuoteResponse {
     private String phoneNumber;
     private String emailAddress;
     private ContactMethod contactMethod;
-    private Date date;
+    private LocalDate expectedMovingDate;
+    private LocalDateTime initiationDate;
     private String comment;
 }
