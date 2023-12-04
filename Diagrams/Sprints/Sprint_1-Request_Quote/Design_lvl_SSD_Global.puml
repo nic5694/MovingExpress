@@ -25,13 +25,15 @@ alt Client is logged in
     LandingPage -> UserHomePage : Navigate to profile after login
     deactivate LandingPage
     activate UserHomePage
+
     UserHomePage -> ShipmentQuotePage : Select 'Request Quote'
     deactivate UserHomePage
-else Client is not logged in
+    activate ShipmentQuotePage
+else
     LandingPage -> ShipmentQuotePage : Select 'Shipment Quote'
     deactivate LandingPage
+    activate ShipmentQuotePage
 end
-activate ShipmentQuotePage
 
 ShipmentQuotePage --> Client : Display quote form
 Client -> ShipmentQuotePage : Fill up quote details Form
@@ -62,6 +64,34 @@ deactivate QuoteController
 
 ShipmentQuotePage --> Client : 'Quote Sent Successfully' message
 deactivate ShipmentQuotePage
+
+alt Client is logged in (Post-Quote Creation)
+    UserHomePage -> QuoteController : View/Edit Quote Status
+    activate QuoteController
+
+    QuoteController -> QuoteService : retrieveQuoteStatus()/editQuote()
+    activate QuoteService
+
+    QuoteService -> QuoteRepository : SELECT quotes/UPDATE quotes
+    activate QuoteRepository
+
+    QuoteRepository -> Database : Query/Update quote data
+    activate Database
+    Database --> QuoteRepository : Query/Update Results
+    deactivate Database
+
+    QuoteRepository --> QuoteService : Quote Status/Update Confirmation
+    deactivate QuoteRepository
+
+    QuoteService --> QuoteController : QuoteStatusResponse/EditResponse
+    deactivate QuoteService
+
+    QuoteController --> UserHomePage : Display Quote Status/Edit Confirmation
+    deactivate QuoteController
+
+    UserHomePage --> Client : Show Quote Status/Edit Confirmation
+    deactivate UserHomePage
+end
 
 == Admin Sequence ==
 Admin -> ReactApplication : Access website
