@@ -5,7 +5,9 @@ package "shipmentsubdomain" {
 
     package "businesslayer" {
         interface QuoteService {
-            + createQuote(quoteRequest: QuoteRequest) : QuoteResponse
+            + getQuotes() : List<QuoteResponse>
+            + getQuoteDetails(quoteId: String) : QuoteResponse
+            + addQuote(quoteRequest: QuoteRequest) : QuoteResponse
             + cancelQuote(quoteId: String) : boolean
             + updateQuoteStatus(quoteId: String, status: String) : boolean
             + updateQuote(quoteRequest: QuoteRequest) : QuoteResponse
@@ -16,7 +18,9 @@ package "shipmentsubdomain" {
             - quoteRepository : QuoteRepository
             - quoteRequestMapper : QuoteRequestMapper
             - quoteResponseMapper : QuoteResponseMapper
-            + createQuote(quoteRequest: QuoteRequest) : QuoteResponse
+            + getQuotes() : List<QuoteResponse>
+            + getQuoteDetails(quoteId: String) : QuoteResponse
+            + addQuote(quoteRequest: QuoteRequest) : QuoteResponse
             + cancelQuote(quoteId: String) : boolean
             + updateQuoteStatus(quoteId: String, status: String) : boolean
             + updateQuote(quoteRequest: QuoteRequest) : QuoteResponse
@@ -26,43 +30,60 @@ package "shipmentsubdomain" {
 
     package "datalayer" {
         class ContactDetails {
-            - name : String
-            - email : String
+            - firstName : String
+            - lastName : String
+            - emailAddress : String
             - phoneNumber : String
-            - preferredContactMethod : ContactMethod
         }
 
         enum ContactMethod {
             EMAIL
-            PHONE
+            PHONE_NUMBER
+            BOTH
         }
 
         enum Country {
             USA
-            CANADA
+            CA
         }
 
-        class Address {
-            - line1 : String
-            - line2 : String
-            - city : String
-            - postalCode : String
-            - country : Country
+        class PickupAddress{
+            - pickupStreetAddress : String
+            - pickupCity:String
+            - pickupProvince:String
+            - pickupCountry:String
+            - pickupPostalCode:String
+            - pickupRoomNumber:int
+            - pickupElevator:boolean
+            - pickupBuildingType:String
         }
 
-        class PickupAddress extends Address {
-        }
-
-        class DestinationAddress extends Address {
+        class DestinationAddress{
+            - destinationStreetAddress : String
+            - destinationCity:String
+            - destinationProvince:String
+            - destinationCountry:String
+            - destinationPostalCode:String
+            - destinationRoomNumber:int
+            - destinationElevator:boolean
+            - destinationBuildingType:String
         }
 
         class Quote {
-            - id : int
-            - contactDetails : ContactDetails
+            - id : Integer
+            - quoteIdentifier: QuoteIdentifier
             - pickupAddress : PickupAddress
             - destinationAddress : DestinationAddress
-            - quoteIdentifier : QuoteIdentifier
-            - status : String
+            - contactDetails : ContactDetails
+            - contactMethod: ContactMethod
+            - expectedMovingDate: LocalDate
+            - initiationDate: LocalDateTime
+            - comment: String
+            - movingEstimatorIdentifier: MovingEstimatorIdentifier
+        }
+
+        class MovingEstimatorIdentifier {
+            - movingEstimatorId : String
         }
 
         class QuoteIdentifier {
@@ -70,20 +91,19 @@ package "shipmentsubdomain" {
         }
 
         interface QuoteRepository {
-            + save(quote: Quote) : Quote
-            + delete(quoteId: String) : boolean
-            + update(quote: Quote) : Quote
-            + findById(quoteId: String) : Quote
+            + findByQuoteId(quoteId: String): Quote
         }
     }
 
     package "datamapperlayer" {
         interface QuoteRequestMapper {
-            + toQuote(quoteRequest: QuoteRequest) : Quote
+            + requestModelToEntity(quoteRequest: QuoteRequest) : Quote
+            + requestModelsToEntities(quoteRequests: List<QuoteRequest>) : List<Quote>
         }
 
         interface QuoteResponseMapper {
-            + toQuoteResponse(quote: Quote) : QuoteResponse
+            + entityToResponseModel(quote: Quote) : QuoteResponse
+            + entitiesToResponseModels(quotes: List<Quote>): List<QuoteResponse>
         }
     }
 
@@ -110,20 +130,44 @@ package "shipmentsubdomain" {
             - emailAddress : String
             - phoneNumber : String
             - contactMethod : ContactMethod
-            - expectedMovingDate : String
+            - expectedMovingDate : LocalDate
             - comment : String
         }
 
         class QuoteResponse {
             - quoteId : String
-            - estimatedPrice : double
-            - estimatedTime : String
-            - status : String
+            - movingEstimatorId: String
+            - pickupStreetAddress : String
+            - pickupCity : String
+            - pickupProvince : String
+            - pickupCountry : Country
+            - pickupPostalCode : String
+            - pickupRoomNumber : int
+            - pickupElevator : boolean
+            - pickupBuildingType : String
+            - destinationStreetAddress : String
+            - destinationCity : String
+            - destinationProvince : String
+            - destinationCountry : Country
+            - destinationPostalCode : String
+            - destinationRoomNumber : int
+            - destinationElevator : boolean
+            - destinationBuildingType : String
+            - firstName : String
+            - lastName : String
+            - emailAddress : String
+            - phoneNumber : String
+            - contactMethod : ContactMethod
+            - expectedMovingDate : LocalDate
+            - initiationDate: LocalDateTime
+            - comment : String
         }
 
-        class ShipmentController {
+        class QuoteController {
             - quoteService : QuoteService
-            + requestQuote(quoteRequest: QuoteRequest) : QuoteResponse
+            + getQuotes(): List<QuoteResponse>
+            + getQuoteDetails(quoteId: String) : QuoteResponse
+            + addQuote(quoteRequest: QuoteRequest) : QuoteResponse
             + cancelQuote(quoteId: String) : boolean
             + updateQuote(quoteRequest: QuoteRequest) : QuoteResponse
         }
@@ -140,11 +184,15 @@ package "shipmentsubdomain" {
     Quote -up-^ PickupAddress : has
     Quote -up-^ DestinationAddress : has
     Quote -up-^ QuoteIdentifier : has
-    ContactDetails -right-> ContactMethod : uses
-    Address -up-^ Country : uses
-    ShipmentController -right-> QuoteService : uses
-    ShipmentController -down-> QuoteRequest : uses
-    ShipmentController -down-> QuoteResponse : uses
+    Quote -up-^ MovingEstimatorIdentifier : has
+    Quote -up-^ ContactMethod : has
+    PickupAddress -up-^ Country : uses
+    DestinationAddress -up-^ Country : uses
+    QuoteController -right-> QuoteService : uses
+    QuoteController -down-> QuoteRequest : uses
+    QuoteController -down-> QuoteResponse : uses
+    QuoteRequestMapper -up-^ QuoteRequest : uses
+    QuoteResponseMapper -up-^ QuoteResponse : uses
 }
 
 @enduml
