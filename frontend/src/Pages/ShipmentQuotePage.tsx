@@ -1,7 +1,138 @@
 import React from 'react'
 import NavBar1 from '../Components/NavBar1'
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 function ShipmentQuotePage() {
+  
+  
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    
+    e.preventDefault();
+
+    console.log(e)
+
+    // personal info 
+    let firstName : string = (e.target as any).form[0].value
+    let lastName : string = (e.target as any).form[1].value
+    let email : string = (e.target as any).form[2].value
+    let phonenumber : string = (e.target as any).form[3].value
+    let movingDate : Date = (e.target as any).form[4].value
+    //Radio Btns
+    let emailValueRadioBtn :boolean = (e.target as any).form[5].checked
+    let PhoneNumberRadioBtn :boolean = (e.target as any).form[6].checked
+    let BothValueRadioBtn :boolean = (e.target as any).form[7].checked
+    let additionalComments : string = (e.target as any).form[8].value
+
+    let wayToContact : string = "BOTH"
+    if(emailValueRadioBtn){
+      wayToContact = "EMAIL"
+    } else if (PhoneNumberRadioBtn) {
+      wayToContact = "PHONE_NUMBER"
+    } else if (BothValueRadioBtn){
+      wayToContact = "BOTH"
+    }
+
+    
+
+    //pick up location info
+    let pickUpAddress : string = (e.target as any).form[9].value
+    let cityP : string = (e.target as any).form[10].value
+    let postalCodeP : string = (e.target as any).form[11].value
+    let countryP : string = (e.target as any).form[12].value
+    let buildingTypeP :string = (e.target as any).form[13].value
+    let numberofRoomP : number = (e.target as any).form[14].value
+    // elevator Pick up
+    let elevatorYesRadioBtnP :boolean = (e.target as any).form[15].checked
+    let elevatorNoRadioBtnP :boolean = (e.target as any).form[16].checked
+
+    let elevatorisPresentP : boolean
+    if(elevatorYesRadioBtnP){
+      elevatorisPresentP = true
+    } else {
+      elevatorisPresentP = false
+    } 
+
+    // drop off destination
+    let dropOffAddress : string = (e.target as any).form[17].value
+    let cityD : string = (e.target as any).form[18].value
+    let postalCodeD : string = (e.target as any).form[19].value
+    let countryD : string = (e.target as any).form[20].value
+    let buildingTypeD :string = (e.target as any).form[21].value
+    let numberofRoomD : number = (e.target as any).form[22].value
+    // elevator Drop off
+    let elevatorYesRadioBtnD :boolean = (e.target as any).form[23].checked
+    let elevatorNoRadioBtnD :boolean = (e.target as any).form[24].checked
+    
+    let elevatorisPresentD : boolean
+    if(elevatorYesRadioBtnD){
+      elevatorisPresentD = true
+    } else {
+      elevatorisPresentD = false
+    } 
+
+    // shipment name
+    let shipmentName : string = (e.target as any).form[25].value
+
+    const quoteForm = {
+      "pickupStreetAddress": pickUpAddress,
+      "pickupCity": cityP,
+      "pickupProvince": "null",
+      "pickupCountry": countryP,
+      "pickupPostalCode": postalCodeP,
+      "pickupRoomNumber": numberofRoomP,
+      "pickupElevator": elevatorisPresentP,
+      "pickupBuildingType": buildingTypeP,
+      "destinationStreetAddress": dropOffAddress,
+      "destinationCity": cityD,
+      "destinationProvince": "null",
+      "destinationCountry": countryD,
+      "destinationPostalCode": postalCodeD,
+      "destinationRoomNumber": numberofRoomD,
+      "destinationElevator": elevatorisPresentD,
+      "destinationBuildingType": buildingTypeD,
+      "firstName": firstName,
+      "lastName": lastName,
+      "emailAddress": email,
+      "phoneNumber": phonenumber,
+      "contactMethod": wayToContact,
+      "expectedMovingDate": movingDate,
+      "comment": additionalComments
+    }
+
+    try {
+      // Make a POST request using Axios
+      const response = await axios.post('http://localhost:8080/api/v1/movingexpress/quotes/request', quoteForm);
+      console.log('Response:', response.data);
+      
+      toast.success('Request quote sent successfully !', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('Error something happend', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
+    }
+  };
+
+
+
   return (
     <div>
       <NavBar1></NavBar1>
@@ -275,7 +406,7 @@ function ShipmentQuotePage() {
                 </div>
 
                 <div>
-                  <button type="submit" className="text-white text-[13px] bg-companyYellow px-10 py-2 rounded-md shadow-md" style={{fontFamily : "Bebas Neue, cursive"}} name='RequestQuoteBtn' id='RequestQuoteBtn'>Request Quote</button>
+                  <button type="submit" onClick={handleSubmit} className="text-white text-[13px] bg-companyYellow px-10 py-2 rounded-md shadow-md" style={{fontFamily : "Bebas Neue, cursive"}} name='RequestQuoteBtn' id='RequestQuoteBtn'>Request Quote</button>
                 </div>
 
               </div>

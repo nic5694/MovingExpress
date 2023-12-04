@@ -1,7 +1,6 @@
 # Stage 1 - Build the React application
 FROM node:18-alpine as react-build
 WORKDIR /frontend/
-# Copy Tailwind CSS configuration
 
 COPY public /frontend/public/
 COPY src/ /frontend/src

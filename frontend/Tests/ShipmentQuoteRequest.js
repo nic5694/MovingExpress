@@ -121,7 +121,10 @@ async function test_case() {
     
     
     // validate
-
+    const toastifyDiv = await driver.findElement(By.className('Toastify__toast'));
+    const classAttribute = await toastifyDiv.getAttribute('class');
+    // Assert that the class attribute contains the expected class
+    assert(classAttribute.includes('Toastify__toast--success'), 'Expected class not found');
 
     // Close the browser after waiting for another 5 seconds
     await new Promise(resolve => setTimeout(resolve, 1000));

@@ -1,6 +1,7 @@
 import React from 'react'
 import logo from '../Images/ME_Logo.png'
 import Footer from '../Components/Footer'
+import { Link } from 'react-router-dom'
 
 function LandingPage() {
   return (
@@ -15,11 +16,11 @@ function LandingPage() {
         </div>
         
         <div className="flex gap-5 align-middle">
-          <div>
+          {/* <div>
             <a style={{fontFamily : "Bebas Neue, cursive"}} className="border-[3px] border-companyYellow px-7 py-2 rounded-md text-white" href='/SignUp'>Sign Up</a>
-          </div>
+          </div> */}
           <div>
-            <a style={{fontFamily : "Bebas Neue, cursive"}} className="border-[3px] border-companyYellow px-7 py-2 rounded-md text-white" href='/Login'>Login</a>
+            <a style={{fontFamily : "Bebas Neue, cursive"}} className="border-[3px] border-companyYellow px-7 py-2 rounded-md text-white" href='http://localhost:8080/oauth2/authorization/okta'>Login | Sign Up</a>
           </div>
         </div>
 
@@ -42,7 +43,8 @@ function LandingPage() {
           </div>
 
           <div >
-            <a href="/ShipmentQuote" style={{fontFamily : "Bebas Neue, cursive"}} id="shipmentQuoteBtn" className="text-white bg-companyYellow px-6 py-2 rounded-full">Shipment Quote</a>
+            {/* <a href="/ShipmentQuote" style={{fontFamily : "Bebas Neue, cursive"}} id="shipmentQuoteBtn" className="text-white bg-companyYellow px-6 py-2 rounded-full">Shipment Quote</a> */}
+            <Link style={{fontFamily : "Bebas Neue, cursive"}} id="shipmentQuoteBtn" className="text-white bg-companyYellow px-6 py-2 rounded-full" to={"/ShipmentQuote"}>Shipment Quote</Link>
           </div>
           
         </div>
