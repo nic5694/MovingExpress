@@ -14,6 +14,8 @@ skinparam usecase {
 
 actor Client as "Client" #LightBlue
 actor "Shipment Reviewer" as ShipmentReviewer #Blue
+actor "Moving Estimator" as MovingEstimator #LightGreen
+
 
 rectangle "Moving Express System" {
     rectangle "UseCases 1"  {
@@ -29,6 +31,7 @@ rectangle "Moving Express System" {
 Client --> UC1
 
 UC1_1 <--- ShipmentReviewer
+UC1_1 <--- MovingEstimator
 
 UC1 ..> UC1_1  : <<Includes>>
 
