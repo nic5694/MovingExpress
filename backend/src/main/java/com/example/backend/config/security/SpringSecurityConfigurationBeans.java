@@ -76,10 +76,11 @@ public class SpringSecurityConfigurationBeans {
                                 });
                                 response.setStatus(HttpStatus.OK.value());
                             });
-                })
-                .csrf(httpSecurityCsrfConfigurer -> {
-                    httpSecurityCsrfConfigurer.ignoringRequestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/v1/movingexpress/logout"));
-                });
+                }).csrf().disable();
+                //.ignoringRequestMatchers("/api/v1/movingexpress/quotes/request");
+//                .csrf( -> {
+//                    httpSecurityCsrfConfigurer.ignoringRequestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/v1/movingexpress/logout"));
+//                });
         return http.build();
     }
 

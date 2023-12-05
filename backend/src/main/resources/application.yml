@@ -59,6 +59,9 @@ spring:
       platform: mysql
       mode: always
 
+# Exclude SecurityAutoConfiguration to disable Spring Security auto-configuration
+spring.autoconfigure.exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+
 server.port: 8080
 spring.datasource.hikari.initializationFailTimeout: 60000
 

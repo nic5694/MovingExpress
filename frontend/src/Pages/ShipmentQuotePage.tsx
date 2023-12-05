@@ -101,35 +101,45 @@ function ShipmentQuotePage() {
       "comment": additionalComments
     }
 
+    console.log(quoteForm)
+
     try {
       // Make a POST request using Axios
-      const response = await axios.post('http://localhost:8080/api/v1/movingexpress/quotes/request', quoteForm);
+      const response = await axios.post(
+        'http://localhost:8080/api/v1/movingexpress/quotes/request',
+        quoteForm,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
       console.log('Response:', response.data);
-      
+    
       toast.success('Request quote sent successfully !', {
-        position: "top-right",
+        position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "light",
-        });
+        theme: 'light',
+      });
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Error something happend', {
-        position: "top-right",
+      toast.error('Error something happened', {
+        position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "light",
-        });
+        theme: 'light',
+      });
     }
-  };
+  }
 
 
 
