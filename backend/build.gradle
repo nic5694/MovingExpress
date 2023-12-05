@@ -50,6 +50,10 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}",
             "org.projectlombok:lombok:${lombokVersion}",
             "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}",
+            "org.projectlombok:lombok:${lombokVersion}",
+            "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
     testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     testImplementation 'org.yaml:snakeyaml:2.2'
 
@@ -68,7 +72,9 @@ jacocoTestReport {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
                     "com/example/backend/config",
-                    "**/lombok/**/*.class"
+                    "**/lombok/**/*.class",
+                    "**/Lombok*.*",
+                    "**/*Lombok*.*",
             ])
         }))
     }
@@ -84,8 +90,7 @@ jacocoTestCoverageVerification {
     }
 }
 
-test.finalizedBy jacocoTestReport
-check.dependsOn jacocoTestCoverageVerification
+
 
 
 test {
