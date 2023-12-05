@@ -11,7 +11,7 @@ jobs:
           name: Install Lombok
           command: |
             wget https://projectlombok.org/downloads/lombok.jar
-            java -jar lombok.jar install
+            java -jar lombok.jar install $JAVA_HOME
       - run:
           name: build spring boot application
           command: |
