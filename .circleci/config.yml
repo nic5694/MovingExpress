@@ -12,8 +12,8 @@ jobs:
           command: |
             cd backend
             ./gradlew clean build
+
 workflows:
   my-custom-workflow:
     jobs:
       - build
-
