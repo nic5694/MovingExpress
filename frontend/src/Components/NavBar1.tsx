@@ -24,7 +24,7 @@ function NavBar1() {
               <a style={{fontFamily : "Bebas Neue, cursive"}} className="border-[3px] border-companyYellow px-7 py-2 rounded-md text-white" href='/Login'>Login</a>
             </div> */}
             <div>
-              <a style={{fontFamily : "Bebas Neue, cursive"}} name="signinsignupnavbar" id="signinsignupnavbar" className="border-[3px] border-companyYellow px-7 py-2 rounded-md text-white" href='http://localhost:8080/oauth2/authorization/okta'> Login | Sign Up</a>
+              <a style={{fontFamily : "Bebas Neue, cursive"}} id="signinsignupnavbar" className="border-[3px] border-companyYellow px-7 py-2 rounded-md text-white" href='http://localhost:8080/oauth2/authorization/okta'> Login | Sign Up</a>
             </div>
           </div>
 
