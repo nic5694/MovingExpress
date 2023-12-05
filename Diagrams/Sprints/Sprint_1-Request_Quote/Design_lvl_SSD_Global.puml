@@ -28,12 +28,11 @@ alt Client is logged in
 
     UserHomePage -> ShipmentQuotePage : Select 'Request Quote'
     deactivate UserHomePage
-    activate ShipmentQuotePage
 else
     LandingPage -> ShipmentQuotePage : Select 'Shipment Quote'
     deactivate LandingPage
-    activate ShipmentQuotePage
 end
+activate ShipmentQuotePage
 
 ShipmentQuotePage --> Client : Display quote form
 Client -> ShipmentQuotePage : Fill up quote details Form
@@ -66,30 +65,56 @@ ShipmentQuotePage --> Client : 'Quote Sent Successfully' message
 deactivate ShipmentQuotePage
 
 alt Client is logged in (Post-Quote Creation)
-    UserHomePage -> ShipmentController : View/Edit Quote Status
+    UserHomePage -> ShipmentController : View Quote Status
     activate ShipmentController
 
-    ShipmentController -> QuoteService : retrieveQuoteStatus()/editQuote()
+    ShipmentController -> QuoteService : retrieveQuoteStatus()
     activate QuoteService
 
-    QuoteService -> QuoteRepository : SELECT quotes/UPDATE quotes
+    QuoteService -> QuoteRepository : SELECT quote
     activate QuoteRepository
 
-    QuoteRepository -> Database : Query/Update quote data
+    QuoteRepository -> Database : Query quote data
     activate Database
-    Database --> QuoteRepository : Query/Update Results
+    Database --> QuoteRepository : Query Results
     deactivate Database
 
-    QuoteRepository --> QuoteService : Quote Status/Update Confirmation
+    QuoteRepository --> QuoteService : Quote Status
     deactivate QuoteRepository
 
-    QuoteService --> ShipmentController : QuoteStatusResponse/EditResponse
+    QuoteService --> ShipmentController : QuoteStatusResponse
     deactivate QuoteService
 
-    ShipmentController --> UserHomePage : Display Quote Status/Edit Confirmation
+    ShipmentController --> UserHomePage : Display Quote Status
     deactivate ShipmentController
 
-    UserHomePage --> Client : Show Quote Status/Edit Confirmation
+    UserHomePage --> Client : Show Quote Status
+    deactivate UserHomePage
+
+    UserHomePage -> ShipmentController : Edit Quote
+    activate ShipmentController
+
+    ShipmentController -> QuoteService : editQuote()
+    activate QuoteService
+
+    QuoteService -> QuoteRepository : UPDATE quote
+    activate QuoteRepository
+
+    QuoteRepository -> Database : Update quote data
+    activate Database
+    Database --> QuoteRepository : Update Results
+    deactivate Database
+
+    QuoteRepository --> QuoteService : Update Confirmation
+    deactivate QuoteRepository
+
+    QuoteService --> ShipmentController : EditResponse
+    deactivate QuoteService
+
+    ShipmentController --> UserHomePage : Edit Confirmation
+    deactivate ShipmentController
+
+    UserHomePage --> Client : Show Edit Confirmation
     deactivate UserHomePage
 end
 

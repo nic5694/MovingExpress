@@ -53,10 +53,7 @@ dependencies {
     testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     testImplementation 'org.yaml:snakeyaml:2.2'
 
-    implementation 'org.projectlombok:lombok:1.18.22'
-    annotationProcessor 'org.projectlombok:lombok:1.18.22'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
-    testImplementation 'org.projectlombok:lombok:1.18.22'
+
 }
 bootJar {
     duplicatesStrategy = 'fail'
@@ -70,7 +67,8 @@ jacocoTestReport {
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
-                    "com/example/backend/config"
+                    "com/example/backend/config",
+                    "**/lombok/**/*.class"
             ])
         }))
     }
