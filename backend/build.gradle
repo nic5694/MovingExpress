@@ -27,6 +27,7 @@ dependencies {
     implementation 'org.yaml:snakeyaml:2.2'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation "com.h2database:h2:"
     implementation 'mysql:mysql-connector-java:8.0.23'
     implementation 'com.okta.spring:okta-spring-boot-starter:3.0.5'
@@ -49,8 +50,14 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}",
             "org.projectlombok:lombok:${lombokVersion}",
             "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}",
+            "org.projectlombok:lombok:${lombokVersion}",
+            "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
     testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     testImplementation 'org.yaml:snakeyaml:2.2'
+
+
 }
 bootJar {
     duplicatesStrategy = 'fail'
@@ -64,7 +71,10 @@ jacocoTestReport {
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
-                    "com/petclinic/visits/visitsservicenew/VisitsServiceNewApplication.class"
+                    "com/example/backend/config",
+                    "**/lombok/**/*.class",
+                    "**/Lombok*.*",
+                    "**/*Lombok*.*",
             ])
         }))
     }
@@ -74,14 +84,13 @@ jacocoTestCoverageVerification {
     violationRules {
         rule {
             limit {
-                minimum = 0.00
+                minimum = 0.90
             }
         }
     }
 }
 
-test.finalizedBy jacocoTestReport
-check.dependsOn jacocoTestCoverageVerification
+
 
 
 test {
