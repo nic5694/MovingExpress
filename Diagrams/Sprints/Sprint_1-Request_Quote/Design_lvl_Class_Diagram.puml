@@ -1,0 +1,198 @@
+@startuml
+title Request Quote Class Diagram within the Shipment Subdomain
+
+package "shipmentsubdomain" {
+
+    package "businesslayer" {
+        interface QuoteService {
+            + getQuotes() : List<QuoteResponse>
+            + getQuoteDetails(quoteId: String) : QuoteResponse
+            + addQuote(quoteRequest: QuoteRequest) : QuoteResponse
+            + cancelQuote(quoteId: String) : boolean
+            + updateQuoteStatus(quoteId: String, status: String) : boolean
+            + updateQuote(quoteRequest: QuoteRequest) : QuoteResponse
+            + deleteQuote(quoteId: String) : boolean
+        }
+
+        class QuoteServiceImpl {
+            - quoteRepository : QuoteRepository
+            - quoteRequestMapper : QuoteRequestMapper
+            - quoteResponseMapper : QuoteResponseMapper
+            + getQuotes() : List<QuoteResponse>
+            + getQuoteDetails(quoteId: String) : QuoteResponse
+            + addQuote(quoteRequest: QuoteRequest) : QuoteResponse
+            + cancelQuote(quoteId: String) : boolean
+            + updateQuoteStatus(quoteId: String, status: String) : boolean
+            + updateQuote(quoteRequest: QuoteRequest) : QuoteResponse
+            + deleteQuote(quoteId: String) : boolean
+        }
+    }
+
+    package "datalayer" {
+        class ContactDetails {
+            - firstName : String
+            - lastName : String
+            - emailAddress : String
+            - phoneNumber : String
+        }
+
+        enum ContactMethod {
+            EMAIL
+            PHONE_NUMBER
+            BOTH
+        }
+
+        enum Country {
+            USA
+            CA
+        }
+
+        class PickupAddress{
+            - pickupStreetAddress : String
+            - pickupCity:String
+            - pickupProvince:String
+            - pickupCountry:String
+            - pickupPostalCode:String
+            - pickupRoomNumber:int
+            - pickupElevator:boolean
+            - pickupBuildingType:String
+        }
+
+        class DestinationAddress{
+            - destinationStreetAddress : String
+            - destinationCity:String
+            - destinationProvince:String
+            - destinationCountry:String
+            - destinationPostalCode:String
+            - destinationRoomNumber:int
+            - destinationElevator:boolean
+            - destinationBuildingType:String
+        }
+
+        class Quote {
+            - id : Integer
+            - quoteIdentifier: QuoteIdentifier
+            - pickupAddress : PickupAddress
+            - destinationAddress : DestinationAddress
+            - contactDetails : ContactDetails
+            - contactMethod: ContactMethod
+            - expectedMovingDate: LocalDate
+            - initiationDate: LocalDateTime
+            - comment: String
+            - movingEstimatorIdentifier: MovingEstimatorIdentifier
+        }
+
+        class MovingEstimatorIdentifier {
+            - movingEstimatorId : String
+        }
+
+        class QuoteIdentifier {
+            - quoteId : String
+        }
+
+        interface QuoteRepository {
+            + findByQuoteId(quoteId: String): Quote
+        }
+    }
+
+    package "datamapperlayer" {
+        interface QuoteRequestMapper {
+            + requestModelToEntity(quoteRequest: QuoteRequest) : Quote
+            + requestModelsToEntities(quoteRequests: List<QuoteRequest>) : List<Quote>
+        }
+
+        interface QuoteResponseMapper {
+            + entityToResponseModel(quote: Quote) : QuoteResponse
+            + entitiesToResponseModels(quotes: List<Quote>): List<QuoteResponse>
+        }
+    }
+
+    package "presentationlayer" {
+        class QuoteRequest {
+            - pickupStreetAddress : String
+            - pickupCity : String
+            - pickupProvince : String
+            - pickupCountry : Country
+            - pickupPostalCode : String
+            - pickupRoomNumber : int
+            - pickupElevator : boolean
+            - pickupBuildingType : String
+            - destinationStreetAddress : String
+            - destinationCity : String
+            - destinationProvince : String
+            - destinationCountry : Country
+            - destinationPostalCode : String
+            - destinationRoomNumber : int
+            - destinationElevator : boolean
+            - destinationBuildingType : String
+            - firstName : String
+            - lastName : String
+            - emailAddress : String
+            - phoneNumber : String
+            - contactMethod : ContactMethod
+            - expectedMovingDate : LocalDate
+            - comment : String
+        }
+
+        class QuoteResponse {
+            - quoteId : String
+            - movingEstimatorId: String
+            - pickupStreetAddress : String
+            - pickupCity : String
+            - pickupProvince : String
+            - pickupCountry : Country
+            - pickupPostalCode : String
+            - pickupRoomNumber : int
+            - pickupElevator : boolean
+            - pickupBuildingType : String
+            - destinationStreetAddress : String
+            - destinationCity : String
+            - destinationProvince : String
+            - destinationCountry : Country
+            - destinationPostalCode : String
+            - destinationRoomNumber : int
+            - destinationElevator : boolean
+            - destinationBuildingType : String
+            - firstName : String
+            - lastName : String
+            - emailAddress : String
+            - phoneNumber : String
+            - contactMethod : ContactMethod
+            - expectedMovingDate : LocalDate
+            - initiationDate: LocalDateTime
+            - comment : String
+        }
+
+        class QuoteController {
+            - quoteService : QuoteService
+            + getQuotes(): List<QuoteResponse>
+            + getQuoteDetails(quoteId: String) : QuoteResponse
+            + addQuote(quoteRequest: QuoteRequest) : QuoteResponse
+            + cancelQuote(quoteId: String) : boolean
+            + updateQuote(quoteRequest: QuoteRequest) : QuoteResponse
+        }
+    }
+
+    QuoteServiceImpl -down-|> QuoteService : implements
+    QuoteServiceImpl -down-> QuoteRepository : uses
+    QuoteServiceImpl -down-> QuoteRequestMapper : uses
+    QuoteServiceImpl -down-> QuoteResponseMapper : uses
+    QuoteRequestMapper -left- Quote : data conversion
+    QuoteResponseMapper -right- Quote : data conversion
+    QuoteRepository -[hidden]-> Quote : data persistence
+    Quote -up-^ ContactDetails : has
+    Quote -up-^ PickupAddress : has
+    Quote -up-^ DestinationAddress : has
+    Quote -up-^ QuoteIdentifier : has
+    Quote -up-^ MovingEstimatorIdentifier : has
+    Quote -up-^ ContactMethod : has
+    PickupAddress -up-^ Country : uses
+    DestinationAddress -up-^ Country : uses
+    QuoteController -right-> QuoteService : uses
+    QuoteController -down-> QuoteRequest : uses
+    QuoteController -down-> QuoteResponse : uses
+    QuoteRequestMapper -up-^ QuoteRequest : uses
+    QuoteResponseMapper -up-^ QuoteResponse : uses
+}
+
+@enduml

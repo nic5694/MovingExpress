@@ -14,30 +14,26 @@ skinparam usecase {
 
 actor Client as "Client" #LightBlue
 actor "Shipment Reviewer" as ShipmentReviewer #Blue
-actor "Observer" as Observer #LightCyan
+actor "Moving Estimator" as MovingEstimator #LightGreen
+
 
 rectangle "Moving Express System" {
-    rectangle UseCases {
+    rectangle "UseCases 1"  {
       usecase "1.0 Request a Quote" as UC1 #LightSeaGreen
-      usecase "Cancel Quote" as UC1_1
-      usecase "Verify Cancellation Quote Request" as UC1_2
+      usecase "1.1 Review quote Request" as UC1_1  #LightSeaGreen
 
-      note "If user clicks cancel quote button" as N1
+/'
+      note "If the quote was refused" as N1
+'/
     }
 }
 
-UC1_1 <. UC1_2 : <<include>>
+Client --> UC1
 
-Client --|> Observer
-Client --> UC1_1
+UC1_1 <--- ShipmentReviewer
+UC1_1 <--- MovingEstimator
 
-Observer --> UC1
+UC1 ..> UC1_1  : <<Includes>>
 
-UC1_1 <-- ShipmentReviewer
-UC1_2 <-- ShipmentReviewer
-UC1 <-- ShipmentReviewer
-
-UC1 <.. N1 : <<extends>>
-N1 .. (UC1_1)
 
 @enduml

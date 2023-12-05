@@ -1,0 +1,78 @@
+@startuml
+title Admin Actions on Quotes Sequence Diagram
+
+actor "Shipment Reviewer / Moving Estimator" as Admin
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant LandingPage as "<<View>>\nLandingPage"
+participant ShipmentController as "<<Controller>>\nShipmentController"
+participant QuoteService as "<<Service>>\nQuoteService"
+participant QuoteRepository as "<<Repository>>\nQuoteRepository"
+participant Database as "<<Database>>\nDatabase"
+participant ShipmentQuotes as "<<View>>\nShipmentQuotes"
+
+Admin -> ReactApplication : Access website
+activate ReactApplication
+
+ReactApplication -> LandingPage : render()
+activate LandingPage
+
+LandingPage -> ShipmentQuotes : Admin logs in
+deactivate LandingPage
+activate ShipmentQuotes
+
+ShipmentQuotes --> Admin : Display quotes management options (View/Edit/Delete/Review/Accept)
+Admin -> ShipmentQuotes : Select action (View/Edit/Delete/Review/Accept)
+activate ShipmentQuotes
+
+ShipmentQuotes -> ShipmentController : Admin actions (View/Edit/Delete/Review/Accept)
+activate ShipmentController
+
+ShipmentController -> QuoteService : processAdminAction()
+activate QuoteService
+
+alt Action is View
+    QuoteService -> QuoteRepository : retrieveQuotes()
+    activate QuoteRepository
+
+    QuoteRepository -> Database : SELECT quotes
+    activate Database
+    Database --> QuoteRepository : Quotes Data
+    deactivate Database
+
+    QuoteRepository --> QuoteService : Quotes Retrieved
+    deactivate QuoteRepository
+else Action is Accept
+    QuoteService -> QuoteRepository : markQuoteAsAccepted()
+    activate QuoteRepository
+
+    QuoteRepository -> Database : UPDATE quotes status
+    activate Database
+    Database --> QuoteRepository : Update Success
+    deactivate Database
+
+    QuoteRepository --> QuoteService : Action completed
+    deactivate QuoteRepository
+else Action is Edit/Delete/Review
+    QuoteService -> QuoteRepository : updateQuoteData()
+    activate QuoteRepository
+
+    QuoteRepository -> Database : UPDATE quotes
+    activate Database
+    Database --> QuoteRepository : Update Success
+    deactivate Database
+
+    QuoteRepository --> QuoteService : Action completed
+    deactivate QuoteRepository
+end
+
+QuoteService --> ShipmentController : AdminResponse
+deactivate QuoteService
+
+ShipmentController --> ShipmentQuotes : Show result/response message
+deactivate ShipmentController
+
+ShipmentQuotes --> Admin : 'Action Completed' or 'Quotes Displayed' message
+deactivate ShipmentQuotes
+
+@enduml

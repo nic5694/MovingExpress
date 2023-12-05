@@ -1,0 +1,98 @@
+@startuml
+title Shipment Management Sequence Diagram for Moving Estimator and Shipment Reviewer
+
+actor "Moving Estimator / Shipment Reviewer" as Admin
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant LandingPage as "<<View>>\nLandingPage"
+participant ShipmentQuotesPage as "<<View>>\nShipmentQuotesPage"
+participant ShipmentDetailsPage as "<<View>>\nShipmentDetailsPage"
+participant ShipmentController as "<<Controller>>\nShipmentController"
+participant ShipmentService as "<<Service>>\nShipmentService"
+participant ShipmentRepository as "<<Repository>>\nShipmentRepository"
+participant Database as "<<Database>>\nDatabase"
+
+Admin -> ReactApplication : Access website
+activate ReactApplication
+
+ReactApplication -> LandingPage : render()
+activate LandingPage
+
+LandingPage -> ShipmentQuotesPage : Admin logs in
+deactivate LandingPage
+activate ShipmentQuotesPage
+
+ShipmentQuotesPage -> ShipmentController : GET /shipmentQuotes
+activate ShipmentController
+
+ShipmentController -> ShipmentService : getAllShipmentQuotes()
+activate ShipmentService
+
+ShipmentService -> ShipmentRepository : findAllQuotes()
+activate ShipmentRepository
+
+ShipmentRepository -> Database : SELECT * FROM shipmentQuotes
+activate Database
+Database --> ShipmentRepository : ShipmentQuotes
+deactivate Database
+
+ShipmentRepository --> ShipmentService : ShipmentQuotes
+deactivate ShipmentRepository
+
+ShipmentService --> ShipmentController : ShipmentQuotesResponse
+deactivate ShipmentService
+
+ShipmentController --> ShipmentQuotesPage : Display shipment quotes
+deactivate ShipmentController
+
+ShipmentQuotesPage -> ShipmentDetailsPage : Select 'View Details' of an accepted quote
+deactivate ShipmentQuotesPage
+activate ShipmentDetailsPage
+
+alt Print Shipment Report
+    ShipmentDetailsPage -> ShipmentController : GET /printReport
+    activate ShipmentController
+    ShipmentController -> ShipmentService : generateReport()
+    activate ShipmentService
+    ShipmentService --> Admin : Download Report
+    deactivate ShipmentService
+    deactivate ShipmentController
+else Update Shipment Details
+    ShipmentDetailsPage -> ShipmentController : PUT /updateDetails
+    activate ShipmentController
+    ShipmentController -> ShipmentService : updateDetails()
+    activate ShipmentService
+    ShipmentService -> ShipmentRepository : updateDetails()
+    activate ShipmentRepository
+    ShipmentRepository -> Database : UPDATE shipmentDetails
+    activate Database
+    Database --> ShipmentRepository : Success
+    deactivate Database
+    ShipmentRepository --> ShipmentService : Success
+    deactivate ShipmentRepository
+    ShipmentService --> ShipmentController : SuccessResponse
+    deactivate ShipmentService
+    ShipmentController --> ShipmentDetailsPage : Show details update confirmation
+    deactivate ShipmentController
+else Cancel Shipment
+    ShipmentDetailsPage -> ShipmentController : DELETE /cancelShipment
+    activate ShipmentController
+    ShipmentController -> ShipmentService : cancelShipment()
+    activate ShipmentService
+    ShipmentService -> ShipmentRepository : delete()
+    activate ShipmentRepository
+    ShipmentRepository -> Database : DELETE FROM shipment
+    activate Database
+    Database --> ShipmentRepository : Success
+    deactivate Database
+    ShipmentRepository --> ShipmentService : Success
+    deactivate ShipmentRepository
+    ShipmentService --> ShipmentController : SuccessResponse
+    deactivate ShipmentService
+    ShipmentController --> ShipmentDetailsPage : Show cancellation confirmation message
+    deactivate ShipmentController
+    ShipmentDetailsPage --> Admin : 'Shipment Canceled Successfully'
+    deactivate ShipmentDetailsPage
+end
+
+@enduml

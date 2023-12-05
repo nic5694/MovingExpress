@@ -1,0 +1,316 @@
+@startuml
+title Integrated Shipment and Quote Class Diagram within Moving Express Subdomain
+
+package "movingexpresssubdomain" {
+
+    package "shipmentsubdomain" {
+
+        package "businesslayer" {
+            interface ShipmentService {
+                + getAllShipments() : List<ShipmentResponse>
+                + getShipmentDetails(shipmentId: String) : ShipmentResponse
+                + createShipmentFromQuote(quoteId: String) : ShipmentResponse
+                + updateShipment(shipmentUpdateRequest: ShipmentUpdateRequest) : ShipmentResponse
+                + deleteShipment(shipmentId: String) : boolean
+                + updateShipmentStatus(shipmentId: String, status: ShipmentStatus) : boolean
+            }
+
+            class ShipmentServiceImpl {
+                - shipmentRepository : ShipmentRepository
+                - shipmentRequestMapper : ShipmentRequestMapper
+                - shipmentResponseMapper : ShipmentResponseMapper
+                + getAllShipments() : List<ShipmentResponse>
+                + getShipmentDetails(shipmentId: String) : ShipmentResponse
+                + createShipmentFromQuote(quoteId: String) : ShipmentResponse
+                + updateShipment(shipmentUpdateRequest: ShipmentUpdateRequest) : ShipmentResponse
+                + deleteShipment(shipmentId: String) : boolean
+                + updateShipmentStatus(shipmentId: String, status: ShipmentStatus) : boolean
+            }
+
+            interface QuoteService {
+                + getQuotes() : List<QuoteResponse>
+                + getQuoteDetails(quoteId: String) : QuoteResponse
+                + addQuote(quoteRequest: QuoteRequest) : QuoteResponse
+                + cancelQuote(quoteId: String) : boolean
+                + updateQuoteStatus(quoteId: String, status: String) : boolean
+                + updateQuote(quoteRequest: QuoteRequest) : QuoteResponse
+                + deleteQuote(quoteId: String) : boolean
+            }
+
+            class QuoteServiceImpl {
+                - quoteRepository : QuoteRepository
+                - quoteRequestMapper : QuoteRequestMapper
+                - quoteResponseMapper : QuoteResponseMapper
+                + getQuotes() : List<QuoteResponse>
+                + getQuoteDetails(quoteId: String) : QuoteResponse
+                + addQuote(quoteRequest: QuoteRequest) : QuoteResponse
+                + cancelQuote(quoteId: String) : boolean
+                + updateQuoteStatus(quoteId: String, status: String) : boolean
+                + updateQuote(quoteRequest: QuoteRequest) : QuoteResponse
+                + deleteQuote(quoteId: String) : boolean
+            }
+        }
+
+        package "datalayer" {
+            class Shipment {
+                - id : Integer
+                - shipmentId: String
+                - status: ShipmentStatus
+                - departureAddress: String
+                - arrivalAddress: String
+                - estimatedDeparture: LocalDateTime
+                - estimatedArrival: LocalDateTime
+                - quoteId: String
+            }
+
+            class Quote {
+                - id : Integer
+                - quoteIdentifier: QuoteIdentifier
+                - pickupAddress : PickupAddress
+                - destinationAddress : DestinationAddress
+                - contactDetails : ContactDetails
+                - contactMethod: ContactMethod
+                - expectedMovingDate: LocalDate
+                - initiationDate: LocalDateTime
+                - comment: String
+                - movingEstimatorIdentifier: MovingEstimatorIdentifier
+            }
+
+            class ShipmentIdentifier {
+                - shipmentId : String
+            }
+
+            class MovingEstimatorIdentifier {
+                - movingEstimatorId : String
+            }
+
+            class QuoteIdentifier {
+                - quoteId : String
+            }
+
+            interface ShipmentRepository {
+                + findById(shipmentId: String): Shipment
+                + findByQuoteId(quoteId: String): Shipment
+                + save(shipment: Shipment): Shipment
+                + deleteById(shipmentId: String): void
+            }
+
+            interface QuoteRepository {
+                + findByQuoteId(quoteId: String): Quote
+            }
+
+            enum ShipmentStatus {
+                IN_TRANSITION
+                LOADED
+                UNLOADED
+                AWAITING_PICKUP
+                IN_CUSTOMS
+                DELIVERED
+                CANCELED
+            }
+
+            enum ContactMethod {
+                EMAIL
+                PHONE_NUMBER
+                BOTH
+            }
+
+            enum Country {
+                USA
+                CA
+            }
+
+            class PickupAddress {
+                - pickupStreetAddress : String
+                - pickupCity : String
+                - pickupProvince : String
+                - pickupCountry : Country
+                - pickupPostalCode : String
+                - pickupRoomNumber : int
+                - pickupElevator : boolean
+                - pickupBuildingType : String
+            }
+
+            class DestinationAddress {
+                - destinationStreetAddress : String
+                - destinationCity : String
+                - destinationProvince : String
+                - destinationCountry : Country
+                - destinationPostalCode : String
+                - destinationRoomNumber : int
+                - destinationElevator : boolean
+                - destinationBuildingType : String
+            }
+
+            class ContactDetails {
+                - firstName : String
+                - lastName : String
+                - emailAddress : String
+                - phoneNumber : String
+            }
+        }
+
+        package "datamapperlayer" {
+            interface ShipmentRequestMapper {
+                + toShipmentEntity(shipmentCreateRequest: ShipmentCreateRequest) : Shipment
+            }
+
+            interface ShipmentResponseMapper {
+                + toShipmentModel(shipment: Shipment) : ShipmentResponse
+            }
+
+            interface QuoteRequestMapper {
+                + requestModelToEntity(quoteRequest: QuoteRequest) : Quote
+                + requestModelsToEntities(quoteRequests: List<QuoteRequest>) : List<Quote>
+            }
+
+            interface QuoteResponseMapper {
+                + entityToResponseModel(quote: Quote) : QuoteResponse
+                + entitiesToResponseModels(quotes: List<Quote>): List<QuoteResponse>
+            }
+        }
+
+        package "presentationlayer" {
+            class ShipmentResponse {
+                - shipmentId : String
+                - status: ShipmentStatus
+                - departureAddress: String
+                - arrivalAddress: String
+                - estimatedDeparture: LocalDateTime
+                - estimatedArrival: LocalDateTime
+                - quoteId: String
+            }
+
+            class ShipmentCreateRequest {
+                - departureAddress: String
+                - arrivalAddress: String
+                - estimatedDeparture: LocalDateTime
+                - estimatedArrival: LocalDateTime
+            }
+
+            class ShipmentUpdateRequest {
+                - shipmentId : String
+                - status: ShipmentStatus
+                - departureAddress: String
+                - arrivalAddress: String
+                - estimatedDeparture: LocalDateTime
+                - estimatedArrival: LocalDateTime
+            }
+
+            class ShipmentController {
+                - shipmentService : ShipmentService
+                + getAllShipments(): List<ShipmentResponse>
+                + getShipmentDetails(shipmentId: String) : ShipmentResponse
+                + createShipmentFromQuote(quoteId: String) : ShipmentResponse
+                + updateShipment(shipmentUpdateRequest: ShipmentUpdateRequest) : ShipmentResponse
+                + deleteShipment(shipmentId: String) : boolean
+                + updateShipmentStatus(shipmentId: String, status: ShipmentStatus) : boolean
+            }
+
+            class QuoteRequest {
+                - pickupStreetAddress : String
+                - pickupCity : String
+                - pickupProvince : String
+                - pickupCountry : Country
+                - pickupPostalCode : String
+                - pickupRoomNumber : int
+                - pickupElevator : boolean
+                - pickupBuildingType : String
+                - destinationStreetAddress : String
+                - destinationCity : String
+                - destinationProvince : String
+                - destinationCountry : Country
+                - destinationPostalCode : String
+                - destinationRoomNumber : int
+                - destinationElevator : boolean
+                - destinationBuildingType : String
+                - firstName : String
+                - lastName : String
+                - emailAddress : String
+                - phoneNumber : String
+                - contactMethod : ContactMethod
+                - expectedMovingDate : LocalDate
+                - comment : String
+            }
+
+            class QuoteResponse {
+                - quoteId : String
+                - movingEstimatorId: String
+                - pickupStreetAddress : String
+                - pickupCity : String
+                - pickupProvince : String
+                - pickupCountry : Country
+                - pickupPostalCode : String
+                - pickupRoomNumber : int
+                - pickupElevator : boolean
+                - pickupBuildingType : String
+                - destinationStreetAddress : String
+                - destinationCity : String
+                - destinationProvince : String
+                - destinationCountry : Country
+                - destinationPostalCode : String
+                - destinationRoomNumber : int
+                - destinationElevator : boolean
+                - destinationBuildingType : String
+                - firstName : String
+                - lastName : String
+                - emailAddress : String
+                - phoneNumber : String
+                - contactMethod : ContactMethod
+                - expectedMovingDate : LocalDate
+                - initiationDate: LocalDateTime
+                - comment : String
+            }
+
+            class QuoteController {
+                - quoteService : QuoteService
+                + getQuotes(): List<QuoteResponse>
+                + getQuoteDetails(quoteId: String) : QuoteResponse
+                + addQuote(quoteRequest: QuoteRequest) : QuoteResponse
+                + cancelQuote(quoteId: String) : boolean
+                + updateQuote(quoteRequest: QuoteRequest) : QuoteResponse
+                + deleteQuote(quoteId: String) : boolean
+            }
+        }
+
+        ' Relationships
+        ShipmentServiceImpl -down-> ShipmentRepository : uses
+        ShipmentServiceImpl -down-> ShipmentRequestMapper : uses
+        ShipmentServiceImpl -down-> ShipmentResponseMapper : uses
+        ShipmentRequestMapper -left-> Shipment : maps
+        ShipmentResponseMapper -right-> Shipment : maps
+        ShipmentRepository -[hidden]-> Shipment : stores
+        Shipment -up-^ ShipmentIdentifier : identified by
+        Shipment -up-^ ShipmentStatus : has status
+        Shipment -up-^ Country : uses
+        ShipmentController -right-> ShipmentService : uses
+        ShipmentController -down-> ShipmentResponse : manages
+        ShipmentController -down-> ShipmentCreateRequest : receives
+        ShipmentController -down-> ShipmentUpdateRequest : receives
+
+        QuoteServiceImpl -down-|> QuoteService : implements
+        QuoteServiceImpl -down-> QuoteRepository : uses
+        QuoteServiceImpl -down-> QuoteRequestMapper : uses
+        QuoteServiceImpl -down-> QuoteResponseMapper : uses
+        QuoteRequestMapper -left- Quote : data conversion
+        QuoteResponseMapper -right- Quote : data conversion
+        QuoteRepository -[hidden]-> Quote : data persistence
+        Quote -up-^ ContactDetails : has
+        Quote -up-^ PickupAddress : has
+        Quote -up-^ DestinationAddress : has
+        Quote -up-^ QuoteIdentifier : has
+        Quote -up-^ MovingEstimatorIdentifier : has
+        Quote -up-^ ContactMethod : has
+        PickupAddress -up-^ Country : uses
+        DestinationAddress -up-^ Country : uses
+        QuoteController -right-> QuoteService : uses
+        QuoteController -down-> QuoteRequest : uses
+        QuoteController -down-> QuoteResponse : uses
+        QuoteRequestMapper -up-^ QuoteRequest : uses
+        QuoteResponseMapper -up-^ QuoteResponse : uses
+        Shipment -up-- Quote : associated with
+
+}
+
+@enduml
+
