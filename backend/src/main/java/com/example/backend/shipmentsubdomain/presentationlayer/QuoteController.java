@@ -13,7 +13,7 @@ public class QuoteController {
     private final QuoteService quoteService;
 
     @ResponseStatus(org.springframework.http.HttpStatus.CREATED)
-    @GetMapping(value = "/request")
+    @PostMapping(value = "/request")
     public QuoteResponse addQuote(@RequestBody QuoteRequest quoteRequest){
         return quoteService.addQuote(quoteRequest);
     }

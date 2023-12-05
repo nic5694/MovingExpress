@@ -20,6 +20,8 @@ public class ResponseHeaderFilter implements Filter{
         final HttpServletResponse httpResponse = (HttpServletResponse) response;
         httpResponse.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
         httpResponse.setHeader("Access-Control-Allow-Credentials", "true");
+        httpResponse.setHeader("Access-Control-Allow-Headers", "content-type");
+        httpResponse.setHeader("Access-Control-Allow-Methods","PUT, POST, GET, DELETE, PATCH, OPTIONS");
 //        httpResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT");
 //        httpResponse.setHeader("Vary", "Origin");
 //        //set the header to accept requests without CORS
