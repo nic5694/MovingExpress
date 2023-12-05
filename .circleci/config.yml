@@ -6,9 +6,35 @@ jobs:
       - image: cimg/openjdk:17.0 # Java 17 Docker image
     working_directory: ~/MovingExpress
     steps:
-        - checkout
-        - run: 
-            name: build spring boot application
-            command: |
-              cd backend
-              ./gradlew clean build
+      - checkout
+      - run:
+          name: build spring boot application
+          command: |
+            cd backend
+            ./gradlew clean build
+
+  seleniumtests:
+    docker:
+      - image: cimg/base:stable
+        auth:
+          # ensure you have first added these secrets
+          # visit app.circleci.com/settings/project/github/nic5694/MovingExpress/environment-variables
+          username: $DOCKER_HUB_USER
+          password: $DOCKER_HUB_PASSWORD
+    steps:
+      - checkout
+      - run:
+          name: Download Selenium
+          command: curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar
+      - run:
+          name: Start Selenium
+          command: java -jar selenium-server-standalone-3.5.3.jar -log test-reports/selenium.log
+      - run:
+          name: Run Node.js Tests
+          command: cd ~/frontend/Tests && node .
+
+workflows:
+  my-custom-workflow:
+    jobs:
+      - build
+      - seleniumtests
