@@ -20,7 +20,7 @@ function LandingPage() {
             <a style={{fontFamily : "Bebas Neue, cursive"}} className="border-[3px] border-companyYellow px-7 py-2 rounded-md text-white" href='/SignUp'>Sign Up</a>
           </div> */}
           <div>
-            <a style={{fontFamily : "Bebas Neue, cursive"}} className="border-[3px] border-companyYellow px-7 py-2 rounded-md text-white" href='http://localhost:8080/oauth2/authorization/okta'>Login | Sign Up</a>
+            <a style={{fontFamily : "Bebas Neue, cursive"}} id="signinsignuplandingpage" name="signinsignuplandingpage" className="border-[3px] border-companyYellow px-7 py-2 rounded-md text-white" href='http://localhost:8080/oauth2/authorization/okta'>Login | Sign Up</a>
           </div>
         </div>
 
