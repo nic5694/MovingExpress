@@ -25,7 +25,7 @@ This is pretty much the exact same as the Pull Request Naming except that at the
 //put whatever type of branch you were on if it was a bug put bug if it was a feature put feat like explained above
 feat(ME-JiraID): short description (#420)
 ```
-####SSH Keys
+#### SSH Keys
 
 Note: This section is if you are using SSH keys to clone your repo and have already generated your GitHub SSH keys and ran your keygen in your terminal (console of your computer)
 
