@@ -22,5 +22,6 @@ CLick the clipboard button and paste it in your terminal or gitbash and add on t
 #### Pull Request Commit Naming
 This is pretty much the exact same as the Pull Request Naming except that at the end there will be an auto-generated number in parentheses. Please don't delete it. Simply add your stuff before it.
 ```
-feat(TEAMTAG-JiraID): short description (#420)
+//put whatever type of branch you were on if it was a bug put bug if it was a feature put feat like explained above
+feat(ME-JiraID): short description (#420)
 ```
