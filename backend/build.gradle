@@ -90,8 +90,8 @@ jacocoTestCoverageVerification {
     }
 }
 
-
-
+test.finalizedBy jacocoTestReport
+//check.dependsOn jacocoTestCoverageVerification
 
 test {
     jvmArgs '--enable-preview'

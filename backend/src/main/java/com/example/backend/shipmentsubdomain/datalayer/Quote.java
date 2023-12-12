@@ -26,13 +26,15 @@ public class Quote {
     private LocalDate expectedMovingDate;
     private LocalDateTime initiationDate;
     private String comment;
-    private MovingEstimatorIdentifier movingEstimatorIdentifier;
+    @Enumerated(EnumType.STRING)
+    private QuoteStatus quoteStatus;
+    private String shipmentName;
 
     public Quote(){
         this.quoteIdentifier=new QuoteIdentifier();
     }
 
-    public Quote(PickupAddress pickupAddress, DestinationAddress destinationAddress, ContactDetails contactDetails, ContactMethod contactMethod, LocalDate expectedMovingDate,  String comment) {
+    public Quote(PickupAddress pickupAddress, DestinationAddress destinationAddress, ContactDetails contactDetails, ContactMethod contactMethod, LocalDate expectedMovingDate,  String comment, String shipmentName) {
         this.quoteIdentifier = new QuoteIdentifier();
         this.pickupAddress = pickupAddress;
         this.destinationAddress = destinationAddress;
@@ -41,5 +43,7 @@ public class Quote {
         this.initiationDate=LocalDateTime.now();
         this.contactMethod=contactMethod;
         this.comment=comment;
+        this.quoteStatus=QuoteStatus.CREATED;
+        this.shipmentName=shipmentName;
     }
 }
