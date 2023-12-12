@@ -62,8 +62,7 @@ jacoco {
 // Common exclusions for Jacoco tasks
 def testExclusionClasses = [
         "com/example/backend/config/**",
-        "com/example/backend/shipmentsubdomain/datalayer/shipment/**",
-        "com/example/backend/util/**"
+        "com/example/backend/shipmentsubdomain/datalayer/shipment/**"
         ]
 
 jacocoTestReport {
