@@ -14,15 +14,27 @@ CREATE TABLE IF NOT EXISTS trucks (
     vin VARCHAR(17) UNIQUE NOT NULL,
     capacity DOUBLE
     );
+CREATE TABLE IF NOT EXISTS addresses (
+                                       id INT AUTO_INCREMENT PRIMARY KEY,
+                                       addressId VARCHAR(36) UNIQUE NOT NULL,
+    streetAddress VARCHAR(255),
+    city VARCHAR(255),
+    province VARCHAR(255),
+    country VARCHAR(255),
+    postalCode VARCHAR(10)
+    );
+
 
 CREATE TABLE IF NOT EXISTS shipments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     shipmentId VARCHAR(36) UNIQUE NOT NULL,
     shipmentStatus VARCHAR(255),
-    shipmentDepartureAddress VARCHAR(255),
-    shipmentArrivalAddress VARCHAR(255),
-    vin VARCHAR(17),
+    departureAddressId VARCHAR(36),
+    arrivalAddressId VARCHAR(36),
+    vin VARCHAR(17) UNIQUE,
     clientId VARCHAR(36),
+    FOREIGN KEY (departureAddressId) REFERENCES addresses(addressId),
+    FOREIGN KEY (arrivalAddressId) REFERENCES addresses(addressId),
     FOREIGN KEY (vin) REFERENCES trucks(vin),
     FOREIGN KEY (clientId) REFERENCES clients(clientId)
     );

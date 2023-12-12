@@ -1,6 +1,6 @@
-package com.example.backend.shipmentsubdomain.datamapperlayer;
+package com.example.backend.shipmentsubdomain.datamapperlayer.quote;
+
 import com.example.backend.shipmentsubdomain.datalayer.Quote;
-import com.example.backend.shipmentsubdomain.datalayer.QuoteIdentifier;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
