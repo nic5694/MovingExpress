@@ -12,10 +12,9 @@ import lombok.NoArgsConstructor;
 public class DestinationAddress {
     private String destinationStreetAddress;
     private String destinationCity;
-    private String destinationProvince;
     private Country destinationCountry;
     private String destinationPostalCode;
-    private int destinationRoomNumber;
+    private int destinationNumberOfRooms;
     private boolean destinationElevator;
     private String destinationBuildingType;
 }

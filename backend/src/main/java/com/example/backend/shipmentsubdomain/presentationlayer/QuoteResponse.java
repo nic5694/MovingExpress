@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.example.backend.shipmentsubdomain.datalayer.Country;
+import com.example.backend.shipmentsubdomain.datalayer.QuoteStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
@@ -15,21 +16,18 @@ import lombok.Value;
 @Builder
 public class QuoteResponse {
     private String quoteId;
-    private String movingEstimatorId=null;
     private String pickupStreetAddress;
     private String pickupCity;
-    private String pickupProvince;
     private Country pickupCountry;
     private String pickupPostalCode;
-    private int pickupRoomNumber;
+    private int pickupNumberOfRooms;
     private boolean pickupElevator;
     private String pickupBuildingType;
     private String destinationStreetAddress;
     private String destinationCity;
-    private String destinationProvince;
     private Country destinationCountry;
     private String destinationPostalCode;
-    private int destinationRoomNumber;
+    private int destinationNumberOfRooms;
     private boolean destinationElevator;
     private String destinationBuildingType;
     private String firstName;
@@ -40,4 +38,6 @@ public class QuoteResponse {
     private LocalDate expectedMovingDate;
     private LocalDateTime initiationDate;
     private String comment;
+    private QuoteStatus quoteStatus;
+    private String shipmentName;
 }

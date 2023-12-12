@@ -23,19 +23,17 @@ public class QuoteServiceImpl implements QuoteService{
 
         PickupAddress pickupAddress = new PickupAddress(quoteRequest.getPickupStreetAddress(),
                 quoteRequest.getPickupCity(),
-                quoteRequest.getPickupProvince(),
                 quoteRequest.getPickupCountry(),
                 quoteRequest.getPickupPostalCode(),
-                quoteRequest.getPickupRoomNumber(),
+                quoteRequest.getPickupNumberOfRooms(),
                 quoteRequest.isPickupElevator(),
                 quoteRequest.getPickupBuildingType());
 
         DestinationAddress destinationAddress = new DestinationAddress(quoteRequest.getDestinationStreetAddress(),
                 quoteRequest.getDestinationCity(),
-                quoteRequest.getDestinationProvince(),
                 quoteRequest.getDestinationCountry(),
                 quoteRequest.getDestinationPostalCode(),
-                quoteRequest.getDestinationRoomNumber(),
+                quoteRequest.getDestinationNumberOfRooms(),
                 quoteRequest.isDestinationElevator(),
                 quoteRequest.getDestinationBuildingType());
 
@@ -48,6 +46,7 @@ public class QuoteServiceImpl implements QuoteService{
         quote.setDestinationAddress(destinationAddress);
         quote.setContactDetails(contactDetails);
         quote.setInitiationDate(LocalDateTime.now());
+        quote.setQuoteStatus(QuoteStatus.PENDING);
 
         Quote savedQuote=quoteRepository.save(quote);
         return quoteResponseMapper.entityToResponseModel(savedQuote);

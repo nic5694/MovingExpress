@@ -16,18 +16,16 @@ import java.time.LocalDate;
 public class QuoteRequest {
     private String pickupStreetAddress;
     private String pickupCity;
-    private String pickupProvince;
     private Country pickupCountry;
     private String pickupPostalCode;
-    private int pickupRoomNumber;
+    private int pickupNumberOfRooms;
     private boolean pickupElevator;
     private String pickupBuildingType;
     private String destinationStreetAddress;
     private String destinationCity;
-    private String destinationProvince;
     private Country destinationCountry;
     private String destinationPostalCode;
-    private int destinationRoomNumber;
+    private int destinationNumberOfRooms;
     private boolean destinationElevator;
     private String destinationBuildingType;
     private String firstName;
@@ -37,4 +35,5 @@ public class QuoteRequest {
     private LocalDate expectedMovingDate;
     private ContactMethod contactMethod;
     private String comment;
+    private String shipmentName;
 }
