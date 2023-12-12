@@ -4,6 +4,27 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 
 function ShipmentQuotePage() {
+
+    const missingFieldError = (value:any) =>{
+        if(value === "" || value <= 0 || value == null || value === "null"){
+            toast.error('Missing Field(s)', {
+                position: 'top-right',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'light',
+            })
+
+            return true
+
+        } 
+
+        return false
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
 
@@ -11,15 +32,44 @@ function ShipmentQuotePage() {
 
         // personal info
         let firstName: string = (e.target as any).form[0].value
+        if(missingFieldError(firstName)){
+            return;
+        }
         let lastName: string = (e.target as any).form[1].value
+        if(missingFieldError(lastName)){
+            return;
+        }
         let email: string = (e.target as any).form[2].value
+        if(missingFieldError(email)){
+            return;
+        }
         let phonenumber: string = (e.target as any).form[3].value
+        if(missingFieldError(phonenumber)){
+            return;
+        }
         let movingDate: Date = (e.target as any).form[4].value
+        if(!movingDate){
+            toast.error('Missing Field(s)', {
+                position: 'top-right',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'light',
+            })
+            return;
+        }
         //Radio Btns
         let emailValueRadioBtn: boolean = (e.target as any).form[5].checked
         let PhoneNumberRadioBtn: boolean = (e.target as any).form[6].checked
         let BothValueRadioBtn: boolean = (e.target as any).form[7].checked
         let additionalComments: string = (e.target as any).form[8].value
+
+        if(additionalComments === ""){
+            additionalComments = "No Comments"
+        }
 
         let wayToContact: string = 'BOTH'
         if (emailValueRadioBtn) {
@@ -32,11 +82,26 @@ function ShipmentQuotePage() {
 
         //pick up location info
         let pickUpAddress: string = (e.target as any).form[9].value
+        if(missingFieldError(pickUpAddress)){
+            return;
+        }
         let cityP: string = (e.target as any).form[10].value
+        if(missingFieldError(cityP)){
+            return;
+        }
         let postalCodeP: string = (e.target as any).form[11].value
+        if(missingFieldError(postalCodeP)){
+            return;
+        }
         let countryP: string = (e.target as any).form[12].value
         let buildingTypeP: string = (e.target as any).form[13].value
+        if(missingFieldError(buildingTypeP)){
+            return;
+        }
         let numberofRoomP: number = (e.target as any).form[14].value
+        if(missingFieldError(numberofRoomP)){
+            return;
+        }
         // elevator Pick up
         let elevatorYesRadioBtnP: boolean = (e.target as any).form[15].checked
         let elevatorNoRadioBtnP: boolean = (e.target as any).form[16].checked
@@ -50,11 +115,26 @@ function ShipmentQuotePage() {
 
         // drop off destination
         let dropOffAddress: string = (e.target as any).form[17].value
+        if(missingFieldError(dropOffAddress)){
+            return;
+        }
         let cityD: string = (e.target as any).form[18].value
+        if(missingFieldError(cityD)){
+            return;
+        }
         let postalCodeD: string = (e.target as any).form[19].value
+        if(missingFieldError(postalCodeD)){
+            return;
+        }
         let countryD: string = (e.target as any).form[20].value
         let buildingTypeD: string = (e.target as any).form[21].value
+        if(missingFieldError(buildingTypeD)){
+            return;
+        }
         let numberofRoomD: number = (e.target as any).form[22].value
+        if(missingFieldError(numberofRoomD)){
+            return;
+        }
         // elevator Drop off
         let elevatorYesRadioBtnD: boolean = (e.target as any).form[23].checked
         let elevatorNoRadioBtnD: boolean = (e.target as any).form[24].checked
@@ -68,6 +148,12 @@ function ShipmentQuotePage() {
 
         // shipment name
         let shipmentName: string = (e.target as any).form[25].value
+        if(missingFieldError(shipmentName)){
+            return;
+        }
+
+
+
 
         const quoteForm = {
             pickupStreetAddress: pickUpAddress,
@@ -188,6 +274,7 @@ function ShipmentQuotePage() {
                                             id="FirstNameInput"
                                             name="FirstNameInput"
                                             placeholder="First Name"
+                                            required
                                         />
                                         <label
                                             style={{
@@ -207,6 +294,7 @@ function ShipmentQuotePage() {
                                             id="LastNameInput"
                                             name="LastNameInput"
                                             placeholder="Last Name"
+                                            required
                                         />
                                         <label
                                             style={{
@@ -226,6 +314,7 @@ function ShipmentQuotePage() {
                                             id="EmailInput"
                                             name="EmailInput"
                                             placeholder="E-Mail"
+                                            required
                                         />
                                         <label
                                             style={{
@@ -245,6 +334,7 @@ function ShipmentQuotePage() {
                                             name="PhoneNumberInput"
                                             id="PhoneNumberInput"
                                             placeholder="Phone Number"
+                                            required
                                         />
                                         <label
                                             style={{
@@ -265,6 +355,7 @@ function ShipmentQuotePage() {
                                             className="border border-[lightgray] w-[200px] rounded-sm px-4 py-1"
                                             name="MovingDateInput"
                                             id="MovingDateInput"
+                                            required
                                         />
                                         <label
                                             style={{
@@ -349,6 +440,7 @@ function ShipmentQuotePage() {
                                         placeholder="Pick Up Address"
                                         id="PickUpAddressInput"
                                         name="PickUpAddressInput"
+                                        required
                                     />
                                     <label
                                         style={{
@@ -368,6 +460,7 @@ function ShipmentQuotePage() {
                                             id="CityInputP"
                                             name="CityInputP"
                                             placeholder="City"
+                                            required
                                         />
                                         <label
                                             style={{
@@ -387,6 +480,7 @@ function ShipmentQuotePage() {
                                             id="PostalCodeInputP"
                                             name="PostalCodeInputP"
                                             placeholder="Postal Code"
+                                            required
                                         />
                                         <label
                                             style={{
@@ -552,6 +646,7 @@ function ShipmentQuotePage() {
                                         placeholder="Drop Off Address"
                                         name="DropOffAddressInput"
                                         id="DropOffAddressInput"
+                                        required
                                     />
                                     <label
                                         style={{
@@ -571,6 +666,7 @@ function ShipmentQuotePage() {
                                             placeholder="City"
                                             name="CityInputD"
                                             id="CityInputD"
+                                            required
                                         />
                                         <label
                                             style={{
@@ -590,6 +686,7 @@ function ShipmentQuotePage() {
                                             placeholder="Postal Code"
                                             id="PostalCodeInputD"
                                             name="PostalCodeInputD"
+                                            required
                                         />
                                         <label
                                             style={{
@@ -740,6 +837,7 @@ function ShipmentQuotePage() {
                                         placeholder="Enter Shipment Name"
                                         name="ShipmentNameInput"
                                         id="ShipmentNameInput"
+                                        required
                                     />
                                     <label
                                         style={{
