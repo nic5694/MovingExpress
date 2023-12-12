@@ -74,7 +74,7 @@ function UserHomeNav(props:any) {
               </div>
 
             <div>
-              <button style={{ fontFamily: 'Bebas Neue, cursive' }} className='border-[2px] py-1 px-5 rounded-md border-companyYellow text-white'>Log Out</button>
+              <button style={{ fontFamily: 'Bebas Neue, cursive' }} className='border-[2px] py-1 px-5 rounded-sm border-companyYellow text-white'>Log Out</button>
             </div>
           </div>
 
