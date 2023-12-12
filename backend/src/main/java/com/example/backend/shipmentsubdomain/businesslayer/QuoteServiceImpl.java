@@ -46,7 +46,7 @@ public class QuoteServiceImpl implements QuoteService{
         quote.setDestinationAddress(destinationAddress);
         quote.setContactDetails(contactDetails);
         quote.setInitiationDate(LocalDateTime.now());
-        quote.setQuoteStatus(QuoteStatus.CREATED);
+        quote.setQuoteStatus(QuoteStatus.PENDING);
 
         Quote savedQuote=quoteRepository.save(quote);
         return quoteResponseMapper.entityToResponseModel(savedQuote);
