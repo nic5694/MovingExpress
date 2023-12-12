@@ -1,6 +1,5 @@
 package com.example.backend.shipmentsubdomain.presentationlayer.shipment;
 
-import com.example.backend.mailerservice.MailService;
 import com.example.backend.shipmentsubdomain.datalayer.shipment.Shipment;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000",allowCredentials = "true")
 public class ShipmentController {
-    private final MailService shipmentService;
 
 
     @PostMapping("createShipmentFromQuote/{quoteId}")

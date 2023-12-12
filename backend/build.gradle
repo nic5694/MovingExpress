@@ -23,47 +23,6 @@ repositories {
     mavenCentral()
 }
 
-//dependencies {
-//    implementation 'org.yaml:snakeyaml:2.2'
-//    implementation 'org.springframework.boot:spring-boot-starter-web'
-//    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//    implementation 'org.springframework.boot:spring-boot-starter-webflux'
-//    implementation "com.h2database:h2:"
-//    implementation 'mysql:mysql-connector-java:8.0.23'
-//    implementation 'com.okta.spring:okta-spring-boot-starter:3.0.5'
-//    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-//    implementation 'org.springframework.boot:spring-boot-starter-mail'
-//    implementation 'com.sun.mail:jakarta.mail:1.6.7' // Use the latest version available
-//    implementation 'jakarta.mail:jakarta.mail-api:1.6.7'
-//
-//    implementation 'io.github.cdimascio:java-dotenv:5.2.2'
-//    compileOnly 'org.projectlombok:lombok'
-//    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-//    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
-//    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-//    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//    implementation('com.okta.spring:okta-spring-boot-starter:3.0.5')
-//    runtimeOnly "com.h2database:h2:"
-//    annotationProcessor 'org.projectlombok:lombok'
-//    testImplementation 'io.projectreactor:reactor-test'
-//    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-//    implementation 'org.bitbucket.b_c:jose4j:0.9.3'
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
-//    implementation 'org.springframework.boot:spring-boot-starter-validation'
-//    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
-//    compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"
-//    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}",
-//            "org.projectlombok:lombok:${lombokVersion}",
-//            "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
-//    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-//    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}",
-//            "org.projectlombok:lombok:${lombokVersion}",
-//            "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
-//    testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
-//    testImplementation 'org.yaml:snakeyaml:2.2'
-//
-//
-//}
 dependencies {
     implementation 'org.yaml:snakeyaml:2.2'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -75,48 +34,53 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'com.sun.mail:javax.mail:1.5.5'
     implementation 'io.github.cdimascio:java-dotenv:5.2.2'
-    compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
-    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    runtimeOnly "com.h2database:h2"
-    testImplementation 'io.projectreactor:reactor-test'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
     implementation 'org.bitbucket.b_c:jose4j:0.9.3'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation "org.projectlombok:lombok:${lombokVersion}"
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
-    compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"
-    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+
+    compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}",
+            "org.projectlombok:lombok:${lombokVersion}"
+
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}",
+            "org.projectlombok:lombok:${lombokVersion}",
             "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+    runtimeOnly "com.h2database:h2"
     testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
-    testImplementation 'org.yaml:snakeyaml:2.2'
+    testImplementation 'io.projectreactor:reactor-test',
+            'org.springframework.boot:spring-boot-starter-test',
+            'org.yaml:snakeyaml:2.2'
 }
-
-bootJar {
-    duplicatesStrategy = 'fail'
-}
-
 jacoco {
-    toolVersion = "0.8.8"
+    toolVersion = '0.8.8'
 }
+
+// Common exclusions for Jacoco tasks
+def testExclusionClasses = [
+        "com/example/backend/config/**",
+        "com/example/backend/shipmentsubdomain/datalayer/shipment/**",
+        "com/example/backend/util/**"
+        ]
+
 jacocoTestReport {
     dependsOn test
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: [
-                    "com/example/backend/config",
-                    "**/lombok/**/*.class",
-                    "**/Lombok*.*",
-                    "**/*Lombok*.*",
-            ])
+            fileTree(dir: it, exclude: testExclusionClasses)
         }))
     }
 }
 
 jacocoTestCoverageVerification {
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: testExclusionClasses)
+        }))
+    }
     violationRules {
         rule {
             limit {
@@ -126,18 +90,18 @@ jacocoTestCoverageVerification {
     }
 }
 
-test.finalizedBy jacocoTestReport
-//check.dependsOn jacocoTestCoverageVerification
+
+jacocoTestCoverageVerification.dependsOn jacocoTestReport
+check.dependsOn jacocoTestCoverageVerification
 
 test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
     jvmArgs '--enable-preview'
     useJUnitPlatform()
     testLogging {
         events "passed", "skipped", "failed"
     }
-}
-
-
-tasks.named('test') {
-    useJUnitPlatform()
 }
