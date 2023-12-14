@@ -203,46 +203,4 @@ class QuoteRepositoryPersistenceTest {
                 .shipmentName("Sample Shipment")
                 .build();
     }
-
-    private Quote buildQuote(){
-        return Quote.builder()
-                .quoteIdentifier(new QuoteIdentifier())
-                .pickupAddress(
-                        PickupAddress.builder()
-                                .pickupStreetAddress("123 Main St")
-                                .pickupCity("Anytown")
-                                .pickupCountry(Country.USA)
-                                .pickupPostalCode("12345")
-                                .pickupNumberOfRooms(5)
-                                .pickupElevator(true)
-                                .pickupBuildingType("Apartment")
-                                .build()
-                )
-                .destinationAddress(
-                        DestinationAddress.builder()
-                                .destinationStreetAddress("456 Market St")
-                                .destinationCity("Othertown")
-                                .destinationCountry(Country.CA)
-                                .destinationPostalCode("54321")
-                                .destinationNumberOfRooms(4)
-                                .destinationElevator(false)
-                                .destinationBuildingType("House")
-                                .build()
-                )
-                .contactDetails(
-                        ContactDetails.builder()
-                                .firstName("John")
-                                .lastName("Doe")
-                                .emailAddress("johndoe@example.com")
-                                .phoneNumber("555-1234")
-                                .build()
-                )
-                .contactMethod(ContactMethod.EMAIL)
-                .expectedMovingDate(LocalDate.of(2023, 1, 1))
-                .initiationDate(LocalDateTime.now())
-                .comment("Moving soon")
-                .quoteStatus(QuoteStatus.PENDING)
-                .shipmentName("Sample Shipment")
-                .build();
-    }
 }
