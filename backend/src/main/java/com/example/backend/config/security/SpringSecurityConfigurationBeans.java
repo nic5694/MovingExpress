@@ -1,6 +1,8 @@
 package com.example.backend.config.security;
 
 import com.example.backend.config.ErrorMessge;
+import com.example.backend.config.security.csrf.SpaCsrfToken;
+import com.example.backend.config.security.filters.CsrfCustomFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -24,6 +28,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -75,11 +80,25 @@ public class SpringSecurityConfigurationBeans {
                                 });
                                 response.setStatus(HttpStatus.OK.value());
                             });
-                }).csrf().disable();
-                //.ignoringRequestMatchers("/api/v1/movingexpress/quotes/request");
-//                .csrf( -> {
-//                    httpSecurityCsrfConfigurer.ignoringRequestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/v1/movingexpress/logout"));
-//                });
+                })
+                .csrf((csrf) -> csrf
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .csrfTokenRequestHandler(new SpaCsrfToken())
+                        .ignoringRequestMatchers(
+                                new AntPathRequestMatcher("/api/v1/movingexpress/logout", HttpMethod.POST.toString()),
+                                new AntPathRequestMatcher("/api/v1/movingexpress/security/redirect", HttpMethod.GET.toString())
+                        )
+                )
+                .cors(httpSecurityCorsConfigurer -> {
+                    final var cors = new CorsConfiguration();
+                    cors.setAllowedOrigins(List.of(frontendDomain));
+                    cors.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+                    cors.setAllowedHeaders(Arrays.asList("authorization", "content-type", "xsrf-token"));
+                    cors.setExposedHeaders(List.of("xsrf-token"));
+                    cors.setAllowCredentials(true);
+                    cors.setMaxAge(3600L);
+                })
+                .addFilterAfter(new CsrfCustomFilter(), BasicAuthenticationFilter.class);
         return http.build();
     }
 
@@ -87,8 +106,7 @@ public class SpringSecurityConfigurationBeans {
     public CorsConfigurationSource corsConfigurationSource() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         final CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("*"); // Allow requests from any origin
-//        config.addAllowedOrigin(Arrays.toString(new String[]{"http://localhost:3000", "http://localhost:8080"}));
+        config.addAllowedOrigin("*");
         config.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:8080"));
         config.addAllowedMethod("GET");
         config.addAllowedMethod("PUT");
@@ -115,8 +133,26 @@ public class SpringSecurityConfigurationBeans {
 
     private LogoutHandler logoutHandler() {
         return (request, response, authentication) -> {
+
+            List<Cookie> cookies = List.of(request.getCookies());
+
+            cookies.forEach(cookie -> {
+                Cookie newCookie = new Cookie(cookie.getName(), "");
+                newCookie.setMaxAge(0);
+                newCookie.setPath("/");
+                response.addCookie(newCookie);
+            });
+
+            boolean isSignup = Boolean.parseBoolean(request.getParameter("isLogoutSignUp"));
+            boolean isExternal = Boolean.parseBoolean(request.getParameter("isLogoutExternal"));
+            log.info("isSignup: " + isSignup);
             try {
-                response.sendRedirect(issuer + "v2/logout?client_id=" + clientId + "&returnTo=" + frontendDomain);
+                if (isSignup)
+                    response.sendRedirect(issuer + "v2/logout?client_id=" + clientId + "&returnTo=http://localhost:8080/oauth2/authorization/okta");
+                else if (isExternal)
+                    response.sendRedirect(issuer + "v2/logout?client_id=" + clientId + "&returnTo=" + frontendDomain + "/external");
+                else
+                    response.sendRedirect(issuer + "v2/logout?client_id=" + clientId + "&returnTo=" + frontendDomain);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
