@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000",allowCredentials = "true")
 public class ShipmentController {
-    private EmailUtil emailUtil;
+    private final EmailUtil emailUtil;
     @PostMapping("createShipmentFromQuote/{quoteId}")
     public Shipment createShipmentFromQuote(@PathVariable String quoteId) {
             // use the quoteId to get the quote, then create a shipment from the quote
