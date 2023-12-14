@@ -11,6 +11,7 @@ import UserHomePage from './Pages/UserHomePage'
 import ShipmentsPage from './Pages/ShipmentsPage'
 import EstimatorPage from './Pages/ShipmentEstimatorPage'
 import ReviewerPage from './Pages/ShipmentReviewerPage'
+import LogoutRedirectHandler from './auth/LogoutRedirectHandler'
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
                 <Route path="/Shipments" Component={ShipmentsPage} />
                 <Route path="/Estimator" Component={EstimatorPage} />
                 <Route path="/Reviewer" Component={ReviewerPage} />
+                <Route path="/logout" Component={LogoutRedirectHandler} />
             </Routes>
             <Footer />
         </Router>

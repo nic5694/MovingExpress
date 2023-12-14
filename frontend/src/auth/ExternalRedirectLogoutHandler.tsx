@@ -1,22 +1,25 @@
 import React, { useEffect } from 'react'
 
-function LogoutRedirect() {
+function ExternalRedirectLogoutHandler() {
     useEffect(() => {
+        // @ts-ignore
         console.log(document.cookie)
         // @ts-ignore
-        document.getElementById('submit').click()
+        if (document.cookie.includes('isAuthenticated=true')) {
+            // @ts-ignore
+            document.getElementById('submit').click()
+        } else {
+            window.location.href =
+                'http://localhost:8080/oauth2/authorization/okta'
+        }
     }, [])
 
     return (
         <div className={'logoutRedirect'}>
-            <div className="loader">
-                <p>Creating account...</p>
-            </div>
-
             <form
                 method={'post'}
                 action={
-                    'http://localhost:8080/api/v1/movingexpress/logout?isLogoutSignUp=true'
+                    'http://localhost:8080/api/v1/movingexpress/logout?isLogoutExternal=true'
                 }
                 id="logoutForm"
             >
@@ -35,4 +38,4 @@ function LogoutRedirect() {
     )
 }
 
-export default LogoutRedirect
+export default ExternalRedirectLogoutHandler
