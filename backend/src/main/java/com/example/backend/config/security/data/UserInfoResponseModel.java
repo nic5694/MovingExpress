@@ -1,0 +1,15 @@
+package com.example.backend.config.security.data;
+
+import lombok.*;
+import java.util.HashMap;
+@EqualsAndHashCode(callSuper=false)
+@Data
+@AllArgsConstructor
+@Builder
+@Generated
+public class UserInfoResponseModel {
+    private String username;
+    private String email;
+    private String picture;
+    private HashMap<String, String> user_metadata;
+}

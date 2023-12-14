@@ -1,4 +1,4 @@
-package com.example.backend.shipmentsubdomain.datamapperlayer;
+package com.example.backend.shipmentsubdomain.datamapperlayer.quote;
 
 import com.example.backend.shipmentsubdomain.datalayer.Quote;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponse;

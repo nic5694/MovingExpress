@@ -1,8 +1,8 @@
 package com.example.backend.shipmentsubdomain.businesslayer;
 
 import com.example.backend.shipmentsubdomain.datalayer.*;
-import com.example.backend.shipmentsubdomain.datamapperlayer.QuoteRequestMapper;
-import com.example.backend.shipmentsubdomain.datamapperlayer.QuoteResponseMapper;
+import com.example.backend.shipmentsubdomain.datamapperlayer.quote.QuoteRequestMapper;
+import com.example.backend.shipmentsubdomain.datamapperlayer.quote.QuoteResponseMapper;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteRequest;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponse;
 import lombok.RequiredArgsConstructor;
