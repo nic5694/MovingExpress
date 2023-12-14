@@ -45,6 +45,10 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
         auto-quote-keyword: true
 
+  sql:
+    init:
+      platform: h2
+      mode: always
 ---
 # for Test - using the provided configuration
 #spring:

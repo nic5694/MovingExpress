@@ -3,6 +3,7 @@ package com.example.backend.shipmentsubdomain.businesslayer;
 import com.example.backend.shipmentsubdomain.datalayer.*;
 import com.example.backend.shipmentsubdomain.datamapperlayer.QuoteRequestMapper;
 import com.example.backend.shipmentsubdomain.datamapperlayer.QuoteResponseMapper;
+import com.example.backend.shipmentsubdomain.exceptions.NotFoundException;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteRequest;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,16 @@ public class QuoteServiceImpl implements QuoteService{
     private final QuoteRepository quoteRepository;
     private final QuoteRequestMapper quoteRequestMapper;
     private final QuoteResponseMapper quoteResponseMapper;
+
+    @Override
+    public QuoteResponse getQuote(String quoteId) {
+        Quote existingQuote=quoteRepository.findByQuoteIdentifier_QuoteId(quoteId);
+        if(existingQuote==null){
+            throw new NotFoundException("quoteId not found: "+quoteId);
+        }
+
+        return quoteResponseMapper.entityToResponseModel(existingQuote);
+    }
 
     @Override
     public QuoteResponse addQuote(QuoteRequest quoteRequest) {
