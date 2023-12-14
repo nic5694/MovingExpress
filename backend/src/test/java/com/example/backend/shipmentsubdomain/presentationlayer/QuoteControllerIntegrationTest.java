@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.test.context.jdbc.Sql;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
@@ -24,12 +25,15 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @AutoConfigureWebClient
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
+@Sql({"/data-mysql.sql"})
 class QuoteControllerIntegrationTest {
-    private final String BASE_URI_QUOTES = "/api/v1/movingexpress/quotes/request";
+    private final String BASE_URI_QUOTES_REQUEST = "/api/v1/movingexpress/quotes/request";
+    private final String BASE_URI_QUOTES_RETRIEVE="/api/v1/movingexpress/quotes/retrieve";
+
+    private final String VALID_QUOTE_ID="a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6";
 
     @Autowired
     WebTestClient webTestClient;
-
     @Autowired
     QuoteRepository quoteRepository;
 
@@ -75,6 +79,42 @@ class QuoteControllerIntegrationTest {
     }
 
     @Test
+    public void whenQuoteWithValidQuoteIdExists_thenReturnQuote(){
+        webTestClient.get()
+                .uri(BASE_URI_QUOTES_RETRIEVE+"/"+VALID_QUOTE_ID)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .jsonPath("$.expectedMovingDate").isEqualTo("2023-01-01")
+                .jsonPath("$.contactMethod").isEqualTo("EMAIL")
+                .jsonPath("$.comment").isEqualTo("Additional comments go here")
+
+                .jsonPath("$.pickupStreetAddress").isEqualTo("123 Main St")
+                .jsonPath("$.pickupCity").isEqualTo("CityA")
+                .jsonPath("$.pickupCountry").isEqualTo("CA")
+                .jsonPath("$.pickupPostalCode").isEqualTo("12345")
+                .jsonPath("$.pickupNumberOfRooms").isEqualTo(101)
+                .jsonPath("$.pickupElevator").isEqualTo(true)
+                .jsonPath("$.pickupBuildingType").isEqualTo("Apartment")
+
+                .jsonPath("$.destinationStreetAddress").isEqualTo("456 Oak St")
+                .jsonPath("$.destinationCity").isEqualTo("CityB")
+                .jsonPath("$.destinationCountry").isEqualTo("USA")
+                .jsonPath("$.destinationPostalCode").isEqualTo("54321")
+                .jsonPath("$.destinationNumberOfRooms").isEqualTo(202)
+                .jsonPath("$.destinationElevator").isEqualTo(false)
+                .jsonPath("$.destinationBuildingType").isEqualTo("House")
+
+                .jsonPath("$.firstName").isEqualTo("John")
+                .jsonPath("$.lastName").isEqualTo("Doe")
+                .jsonPath("$.emailAddress").isEqualTo("john.doe@example.com")
+                .jsonPath("$.phoneNumber").isEqualTo("123-456-7890");
+
+    }
+
+    @Test
     public void whenAddQuoteWithValidValues_thenReturnNewQuote(){
         //arrange
         QuoteRequestModel quoteRequestModel = QuoteRequestModel.builder()
@@ -103,7 +143,7 @@ class QuoteControllerIntegrationTest {
 
         //act and assert
         webTestClient.post()
-                .uri(BASE_URI_QUOTES)
+                .uri(BASE_URI_QUOTES_REQUEST)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(quoteRequestModel)
                 .accept(MediaType.APPLICATION_JSON)

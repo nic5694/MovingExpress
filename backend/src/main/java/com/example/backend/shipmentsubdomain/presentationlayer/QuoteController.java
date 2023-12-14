@@ -22,7 +22,12 @@ public class QuoteController {
         return  quoteService.getAllQuotes(quoteStatus);
     }
 
-    @ResponseStatus(org.springframework.http.HttpStatus.CREATED)
+    @GetMapping("/retrieve/{quoteId}")
+    public QuoteResponse getQuote(@PathVariable String quoteId){
+        return quoteService.getQuote(quoteId);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/request")
     public QuoteResponseModel addQuote(@RequestBody QuoteRequestModel quoteRequestModel){
         return quoteService.addQuote(quoteRequestModel);
