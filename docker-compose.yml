@@ -9,13 +9,13 @@ services:
     depends_on:
       - mysql1
 
-  single_page_app:
-    container_name: movingSystemSinglePageApp
-    image: docker-react-i
-    build:
-      context: ./frontend
-    ports:
-      - 3000:80
+#  single_page_app:
+#    container_name: movingSystemSinglePageApp
+#    image: docker-react-i
+#    build:
+#      context: ./frontend
+#    ports:
+#      - 3000:80
 
   mysql1:
     image: mysql:5.7

@@ -39,6 +39,7 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: create
+      dialect: org.hibernate.dialect.MySQL8Dialect
 
     properties:
       hibernate:
