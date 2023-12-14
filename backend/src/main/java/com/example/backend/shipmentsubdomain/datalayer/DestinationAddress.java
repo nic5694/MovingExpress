@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 public class DestinationAddress {
     private String destinationStreetAddress;
     private String destinationCity;
-    @Column(name = "destination_country", length = 255)
     @Enumerated(EnumType.STRING)
     private Country destinationCountry;
     private String destinationPostalCode;

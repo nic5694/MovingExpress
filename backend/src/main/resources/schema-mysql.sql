@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS moving_estimators (
 CREATE TABLE IF NOT EXISTS quotes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     quote_id VARCHAR(36) UNIQUE NOT NULL,
-    pickUp_street_address VARCHAR(255),
+    pickup_street_address VARCHAR(255),
     pickup_city VARCHAR(255),
     pickup_country VARCHAR(255),
     pickup_postal_code VARCHAR(10),
@@ -84,8 +84,8 @@ CREATE TABLE IF NOT EXISTS quotes (
     expected_moving_date Date,
     initiation_date DATETIME,
     comment VARCHAR(255),
-    quoteStatus VARCHAR(10),
-    shipmentName VARCHAR(255)
+    quote_status VARCHAR(10),
+    shipment_name VARCHAR(255)
 --     FOREIGN KEY (emailAddress) REFERENCES clients(email),
 --     FOREIGN KEY (movingEstimatorId) REFERENCES MovingEstimator(estimatorId)
     );
