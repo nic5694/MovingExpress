@@ -30,7 +30,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @ActiveProfiles("test")
 @Sql({ "/data-mysql.sql" })
 class QuoteControllerIntegrationTest {
-        private final String BASE_URI_QUOTES = "/api/v1/movingexpress/quotes/";
+        private final String BASE_URI_QUOTES = "/api/v1/movingexpress/quotes";
         private final String BASE_URI_QUOTES_REQUEST = "/api/v1/movingexpress/quotes/request";
         private final String BASE_URI_QUOTES_RETRIEVE = "/api/v1/movingexpress/quotes/retrieve";
 
@@ -215,7 +215,7 @@ class QuoteControllerIntegrationTest {
 
                 //act and assert
                 webTestClient.post()
-                        .uri(BASE_URI_QUOTES + quoteId +"/events")
+                        .uri(BASE_URI_QUOTES +"/"+ quoteId +"/events")
                         .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(eventRequestModel)
                         .accept(MediaType.APPLICATION_JSON)
