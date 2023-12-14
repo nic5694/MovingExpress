@@ -2,28 +2,34 @@ package com.example.backend.shipmentsubdomain.datalayer.shipment;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.Getter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Date;
 
+@Data
 @Entity(name = "shipments")
 public class Shipment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Integer id;
+    private Integer id;
+
     @Embedded
-    public ShipmentIdentifier shipmentIdentifier;
+    private ShipmentIdentifier shipmentIdentifier;
+
     @Nullable
     public String userId;
     @Embedded
-    public TruckIdentifier truckIdentifier;
+    private TruckIdentifier truckIdentifier;
+
     @Enumerated(EnumType.STRING)
-    public ShipmentStatus shipmentStatus;
-    public Date expectedMovingDate;
-    public Date actualMovingDate;
-    public double approximateWeight;
-    public String name;
+    private ShipmentStatus shipmentStatus;
+    private Date expectedMovingDate;
+    private Date actualMovingDate;
+    private double approximateWeight;
+    private String name;
 
 
     @OneToOne
