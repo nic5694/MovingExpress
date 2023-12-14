@@ -1,4 +1,4 @@
-package com.example.backend.clientsubdomain.datalayer;
+package com.example.backend.customersubdomain.datalayer;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
@@ -21,12 +21,14 @@ public class Customer {
     @GeneratedValue(strategy = IDENTITY)
     private int id;
     private String userId;
+    @Nullable
+    private String profilePictureUrl;
     private String firstName;
     @Nullable
     private String lastName;
     private String email;
     @Nullable
-    private String phone;
+    private String phoneNumber;
     @Nullable
     private String streetAddress;
     @Nullable

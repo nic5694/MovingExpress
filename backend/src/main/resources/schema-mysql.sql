@@ -2,16 +2,17 @@ USE `movingsystem-db`;
 
 CREATE TABLE IF NOT EXISTS customers (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    customerId VARCHAR(36) UNIQUE NOT NULL,
-    firstName VARCHAR(255),
-    lastName VARCHAR(255) NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    phoneNumber VARCHAR(15) NULL,
-    streetAddress VARCHAR(255) NULL,
+    user_id VARCHAR(36) UNIQUE NOT NULL,
+    first_name VARCHAR(255),
+    last_name VARCHAR(255) NULL,
+    profile_picture_url VARCHAR(255) NULL,
+    email VARCHAR(255) UNIQUE NULL,
+    phone_number VARCHAR(15) NULL,
+    street_address VARCHAR(255) NULL,
     city VARCHAR(255) NULL,
     province VARCHAR(255) NULL,
     country VARCHAR(255) NULL,
-    postalCode VARCHAR(10) NULL
+    postal_code VARCHAR(10) NULL
     );
 
 CREATE TABLE IF NOT EXISTS trucks (
@@ -21,70 +22,70 @@ CREATE TABLE IF NOT EXISTS trucks (
     );
 CREATE TABLE IF NOT EXISTS addresses (
                                        id INT AUTO_INCREMENT PRIMARY KEY,
-                                       addressId VARCHAR(36) UNIQUE NOT NULL,
-    streetAddress VARCHAR(255),
+                                       address_id VARCHAR(36) UNIQUE NOT NULL,
+    street_address VARCHAR(255),
     city VARCHAR(255),
     province VARCHAR(255),
     country VARCHAR(255),
-    postalCode VARCHAR(10)
+    postal_code VARCHAR(10)
     );
 
 
 CREATE TABLE IF NOT EXISTS shipments (
                                          id INT AUTO_INCREMENT PRIMARY KEY,
-                                         shipmentId VARCHAR(36) UNIQUE NOT NULL,
-    shipmentStatus VARCHAR(255),
+                                         shipment_id VARCHAR(36) UNIQUE NOT NULL,
+    shipment_status VARCHAR(255),
     expected_moving_date Date,
     actual_moving_date Date NULL,
     shipment_name VARCHAR(255),
     approximate_weight DOUBLE NULL,
-    departureAddressId VARCHAR(36),
-    arrivalAddressId VARCHAR(36),
+    departure_address_id VARCHAR(36),
+    arrival_address_id VARCHAR(36),
     vin VARCHAR(17) UNIQUE NULL,
-    customerId VARCHAR(36),
-    FOREIGN KEY (departureAddressId) REFERENCES addresses(addressId),
-    FOREIGN KEY (arrivalAddressId) REFERENCES addresses(addressId),
+    user_id VARCHAR(36),
+    FOREIGN KEY (departure_address_id) REFERENCES addresses(address_id),
+    FOREIGN KEY (arrival_address_id) REFERENCES addresses(address_id),
     FOREIGN KEY (vin) REFERENCES trucks(vin),
-    FOREIGN KEY (customerId) REFERENCES customers(customerId)
+    FOREIGN KEY (user_id) REFERENCES customers(user_id)
     );
 
 
 CREATE TABLE IF NOT EXISTS inventories (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    inventoryId VARCHAR(36) UNIQUE NOT NULL,
+    inventory_id VARCHAR(36) UNIQUE NOT NULL,
     description VARCHAR(255),
-    shipmentId VARCHAR(36),
-    FOREIGN KEY (shipmentId) REFERENCES shipments(shipmentId)
+    shipment_id VARCHAR(36),
+    FOREIGN KEY (shipment_id) REFERENCES shipments(shipment_id)
     );
 
 CREATE TABLE IF NOT EXISTS items (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    itemId VARCHAR(36) UNIQUE NOT NULL,
-    itemName VARCHAR(255) NOT NULL,
+    item_id VARCHAR(36) UNIQUE NOT NULL,
+    name VARCHAR(255) NOT NULL,
     type ENUM('ITEM', 'BOX') NOT NULL,
     price DECIMAL(10, 2),
     description VARCHAR(255),
     weight DOUBLE NULL,
-    handlingInstructions VARCHAR(255),
-    inventoryId VARCHAR(36),
-    FOREIGN KEY (inventoryId) REFERENCES inventories(inventoryId)
+    handling_instructions VARCHAR(255),
+    inventory_id VARCHAR(36),
+    FOREIGN KEY (inventory_id) REFERENCES inventories(inventory_id)
     );
 
 CREATE TABLE IF NOT EXISTS moving_estimators (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    estimatorId VARCHAR(36) UNIQUE NOT NULL,
-    firstName VARCHAR(255),
-    lastName VARCHAR(255),
+    estimator_id VARCHAR(36) UNIQUE NOT NULL,
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
     email VARCHAR(255) UNIQUE,
-    phoneNumber VARCHAR(15),
-    shipmentId VARCHAR(36),
-    FOREIGN KEY (shipmentId) REFERENCES shipments(shipmentId)
+    phone_number VARCHAR(15),
+    shipment_id VARCHAR(36),
+    FOREIGN KEY (shipment_id) REFERENCES shipments(shipment_id)
     );
 
 CREATE TABLE IF NOT EXISTS quotes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     quote_id VARCHAR(36) UNIQUE NOT NULL,
-    pickUp_street_address VARCHAR(255),
+    pickup_street_address VARCHAR(255),
     pickup_city VARCHAR(255),
     pickup_country VARCHAR(255),
     pickup_postal_code VARCHAR(10),
@@ -106,8 +107,8 @@ CREATE TABLE IF NOT EXISTS quotes (
     expected_moving_date Date,
     initiation_date DATETIME,
     comment VARCHAR(255),
-    quoteStatus VARCHAR(10),
-    shipmentName VARCHAR(255)
+    quote_status VARCHAR(10),
+    shipment_name VARCHAR(255)
 --     FOREIGN KEY (emailAddress) REFERENCES clients(email),
 --     FOREIGN KEY (movingEstimatorId) REFERENCES MovingEstimator(estimatorId)
     );
@@ -115,38 +116,38 @@ CREATE TABLE IF NOT EXISTS quotes (
 
 CREATE TABLE IF NOT EXISTS moving_crews (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    movingCrewId VARCHAR(36) UNIQUE NOT NULL,
+    moving_crew_id VARCHAR(36) UNIQUE NOT NULL,
     type VARCHAR(255),
-    shipmentId VARCHAR(36),
-    FOREIGN KEY (shipmentId) REFERENCES shipments(shipmentId)
+    shipment_id VARCHAR(36),
+    FOREIGN KEY (shipment_id) REFERENCES shipments(shipment_id)
     );
 
 CREATE TABLE IF NOT EXISTS drivers (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    driverId VARCHAR(36) UNIQUE NOT NULL,
-    firstName VARCHAR(255),
-    lastName VARCHAR(255),
-    phoneNumber VARCHAR(15),
+    user_id VARCHAR(36) UNIQUE NOT NULL,
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    phone_number VARCHAR(15),
     email VARCHAR(255) UNIQUE NOT NULL,
-    shipmentId VARCHAR(36),
-    FOREIGN KEY (shipmentId) REFERENCES shipments(shipmentId)
+    shipment_id VARCHAR(36),
+    FOREIGN KEY (shipment_id) REFERENCES shipments(shipment_id)
     );
 
 CREATE TABLE IF NOT EXISTS shipment_reviewers (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    shipmentReviewerId VARCHAR(36),
-    firstName VARCHAR(255),
-    lastName VARCHAR(255),
+    user_id VARCHAR(36),
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
     email VARCHAR(255) UNIQUE NOT NULL,
-    phoneNumber VARCHAR(15)
+    phone_number VARCHAR(15)
     );
 
 CREATE TABLE IF NOT EXISTS observers (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    observerId VARCHAR(36) UNIQUE NOT NULL,
-    firstName VARCHAR(255),
-    lastName VARCHAR(255),
+    observer_id VARCHAR(36) UNIQUE NOT NULL,
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
     email VARCHAR(255) UNIQUE NOT NULL,
-    shipmentId VARCHAR(36),
-    FOREIGN KEY (shipmentId) REFERENCES shipments(shipmentId)
+    shipment_id VARCHAR(36),
+    FOREIGN KEY (shipment_id) REFERENCES shipments(shipment_id)
     );

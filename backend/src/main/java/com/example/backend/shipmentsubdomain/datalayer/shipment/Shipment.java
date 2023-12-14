@@ -15,7 +15,7 @@ public class Shipment {
     @Embedded
     public ShipmentIdentifier shipmentIdentifier;
     @Nullable
-    public String clientId;
+    public String userId;
     @Embedded
     public TruckIdentifier truckIdentifier;
     @Enumerated(EnumType.STRING)
@@ -25,12 +25,13 @@ public class Shipment {
     public double approximateWeight;
     public String name;
 
+
     @OneToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "departureAddressId", referencedColumnName = "addressId")
+    @JoinColumn(name = "departure_address_id", referencedColumnName = "addressId")
     public Address departureAddressId;
     @OneToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "arrivalAddressId", referencedColumnName = "addressId")
+    @JoinColumn(name = "arrival_address_id", referencedColumnName = "addressId")
     public Address arrivalAddressId;
 }

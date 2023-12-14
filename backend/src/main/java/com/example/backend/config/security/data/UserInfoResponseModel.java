@@ -9,7 +9,7 @@ import java.util.HashMap;
 @Generated
 public class UserInfoResponseModel {
     private String username;
-    private String email;
+    private String name;
     private String picture;
     private HashMap<String, String> user_metadata;
 }

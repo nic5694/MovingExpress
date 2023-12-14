@@ -10,6 +10,5 @@ import lombok.Generated;
 @Generated
 public class UserRequestModel {
     private String username;
-    private String email;
     private String password;
 }

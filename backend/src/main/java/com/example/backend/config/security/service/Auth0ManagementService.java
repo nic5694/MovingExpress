@@ -82,18 +82,16 @@ public class Auth0ManagementService {
 
     private static String getFormattedBody(UserRequestModel userRequest) {
         String username = userRequest.getUsername();
-        String email = userRequest.getEmail();
         String password = userRequest.getPassword();
 
         return """
         {
          "connection": "Username-Password-Authentication",
-         "email": "%s",
          "username": "%s",
          "password": "%s",
          "app_metadata": {}
         }
-        """.formatted(email, username, password);
+        """.formatted(username, password);
     }
 
     private void deleteUser(String userId, String accessToken) {
@@ -183,7 +181,7 @@ public class Auth0ManagementService {
 
             return UserInfoResponseModel.builder()
                     .username(jsonNode.path("username").asText())
-                    .email(jsonNode.path("email").asText())
+                    .name(jsonNode.path("name").asText())
                     .picture(jsonNode.path("picture").asText())
                     .user_metadata(getUserMetadata(jsonNode))
                     .build();

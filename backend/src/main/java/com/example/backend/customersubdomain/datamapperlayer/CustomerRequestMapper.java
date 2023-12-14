@@ -1,7 +1,7 @@
-package com.example.backend.clientsubdomain.datamapperlayer;
+package com.example.backend.customersubdomain.datamapperlayer;
 
-import com.example.backend.clientsubdomain.datalayer.Customer;
-import com.example.backend.clientsubdomain.presentationlayer.CustomerRequestModel;
+import com.example.backend.customersubdomain.datalayer.Customer;
+import com.example.backend.customersubdomain.presentationlayer.CustomerRequestModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
