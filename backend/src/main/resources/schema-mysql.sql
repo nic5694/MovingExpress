@@ -1,8 +1,8 @@
 USE `movingsystem-db`;
 
-CREATE TABLE IF NOT EXISTS clients (
+CREATE TABLE IF NOT EXISTS customers (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    clientId VARCHAR(36) UNIQUE NOT NULL,
+    customerId VARCHAR(36) UNIQUE NOT NULL,
     firstName VARCHAR(255),
     lastName VARCHAR(255),
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -29,14 +29,18 @@ CREATE TABLE IF NOT EXISTS shipments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     shipmentId VARCHAR(36) UNIQUE NOT NULL,
     shipmentStatus VARCHAR(255),
+    expected_moving_date Date,
+    actual_moving_date Date NULLABLE
+    shipment_name VARCHAR(255),
+    approximate_weight DOUBLE,
     departureAddressId VARCHAR(36),
     arrivalAddressId VARCHAR(36),
     vin VARCHAR(17) UNIQUE,
-    clientId VARCHAR(36),
+    customerId VARCHAR(36),
     FOREIGN KEY (departureAddressId) REFERENCES addresses(addressId),
     FOREIGN KEY (arrivalAddressId) REFERENCES addresses(addressId),
     FOREIGN KEY (vin) REFERENCES trucks(vin),
-    FOREIGN KEY (clientId) REFERENCES clients(clientId)
+    FOREIGN KEY (customerId) REFERENCES clients(customerId)
     );
 
 CREATE TABLE IF NOT EXISTS inventories (

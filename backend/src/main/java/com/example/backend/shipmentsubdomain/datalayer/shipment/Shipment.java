@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.util.Date;
+
 @Entity(name = "shipments")
 public class Shipment {
     @Id
@@ -17,6 +19,11 @@ public class Shipment {
     public TruckIdentifier truckIdentifier;
     @Enumerated(EnumType.STRING)
     public ShipmentStatus shipmentStatus;
+    public Date expectedMovingDate;
+    public Date actualMovingDate;
+    public double approximateWeight;
+    public String name;
+
     @OneToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "departureAddressId", referencedColumnName = "addressId")
