@@ -7,16 +7,31 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 class QuoteRepositoryPersistenceTest {
 
     @Autowired
     private QuoteRepository quoteRepository;
+    private Quote savedQuote;
 
     @BeforeEach
     public void setUp() {
+        quoteRepository.deleteAll();
+        savedQuote=quoteRepository.save(buildQuote());
+    }
 
+    @Test
+    public void findByQuoteIdentifier_QuoteId_shouldSucceed(){
+        //act
+        Quote found=quoteRepository.findByQuoteIdentifier_QuoteId(savedQuote.getQuoteIdentifier().getQuoteId());
+
+        //assert
+        assertNotNull(found);
+        assertThat(found,samePropertyValuesAs(savedQuote));
     }
 
     @Test
@@ -62,5 +77,45 @@ class QuoteRepositoryPersistenceTest {
         assertThat(savedQuote.getContactDetails().getPhoneNumber()).isEqualTo("123-456-7890");
     }
 
-
+    private Quote buildQuote(){
+        return Quote.builder()
+                .quoteIdentifier(new QuoteIdentifier())
+                .pickupAddress(
+                        PickupAddress.builder()
+                                .pickupStreetAddress("123 Main St")
+                                .pickupCity("Anytown")
+                                .pickupCountry(Country.USA)
+                                .pickupPostalCode("12345")
+                                .pickupNumberOfRooms(5)
+                                .pickupElevator(true)
+                                .pickupBuildingType("Apartment")
+                                .build()
+                )
+                .destinationAddress(
+                        DestinationAddress.builder()
+                                .destinationStreetAddress("456 Market St")
+                                .destinationCity("Othertown")
+                                .destinationCountry(Country.CA)
+                                .destinationPostalCode("54321")
+                                .destinationNumberOfRooms(4)
+                                .destinationElevator(false)
+                                .destinationBuildingType("House")
+                                .build()
+                )
+                .contactDetails(
+                        ContactDetails.builder()
+                                .firstName("John")
+                                .lastName("Doe")
+                                .emailAddress("johndoe@example.com")
+                                .phoneNumber("555-1234")
+                                .build()
+                )
+                .contactMethod(ContactMethod.EMAIL)
+                .expectedMovingDate(LocalDate.of(2023, 1, 1))
+                .initiationDate(LocalDateTime.now())
+                .comment("Moving soon")
+                .quoteStatus(QuoteStatus.PENDING)
+                .shipmentName("Sample Shipment")
+                .build();
+    }
 }

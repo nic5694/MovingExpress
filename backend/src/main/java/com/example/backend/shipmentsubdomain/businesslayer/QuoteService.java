@@ -8,7 +8,7 @@ import com.example.backend.shipmentsubdomain.datalayer.QuoteStatus;
 import java.util.List;
 
 public interface QuoteService {
-    QuoteResponseModel addQuote(QuoteRequestModel quoteRequestModel);
-
     List<QuoteResponseModel> getAllQuotes(QuoteStatus quoteStatus);
+    QuoteResponseModel getQuote(String quoteId);
+    QuoteResponseModel addQuote(QuoteRequestModel quoteRequest);
 }
