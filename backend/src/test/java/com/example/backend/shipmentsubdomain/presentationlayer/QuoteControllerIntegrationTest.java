@@ -87,30 +87,32 @@ class QuoteControllerIntegrationTest {
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody()
-                .jsonPath("$.expectedMovingDate").isEqualTo("2023-01-01")
+                .jsonPath("$.quoteId").isEqualTo("a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6")
+                .jsonPath("$.expectedMovingDate").isEqualTo("2023-12-15")
                 .jsonPath("$.contactMethod").isEqualTo("EMAIL")
-                .jsonPath("$.comment").isEqualTo("Additional comments go here")
+                .jsonPath("$.comment").isEqualTo("Moving details for John Doe")
 
                 .jsonPath("$.pickupStreetAddress").isEqualTo("123 Main St")
-                .jsonPath("$.pickupCity").isEqualTo("CityA")
+                .jsonPath("$.pickupCity").isEqualTo("Cityville")
                 .jsonPath("$.pickupCountry").isEqualTo("CA")
-                .jsonPath("$.pickupPostalCode").isEqualTo("12345")
-                .jsonPath("$.pickupNumberOfRooms").isEqualTo(101)
+                .jsonPath("$.pickupPostalCode").isEqualTo("M1A 1A1")
+                .jsonPath("$.pickupNumberOfRooms").isEqualTo(3)
                 .jsonPath("$.pickupElevator").isEqualTo(true)
                 .jsonPath("$.pickupBuildingType").isEqualTo("Apartment")
 
                 .jsonPath("$.destinationStreetAddress").isEqualTo("456 Oak St")
-                .jsonPath("$.destinationCity").isEqualTo("CityB")
+                .jsonPath("$.destinationCity").isEqualTo("Townsville")
                 .jsonPath("$.destinationCountry").isEqualTo("USA")
-                .jsonPath("$.destinationPostalCode").isEqualTo("54321")
-                .jsonPath("$.destinationNumberOfRooms").isEqualTo(202)
+                .jsonPath("$.destinationPostalCode").isEqualTo("M5V 2H1")
+                .jsonPath("$.destinationNumberOfRooms").isEqualTo(4)
                 .jsonPath("$.destinationElevator").isEqualTo(false)
                 .jsonPath("$.destinationBuildingType").isEqualTo("House")
 
                 .jsonPath("$.firstName").isEqualTo("John")
                 .jsonPath("$.lastName").isEqualTo("Doe")
                 .jsonPath("$.emailAddress").isEqualTo("john.doe@example.com")
-                .jsonPath("$.phoneNumber").isEqualTo("123-456-7890");
+                .jsonPath("$.phoneNumber").isEqualTo("123-555-1234");
+
 
     }
 
