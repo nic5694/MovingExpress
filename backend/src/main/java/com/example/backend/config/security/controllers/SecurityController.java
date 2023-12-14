@@ -3,6 +3,8 @@ package com.example.backend.config.security.controllers;
 import com.example.backend.config.security.data.UserInfoResponseModel;
 import com.example.backend.config.security.service.Auth0LoginService;
 import com.example.backend.config.security.service.Auth0ManagementService;
+import com.example.backend.customersubdomain.buisnesslayer.CustomerService;
+import com.example.backend.customersubdomain.presentationlayer.CustomerRequestModel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,13 +26,39 @@ import java.net.URI;
 public class SecurityController {
     private final Auth0LoginService auth0LoginService;
     private final Auth0ManagementService auth0ManagementService;
+    private final CustomerService customerService;
     @GetMapping("/redirect")
     public ResponseEntity<Void> redirectAfterLogin(@AuthenticationPrincipal OidcUser principal) throws IOException, InterruptedException {
-        String accessToken;
         if (principal == null) {
             log.info("Principal is null");
             return ResponseEntity.status(HttpStatus.FOUND)
                     .location(URI.create("http://localhost:8080/oauth2/authorization/okta")).build();
+        }
+        log.info("Principal is not null, userId: {}", principal.getSubject());
+        if(customerService.checkIfCustomerExists(principal.getSubject())){
+            log.info("Customer already exists");
+//            return ResponseEntity.status(HttpStatus.FOUND)
+//                    .location(URI.create("http://localhost:3000/external")).build();
+        } else {
+            log.info("Customer does not exist");
+            CustomerRequestModel customerRequestModel = CustomerRequestModel.builder()
+                    .clientId(principal.getSubject())
+                    .email(principal.getEmail())
+                    .firstName(principal.getName())
+                    .profilePictureUrl(principal.getClaim("picture"))
+                    .build();
+            customerService.addCustomer(customerRequestModel);
+            log.info("Added the customer with userId: {}", principal.getSubject());
+        }
+        if(!customerService.checkIfCustomerExists(principal.getSubject())){
+            CustomerRequestModel customerRequestModel = CustomerRequestModel.builder()
+                    .clientId(principal.getSubject())
+                    .email(principal.getEmail())
+                    .firstName(principal.getName())
+                    .profilePictureUrl(principal.getClaim("picture"))
+                    .build();
+            customerService.addCustomer(customerRequestModel);
+            log.info("Added the customer with userId: {}", principal.getSubject());
         }
         //handle apple, google and facebook login
         if (principal.getSubject().contains("apple") || principal.getSubject().contains("google-oauth2")

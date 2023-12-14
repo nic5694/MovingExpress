@@ -1,4 +1,4 @@
-package com.example.backend.clientsubdomain.datalayer;
+package com.example.backend.customersubdomain.datalayer;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

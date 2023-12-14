@@ -1,11 +1,11 @@
-package com.example.backend.clientsubdomain.buisnesslayer;
+package com.example.backend.customersubdomain.buisnesslayer;
 
-import com.example.backend.clientsubdomain.datalayer.Customer;
-import com.example.backend.clientsubdomain.datalayer.CustomerRepository;
-import com.example.backend.clientsubdomain.datamapperlayer.CustomerRequestMapper;
-import com.example.backend.clientsubdomain.datamapperlayer.CustomerResponseMapper;
-import com.example.backend.clientsubdomain.presentationlayer.CustomerRequestModel;
-import com.example.backend.clientsubdomain.presentationlayer.CustomerResponseModel;
+import com.example.backend.customersubdomain.datalayer.Customer;
+import com.example.backend.customersubdomain.datalayer.CustomerRepository;
+import com.example.backend.customersubdomain.datamapperlayer.CustomerRequestMapper;
+import com.example.backend.customersubdomain.datamapperlayer.CustomerResponseMapper;
+import com.example.backend.customersubdomain.presentationlayer.CustomerRequestModel;
+import com.example.backend.customersubdomain.presentationlayer.CustomerResponseModel;
 import com.example.backend.util.exceptions.CustomerNotFoundException;
 import com.example.backend.util.exceptions.InvalidRequestException;
 import lombok.RequiredArgsConstructor;
@@ -28,11 +28,11 @@ public class CustomerServiceImpl implements CustomerService{
         return customerResponseMapper.toCustomerResponse(customer);
     }
     @Override
-    public CustomerResponseModel createCustomer(CustomerRequestModel customerRequest, String userId) {
-        if (customerRepository.existsByUserId(userId))
-            throw new InvalidRequestException("Customer with userId: " + userId + " already exists.");
+    public CustomerResponseModel addCustomer(CustomerRequestModel customerRequest) {
+        if (customerRepository.existsByUserId(customerRequest.getClientId()))
+            throw new InvalidRequestException("Customer with userId: " + customerRequest.getClientId() + " already exists.");
         Customer customer = customerRequestMapper.toCustomer(customerRequest);
-        customer.setUserId(userId);
+        customer.setUserId(customerRequest.getClientId());
         customerRepository.save(customer);
         return customerResponseMapper.toCustomerResponse(customer);
     }
@@ -47,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService{
         customer.setFirstName(customerRequest.getFirstName() != null ? customerRequest.getFirstName() : customer.getFirstName());
         customer.setLastName(customerRequest.getLastName() != null ? customerRequest.getLastName() : customer.getLastName());
         customer.setEmail(customerRequest.getEmail() != null ? customerRequest.getEmail() : customer.getEmail());
-        customer.setPhone(customerRequest.getPhone() != null ? customerRequest.getPhone() : customer.getPhone());
+        customer.setPhoneNumber(customerRequest.getPhoneNumber() != null ? customerRequest.getPhoneNumber() : customer.getPhoneNumber());
         customer.setStreetAddress(customerRequest.getStreetAddress() != null ? customerRequest.getStreetAddress() : customer.getStreetAddress());
         customer.setPostalCode(customerRequest.getPostalCode() != null ? customerRequest.getPostalCode() : customer.getPostalCode());
         customer.setCity(customerRequest.getCity() != null ? customerRequest.getCity() : customer.getCity());

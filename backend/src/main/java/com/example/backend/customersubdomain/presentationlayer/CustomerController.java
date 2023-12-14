@@ -1,6 +1,6 @@
-package com.example.backend.clientsubdomain.presentationlayer;
+package com.example.backend.customersubdomain.presentationlayer;
 
-import com.example.backend.clientsubdomain.buisnesslayer.CustomerService;
+import com.example.backend.customersubdomain.buisnesslayer.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/corso/customers")
+@RequestMapping("api/v1/movingexpress/customers")
 public class CustomerController {
     private final CustomerService customerService;
 
@@ -51,12 +51,12 @@ public class CustomerController {
 
 
     @PostMapping
-    public ResponseEntity<CustomerResponseModel> createCustomer(@AuthenticationPrincipal OidcUser principal,
-                                                           @Valid @RequestBody CustomerRequestModel customerRequest) {
+    public ResponseEntity<CustomerResponseModel> addCustomer(@AuthenticationPrincipal OidcUser principal,
+                                                             @Valid @RequestBody CustomerRequestModel customerRequest) {
         String userId = principal.getSubject();
         log.info("Create customer with userId: {}", userId);
 
-        CustomerResponseModel customerResponse = customerService.createCustomer(customerRequest, userId);
+        CustomerResponseModel customerResponse = customerService.addCustomer(customerRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(customerResponse);
 
