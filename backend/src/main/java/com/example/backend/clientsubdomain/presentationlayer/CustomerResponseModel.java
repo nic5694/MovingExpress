@@ -13,7 +13,7 @@ public class CustomerResponseModel {
     String firstName;
     String lastName;
     String phone;
-    String address;
+    String streetAddress;
     String city;
     String province;
     String country;

@@ -21,15 +21,20 @@ public class Customer {
     @GeneratedValue(strategy = IDENTITY)
     private int id;
     private String userId;
-    @Nullable
     private String firstName;
     @Nullable
     private String lastName;
     private String email;
+    @Nullable
     private String phone;
-    private String address;
+    @Nullable
+    private String streetAddress;
+    @Nullable
     private String city;
+    @Nullable
     private String province;
+    @Nullable
     private String country;
+    @Nullable
     private String postalCode;
 }

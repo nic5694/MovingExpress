@@ -48,7 +48,7 @@ public class CustomerServiceImpl implements CustomerService{
         customer.setLastName(customerRequest.getLastName() != null ? customerRequest.getLastName() : customer.getLastName());
         customer.setEmail(customerRequest.getEmail() != null ? customerRequest.getEmail() : customer.getEmail());
         customer.setPhone(customerRequest.getPhone() != null ? customerRequest.getPhone() : customer.getPhone());
-        customer.setAddress(customerRequest.getAddress() != null ? customerRequest.getAddress() : customer.getAddress());
+        customer.setStreetAddress(customerRequest.getStreetAddress() != null ? customerRequest.getStreetAddress() : customer.getStreetAddress());
         customer.setPostalCode(customerRequest.getPostalCode() != null ? customerRequest.getPostalCode() : customer.getPostalCode());
         customer.setCity(customerRequest.getCity() != null ? customerRequest.getCity() : customer.getCity());
         customer.setCountry(customerRequest.getCountry() != null ? customerRequest.getCountry() : customer.getCountry());

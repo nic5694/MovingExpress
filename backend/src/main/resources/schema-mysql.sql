@@ -4,9 +4,14 @@ CREATE TABLE IF NOT EXISTS customers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     customerId VARCHAR(36) UNIQUE NOT NULL,
     firstName VARCHAR(255),
-    lastName VARCHAR(255),
+    lastName VARCHAR(255) NULLABLE,
     email VARCHAR(255) UNIQUE NOT NULL,
-    phoneNumber VARCHAR(15)
+    phoneNumber VARCHAR(15) NULLABLE,
+    streetAddress VARCHAR(255) NULLABLE,
+    city VARCHAR(255) NULLABLE,
+    province VARCHAR(255) NULLABLE,
+    country VARCHAR(255) NULLABLE,
+    postalCode VARCHAR(10) NULLABLE
     );
 
 CREATE TABLE IF NOT EXISTS trucks (

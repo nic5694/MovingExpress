@@ -1,5 +1,6 @@
 package com.example.backend.shipmentsubdomain.datalayer.shipment;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -13,8 +14,8 @@ public class Shipment {
     public Integer id;
     @Embedded
     public ShipmentIdentifier shipmentIdentifier;
-    @Embedded
-    public ClientIdentifier clientIdentifier;
+    @Nullable
+    public String clientId;
     @Embedded
     public TruckIdentifier truckIdentifier;
     @Enumerated(EnumType.STRING)

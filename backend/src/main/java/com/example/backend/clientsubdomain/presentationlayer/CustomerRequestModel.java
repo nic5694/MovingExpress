@@ -20,7 +20,7 @@ public class CustomerRequestModel {
     @NotBlank
     String phone;
     @NotBlank
-    String address;
+    String streetAddress;
     @NotBlank
     String city;
     @NotBlank
