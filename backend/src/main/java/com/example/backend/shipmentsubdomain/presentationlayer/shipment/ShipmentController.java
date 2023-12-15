@@ -1,6 +1,6 @@
 package com.example.backend.shipmentsubdomain.presentationlayer.shipment;
 
-import com.example.backend.shipmentsubdomain.datalayer.shipment.Shipment;
+import com.example.backend.shipmentsubdomain.businesslayer.ShipmentService;
 import com.example.backend.util.EmailUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -13,17 +13,14 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "http://localhost:3000",allowCredentials = "true")
 public class ShipmentController {
     private final EmailUtil emailUtil;
-    @PostMapping("createShipmentFromQuote/{quoteId}")
-    public Shipment createShipmentFromQuote(@PathVariable String quoteId) {
-            // use the quoteId to get the quote, then create a shipment from the quote
-        return null;
-        //return shipmentService.createShipmentFromQuote(quoteId);
-    }
+    private final ShipmentService shipmentService;
 
-
-
-    @GetMapping("sendMail/{to}/{subject}/{text}")
-    public void sendMail(@PathVariable String to, @PathVariable String subject, @PathVariable String text) {
+    //Email Test Endpoint
+    //TODO: Remove later
+    @GetMapping("sendMail/{to}")
+    public void sendMail(@PathVariable String to) {
+        String subject = "Shipment Creation Confirmation";
+        String text = shipmentService.generateShipmentConfirmationEmail("TR67MH6F4K5NMOJK6");
         emailUtil.SslEmail(to, subject, text);
     }
 }
