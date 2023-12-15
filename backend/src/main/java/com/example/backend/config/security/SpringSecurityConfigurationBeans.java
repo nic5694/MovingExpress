@@ -87,7 +87,8 @@ public class SpringSecurityConfigurationBeans {
                         .csrfTokenRequestHandler(new SpaCsrfToken())
                         .ignoringRequestMatchers(
                                 new AntPathRequestMatcher("/api/v1/movingexpress/logout", HttpMethod.POST.toString()),
-                                new AntPathRequestMatcher("/api/v1/movingexpress/security/redirect", HttpMethod.GET.toString())
+                                new AntPathRequestMatcher("/api/v1/movingexpress/security/redirect", HttpMethod.GET.toString()),
+                                new AntPathRequestMatcher("/api/v1/movingexpress/quotes/request", HttpMethod.POST.toString())
                         )
                 )
                 .cors(httpSecurityCorsConfigurer -> {
