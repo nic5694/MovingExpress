@@ -14,7 +14,7 @@ public class QuoteController {
 
     @ResponseStatus(org.springframework.http.HttpStatus.CREATED)
     @PostMapping(value = "/request")
-    public QuoteResponse addQuote(@RequestBody QuoteRequest quoteRequest){
-        return quoteService.addQuote(quoteRequest);
+    public QuoteResponseModel addQuote(@RequestBody QuoteRequestModel quoteRequestModel){
+        return quoteService.addQuote(quoteRequestModel);
     }
 }

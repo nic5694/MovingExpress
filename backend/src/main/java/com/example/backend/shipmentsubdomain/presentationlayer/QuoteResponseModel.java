@@ -14,7 +14,7 @@ import lombok.Value;
 @Value
 @AllArgsConstructor
 @Builder
-public class QuoteResponse {
+public class QuoteResponseModel {
     private String quoteId;
     private String pickupStreetAddress;
     private String pickupCity;

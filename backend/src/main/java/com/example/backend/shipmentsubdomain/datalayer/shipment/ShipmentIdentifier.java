@@ -6,8 +6,9 @@ import lombok.Getter;
 import java.util.UUID;
 
 @Embeddable
-@Getter
 public class ShipmentIdentifier {
+
+    @Getter
     private String shipmentId;
 
     public ShipmentIdentifier(){

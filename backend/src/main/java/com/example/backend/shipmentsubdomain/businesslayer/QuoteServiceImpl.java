@@ -3,8 +3,8 @@ package com.example.backend.shipmentsubdomain.businesslayer;
 import com.example.backend.shipmentsubdomain.datalayer.*;
 import com.example.backend.shipmentsubdomain.datamapperlayer.quote.QuoteRequestMapper;
 import com.example.backend.shipmentsubdomain.datamapperlayer.quote.QuoteResponseMapper;
-import com.example.backend.shipmentsubdomain.presentationlayer.QuoteRequest;
-import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponse;
+import com.example.backend.shipmentsubdomain.presentationlayer.QuoteRequestModel;
+import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponseModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,29 +18,29 @@ public class QuoteServiceImpl implements QuoteService{
     private final QuoteResponseMapper quoteResponseMapper;
 
     @Override
-    public QuoteResponse addQuote(QuoteRequest quoteRequest) {
-        Quote quote=quoteRequestMapper.requestModelToEntity(quoteRequest);
+    public QuoteResponseModel addQuote(QuoteRequestModel quoteRequestModel) {
+        Quote quote=quoteRequestMapper.requestModelToEntity(quoteRequestModel);
 
-        PickupAddress pickupAddress = new PickupAddress(quoteRequest.getPickupStreetAddress(),
-                quoteRequest.getPickupCity(),
-                quoteRequest.getPickupCountry(),
-                quoteRequest.getPickupPostalCode(),
-                quoteRequest.getPickupNumberOfRooms(),
-                quoteRequest.isPickupElevator(),
-                quoteRequest.getPickupBuildingType());
+        PickupAddress pickupAddress = new PickupAddress(quoteRequestModel.getPickupStreetAddress(),
+                quoteRequestModel.getPickupCity(),
+                quoteRequestModel.getPickupCountry(),
+                quoteRequestModel.getPickupPostalCode(),
+                quoteRequestModel.getPickupNumberOfRooms(),
+                quoteRequestModel.isPickupElevator(),
+                quoteRequestModel.getPickupBuildingType());
 
-        DestinationAddress destinationAddress = new DestinationAddress(quoteRequest.getDestinationStreetAddress(),
-                quoteRequest.getDestinationCity(),
-                quoteRequest.getDestinationCountry(),
-                quoteRequest.getDestinationPostalCode(),
-                quoteRequest.getDestinationNumberOfRooms(),
-                quoteRequest.isDestinationElevator(),
-                quoteRequest.getDestinationBuildingType());
+        DestinationAddress destinationAddress = new DestinationAddress(quoteRequestModel.getDestinationStreetAddress(),
+                quoteRequestModel.getDestinationCity(),
+                quoteRequestModel.getDestinationCountry(),
+                quoteRequestModel.getDestinationPostalCode(),
+                quoteRequestModel.getDestinationNumberOfRooms(),
+                quoteRequestModel.isDestinationElevator(),
+                quoteRequestModel.getDestinationBuildingType());
 
-        ContactDetails contactDetails = new ContactDetails(quoteRequest.getFirstName(),
-                quoteRequest.getLastName(),
-                quoteRequest.getEmailAddress(),
-                quoteRequest.getPhoneNumber());
+        ContactDetails contactDetails = new ContactDetails(quoteRequestModel.getFirstName(),
+                quoteRequestModel.getLastName(),
+                quoteRequestModel.getEmailAddress(),
+                quoteRequestModel.getPhoneNumber());
 
         quote.setPickupAddress(pickupAddress);
         quote.setDestinationAddress(destinationAddress);

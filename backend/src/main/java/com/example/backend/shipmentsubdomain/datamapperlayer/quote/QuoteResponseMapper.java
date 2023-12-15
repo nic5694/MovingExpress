@@ -1,7 +1,7 @@
 package com.example.backend.shipmentsubdomain.datamapperlayer.quote;
 
 import com.example.backend.shipmentsubdomain.datalayer.Quote;
-import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponse;
+import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponseModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -35,5 +35,5 @@ public interface QuoteResponseMapper {
             @Mapping(expression = "java(quote.getQuoteStatus())", target="quoteStatus"),
             @Mapping(expression = "java(quote.getShipmentName())", target="shipmentName")
     })
-    QuoteResponse entityToResponseModel(Quote quote);
+    QuoteResponseModel entityToResponseModel(Quote quote);
 }
