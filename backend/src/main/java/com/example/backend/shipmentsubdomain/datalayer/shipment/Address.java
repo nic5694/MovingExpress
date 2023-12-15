@@ -14,7 +14,7 @@ public class Address {
     private Integer id;
 
     @Embedded
-    public AddressIdentifier addressIdentifier;
+    private AddressIdentifier addressIdentifier;
     private String city;
     private String streetAddress;
     private String province;
