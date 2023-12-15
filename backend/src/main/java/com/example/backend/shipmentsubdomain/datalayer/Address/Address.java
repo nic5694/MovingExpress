@@ -1,4 +1,4 @@
-package com.example.backend.shipmentsubdomain.datalayer.shipment;
+package com.example.backend.shipmentsubdomain.datalayer.Address;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -17,17 +17,18 @@ public class Address {
     private AddressIdentifier addressIdentifier;
     private String city;
     private String streetAddress;
-    private String province;
     private String country;
     private String postalCode;
-    public Address(@NotNull String city, @NotNull String streetAddress, @NotNull String province, @NotNull String country, @NotNull String postalCode) {
+    public Address(@NotNull String city, @NotNull String streetAddress, @NotNull String country, @NotNull String postalCode) {
+        this.addressIdentifier = new AddressIdentifier();
         Objects.requireNonNull(this.city = city);
         Objects.requireNonNull(this.streetAddress = streetAddress);
-        Objects.requireNonNull(this.province = province);
         Objects.requireNonNull(this.country = country);
         Objects.requireNonNull(this.postalCode = postalCode);
     }
 
     @SuppressWarnings("unused")
-    public Address() {}
+    public Address() {
+        this.addressIdentifier = new AddressIdentifier();
+    }
 }

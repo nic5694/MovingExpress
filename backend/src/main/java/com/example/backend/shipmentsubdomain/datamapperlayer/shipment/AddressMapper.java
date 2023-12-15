@@ -2,7 +2,7 @@ package com.example.backend.shipmentsubdomain.datamapperlayer.shipment;
 
 import com.example.backend.shipmentsubdomain.datalayer.Country;
 import org.mapstruct.Mapper;
-import com.example.backend.shipmentsubdomain.datalayer.shipment.Address;
+import com.example.backend.shipmentsubdomain.datalayer.Address.Address;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
