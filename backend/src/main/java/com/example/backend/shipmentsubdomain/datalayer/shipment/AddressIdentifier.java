@@ -7,11 +7,11 @@ import lombok.Data;
 @Embeddable
 public class AddressIdentifier {
     private String addressId;
-    public AddressIdentifier(){
+    private AddressIdentifier(){
         this.addressId= java.util.UUID.randomUUID().toString();
     }
 
-    public String getAddressId() {
+    private String getAddressId() {
         return addressId;
     }
 }
