@@ -1,19 +1,16 @@
 package com.example.backend.shipmentsubdomain.presentationlayer;
 
 import com.example.backend.shipmentsubdomain.datalayer.*;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 @Value
 @Builder
 @AllArgsConstructor
-public class QuoteRequest {
+public class QuoteRequestModel {
     private String pickupStreetAddress;
     private String pickupCity;
     private Country pickupCountry;

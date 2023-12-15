@@ -1,7 +1,7 @@
 package com.example.backend.shipmentsubdomain.datamapperlayer.quote;
 
 import com.example.backend.shipmentsubdomain.datalayer.Quote;
-import com.example.backend.shipmentsubdomain.presentationlayer.QuoteRequest;
+import com.example.backend.shipmentsubdomain.presentationlayer.QuoteRequestModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -17,5 +17,5 @@ public interface QuoteRequestMapper {
             @Mapping(target = "initiationDate", ignore = true),
             @Mapping(target = "quoteStatus", ignore = true)
     })
-    Quote requestModelToEntity(QuoteRequest quoteRequest);
+    Quote requestModelToEntity(QuoteRequestModel quoteRequestModel);
 }

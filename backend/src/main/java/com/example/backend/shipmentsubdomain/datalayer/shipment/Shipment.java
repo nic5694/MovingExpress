@@ -7,6 +7,7 @@ import lombok.Getter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -21,13 +22,14 @@ public class Shipment {
 
     @Nullable
     public String userId;
+
     @Embedded
     private TruckIdentifier truckIdentifier;
 
     @Enumerated(EnumType.STRING)
     private ShipmentStatus shipmentStatus;
-    private Date expectedMovingDate;
-    private Date actualMovingDate;
+    private LocalDate expectedMovingDate;
+    private LocalDate actualMovingDate;
     private double approximateWeight;
     private String name;
 
@@ -35,9 +37,10 @@ public class Shipment {
     @OneToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "departure_address_id", referencedColumnName = "addressId")
-    public Address departureAddressId;
+    private Address departureAddress;
+
     @OneToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "arrival_address_id", referencedColumnName = "addressId")
-    public Address arrivalAddressId;
+    private Address arrivalAddress;
 }

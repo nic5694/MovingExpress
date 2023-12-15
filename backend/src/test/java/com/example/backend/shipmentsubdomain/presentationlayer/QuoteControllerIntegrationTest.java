@@ -3,7 +3,6 @@ package com.example.backend.shipmentsubdomain.presentationlayer;
 import com.example.backend.shipmentsubdomain.datalayer.ContactMethod;
 import com.example.backend.shipmentsubdomain.datalayer.Country;
 import com.example.backend.shipmentsubdomain.datalayer.QuoteRepository;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +40,7 @@ class QuoteControllerIntegrationTest {
     @Test
     public void whenAddQuoteWithValidValues_thenReturnNewQuote(){
         //arrange
-        QuoteRequest quoteRequest = QuoteRequest.builder()
+        QuoteRequestModel quoteRequestModel = QuoteRequestModel.builder()
                 .pickupStreetAddress("123 Main St")
                 .pickupCity("CityA")
                 .pickupCountry(Country.CA)
@@ -69,7 +68,7 @@ class QuoteControllerIntegrationTest {
         webTestClient.post()
                 .uri(BASE_URI_QUOTES)
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(quoteRequest)
+                .bodyValue(quoteRequestModel)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isCreated()

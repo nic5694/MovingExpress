@@ -3,8 +3,8 @@ package com.example.backend.shipmentsubdomain.businesslayer;
 import com.example.backend.shipmentsubdomain.datalayer.*;
 import com.example.backend.shipmentsubdomain.datamapperlayer.quote.QuoteRequestMapper;
 import com.example.backend.shipmentsubdomain.datamapperlayer.quote.QuoteResponseMapper;
-import com.example.backend.shipmentsubdomain.presentationlayer.QuoteRequest;
-import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponse;
+import com.example.backend.shipmentsubdomain.presentationlayer.QuoteRequestModel;
+import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponseModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -33,13 +33,13 @@ class QuoteServiceImplUnitTest {
     @InjectMocks
     private QuoteServiceImpl quoteService;
 
-    private QuoteRequest sampleQuoteRequest;
+    private QuoteRequestModel sampleQuoteRequestModel;
     private Quote sampleQuote;
-    private QuoteResponse sampleQuoteResponse;
+    private QuoteResponseModel sampleQuoteResponseModel;
 
     @BeforeEach
     void setUp() {
-        sampleQuoteRequest = QuoteRequest.builder()
+        sampleQuoteRequestModel = QuoteRequestModel.builder()
                 .pickupStreetAddress("123 Main St")
                 .pickupCity("Anytown")
                 .pickupCountry(Country.USA)
@@ -65,7 +65,7 @@ class QuoteServiceImplUnitTest {
 
         sampleQuote = new Quote();
         // ... Initialize sampleQuote with appropriate data
-        QuoteResponse.builder()
+        QuoteResponseModel.builder()
                 .quoteId("341dbe66-36b1-4398-b708-dc55aaf60986")
                 .pickupStreetAddress("789 Elm St")
                 .pickupCity("Villagetown")
@@ -95,16 +95,16 @@ class QuoteServiceImplUnitTest {
     @Test
     void addQuote_ShouldSucceed() {
         // Arrange
-        Mockito.when(quoteRequestMapper.requestModelToEntity(any(QuoteRequest.class))).thenReturn(sampleQuote);
+        Mockito.when(quoteRequestMapper.requestModelToEntity(any(QuoteRequestModel.class))).thenReturn(sampleQuote);
         Mockito.when(quoteRepository.save(any(Quote.class))).thenReturn(sampleQuote);
-        Mockito.when(quoteResponseMapper.entityToResponseModel(any(Quote.class))).thenReturn(sampleQuoteResponse);
+        Mockito.when(quoteResponseMapper.entityToResponseModel(any(Quote.class))).thenReturn(sampleQuoteResponseModel);
 
         // Act
-        QuoteResponse result = quoteService.addQuote(sampleQuoteRequest);
+        QuoteResponseModel result = quoteService.addQuote(sampleQuoteRequestModel);
 
         // Assert
-        assertEquals(sampleQuoteResponse, result);
-        Mockito.verify(quoteRequestMapper, Mockito.times(1)).requestModelToEntity(any(QuoteRequest.class));
+        assertEquals(sampleQuoteResponseModel, result);
+        Mockito.verify(quoteRequestMapper, Mockito.times(1)).requestModelToEntity(any(QuoteRequestModel.class));
         Mockito.verify(quoteRepository, Mockito.times(1)).save(any(Quote.class));
         Mockito.verify(quoteResponseMapper, Mockito.times(1)).entityToResponseModel(any(Quote.class));
     }

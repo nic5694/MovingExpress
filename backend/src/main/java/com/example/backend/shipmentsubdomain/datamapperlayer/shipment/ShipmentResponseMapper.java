@@ -11,8 +11,8 @@ public interface ShipmentResponseMapper {
     @Mappings({
             @Mapping(expression = "java(shipment.getShipmentIdentifier().getShipmentId())", target = "shipmentId"),
             @Mapping(expression = "java(shipment.getDepartureAddress())", target = "departureAddress"),
-            @Mapping(expression = "java(shipment.getArrivalAddress())", target = "arrivalAddress"),
-            @Mapping(expression = "java(shipment.getClientId())", target = "clientId"),
+            @Mapping(expression = "java(shipment.getDepartureAddress())", target = "arrivalAddress"),
+            @Mapping(expression = "java(shipment.getUserId())", target = "clientId"),
             @Mapping(expression = "java(shipment.getTruckIdentifier().getVin())", target = "truckId")
     })
     ShipmentResponseModel entityToResponseModel(Shipment shipment);

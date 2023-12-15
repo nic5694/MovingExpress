@@ -2,14 +2,17 @@ package com.example.backend.shipmentsubdomain.datalayer.shipment;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 import java.util.Objects;
 
+@Data
 @Entity(name = "addresses")
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Integer id;
+    private Integer id;
+
     @Embedded
     public AddressIdentifier addressIdentifier;
     private String city;
