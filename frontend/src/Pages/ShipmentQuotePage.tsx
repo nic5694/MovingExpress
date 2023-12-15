@@ -2,6 +2,8 @@ import React from 'react'
 import NavBar1 from '../Components/NavBar1'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+//@ts-ignore
+import { validate, res } from 'react-email-validator';
 
 function ShipmentQuotePage() {
 
@@ -25,6 +27,28 @@ function ShipmentQuotePage() {
         return false
     }
 
+    const IsEmailValid = (email:string) => {
+        validate(email);
+        if(res){
+            return true;
+        }
+        else{
+            // the email is invalid
+            toast.error('Email Not Valid', {
+                position: 'top-right',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'light',
+            })
+
+            return false;
+        }
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
 
@@ -43,6 +67,11 @@ function ShipmentQuotePage() {
         if(missingFieldError(email)){
             return;
         }
+        
+        if(IsEmailValid(email) == false){
+            return;
+        }
+
         let phonenumber: string = (e.target as any).form[3].value
         if(missingFieldError(phonenumber)){
             return;
@@ -158,18 +187,16 @@ function ShipmentQuotePage() {
         const quoteForm = {
             pickupStreetAddress: pickUpAddress,
             pickupCity: cityP,
-            pickupProvince: 'null',
             pickupCountry: countryP,
             pickupPostalCode: postalCodeP,
-            pickupRoomNumber: numberofRoomP,
+            pickupNumberOfRooms: numberofRoomP,
             pickupElevator: elevatorisPresentP,
             pickupBuildingType: buildingTypeP,
             destinationStreetAddress: dropOffAddress,
             destinationCity: cityD,
-            destinationProvince: 'null',
             destinationCountry: countryD,
             destinationPostalCode: postalCodeD,
-            destinationRoomNumber: numberofRoomD,
+            destinationNumberOfRooms: numberofRoomD,
             destinationElevator: elevatorisPresentD,
             destinationBuildingType: buildingTypeD,
             firstName: firstName,
@@ -179,6 +206,7 @@ function ShipmentQuotePage() {
             contactMethod: wayToContact,
             expectedMovingDate: movingDate,
             comment: additionalComments,
+            shipmentName: shipmentName
         }
 
         console.log(quoteForm)
