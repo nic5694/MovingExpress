@@ -6,6 +6,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface QuoteResponseMapper {
     @Mappings({
@@ -36,4 +38,5 @@ public interface QuoteResponseMapper {
             @Mapping(expression = "java(quote.getShipmentName())", target="shipmentName")
     })
     QuoteResponseModel entityToResponseModel(Quote quote);
+    List<QuoteResponseModel> entitiesListToResponseList(List<Quote> quotes);
 }

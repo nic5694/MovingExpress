@@ -16,9 +16,10 @@ function LandingPage() {
                 </div>
 
                 <div className="flex gap-5 align-middle">
-                    {/* <div>
-            <a style={{fontFamily : "Bebas Neue, cursive"}} className="border-[3px] border-companyYellow px-7 py-2 rounded-md text-white" href='/SignUp'>Sign Up</a>
-          </div> */}
+                    <div>
+                        <Link to={"/Reviewer"} style={{fontFamily : "Bebas Neue, cursive"}} className="border-[3px] border-companyYellow px-7 py-2 rounded-md text-white">Reviewer</Link>
+                        <Link to={"/Estimator"} style={{fontFamily : "Bebas Neue, cursive"}} className="border-[3px] border-companyYellow px-7 py-2 rounded-md text-white">Estimator</Link>
+                    </div>
                     <div>
                         <a
                             style={{ fontFamily: 'Bebas Neue, cursive' }}
