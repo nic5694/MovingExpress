@@ -21,7 +21,7 @@ public class Shipment {
     private ShipmentIdentifier shipmentIdentifier;
 
     @Nullable
-    public String userId;
+    private String userId;
 
     @Embedded
     private TruckIdentifier truckIdentifier;
