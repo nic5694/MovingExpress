@@ -1,14 +1,13 @@
 package com.example.backend.shipmentsubdomain.datalayer.shipment;
 
+import com.example.backend.shipmentsubdomain.datalayer.Address.Address;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @Entity(name = "shipments")
@@ -23,13 +22,15 @@ public class Shipment {
     @Nullable
     private String userId;
 
+    @Nullable
     @Embedded
     private TruckIdentifier truckIdentifier;
-
     @Enumerated(EnumType.STRING)
     private ShipmentStatus shipmentStatus;
     private LocalDate expectedMovingDate;
+    @Nullable
     private LocalDate actualMovingDate;
+    @Nullable
     private double approximateWeight;
     private String name;
 
@@ -43,4 +44,17 @@ public class Shipment {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "arrival_address_id", referencedColumnName = "addressId")
     private Address arrivalAddress;
+
+    public Shipment(String userId, TruckIdentifier truckIdentifier, ShipmentStatus shipmentStatus, LocalDate expectedMovingDate, LocalDate actualMovingDate, double approximateWeight, String name, Address departureAddress, Address arrivalAddress) {
+        this.userId = userId;
+        this.truckIdentifier = truckIdentifier;
+        this.shipmentStatus = shipmentStatus;
+        this.expectedMovingDate = expectedMovingDate;
+        this.actualMovingDate = actualMovingDate;
+        this.approximateWeight = approximateWeight;
+        this.name = name;
+        this.departureAddress = departureAddress;
+        this.arrivalAddress = arrivalAddress;
+        this.shipmentIdentifier = new ShipmentIdentifier();
+    }
 }

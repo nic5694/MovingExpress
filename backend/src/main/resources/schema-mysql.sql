@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS shipments (
     shipment_status VARCHAR(255),
     expected_moving_date Date,
     actual_moving_date Date NULL,
-    shipment_name VARCHAR(255),
+    name VARCHAR(255),
     approximate_weight DOUBLE NULL,
     departure_address_id VARCHAR(36),
     arrival_address_id VARCHAR(36),

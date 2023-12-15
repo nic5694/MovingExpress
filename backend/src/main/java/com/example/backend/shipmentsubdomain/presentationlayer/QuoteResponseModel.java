@@ -1,15 +1,14 @@
 package com.example.backend.shipmentsubdomain.presentationlayer;
 
 import com.example.backend.shipmentsubdomain.datalayer.ContactMethod;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 import com.example.backend.shipmentsubdomain.datalayer.Country;
 import com.example.backend.shipmentsubdomain.datalayer.QuoteStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Value
 @AllArgsConstructor
@@ -39,5 +38,5 @@ public class QuoteResponseModel {
     private LocalDateTime initiationDate;
     private String comment;
     private QuoteStatus quoteStatus;
-    private String shipmentName;
+    private String name;
 }

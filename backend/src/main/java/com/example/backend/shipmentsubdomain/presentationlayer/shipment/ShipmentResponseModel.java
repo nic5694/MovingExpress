@@ -1,7 +1,8 @@
 package com.example.backend.shipmentsubdomain.presentationlayer.shipment;
 
-import com.example.backend.shipmentsubdomain.datalayer.shipment.Address;
+import com.example.backend.shipmentsubdomain.datalayer.Address.Address;
 import com.example.backend.shipmentsubdomain.datalayer.shipment.ShipmentStatus;
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
@@ -14,6 +15,7 @@ public class ShipmentResponseModel {
     private Address departureAddress;
     private Address arrivalAddress;
     private String clientId;
+    @Nullable
     private String truckId;
     private ShipmentStatus shipmentStatus;
 }

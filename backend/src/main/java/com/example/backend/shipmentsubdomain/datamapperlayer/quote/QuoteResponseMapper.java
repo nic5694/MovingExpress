@@ -35,7 +35,7 @@ public interface QuoteResponseMapper {
             @Mapping(expression = "java(quote.getExpectedMovingDate())", target = "expectedMovingDate"),
             @Mapping(expression = "java(quote.getComment())", target = "comment"),
             @Mapping(expression = "java(quote.getQuoteStatus())", target="quoteStatus"),
-            @Mapping(expression = "java(quote.getShipmentName())", target="shipmentName")
+            @Mapping(expression = "java(quote.getShipmentName())", target="name")
     })
     QuoteResponseModel entityToResponseModel(Quote quote);
     List<QuoteResponseModel> entitiesListToResponseList(List<Quote> quotes);
