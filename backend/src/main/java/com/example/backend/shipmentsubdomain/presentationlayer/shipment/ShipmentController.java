@@ -22,8 +22,7 @@ public class ShipmentController {
     private final ShipmentService shipmentService;
 
     @GetMapping
-    public ResponseEntity<List<ShipmentResponseModel>> getAllShipments(
-                                                                       @RequestParam Optional<String> userId,
+    public ResponseEntity<List<ShipmentResponseModel>> getAllShipments(@RequestParam Optional<String> userId,
                                                                        @RequestParam Optional<String> email) {
         List<ShipmentResponseModel> shipments = shipmentService.getAllShipments(userId, email);
 //        principal.getSubject();
