@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS shipments (
     arrival_address_id VARCHAR(36),
     vin VARCHAR(17) UNIQUE NULL,
     user_id VARCHAR(36),
+    email VARCHAR(255) NULL,
     FOREIGN KEY (departure_address_id) REFERENCES addresses(address_id),
     FOREIGN KEY (arrival_address_id) REFERENCES addresses(address_id),
     FOREIGN KEY (vin) REFERENCES trucks(vin),

@@ -82,6 +82,8 @@ public class ShipmentServiceImpl implements ShipmentService{
         shipment.setDepartureAddress(savedDepartureAddress);
         shipment.setArrivalAddress(savedArrivalAddress);
         shipment.setShipmentStatus(ShipmentStatus.QUOTED);
+        shipment.setEmail(quoteResponseModel.getEmailAddress());
+
 
         // Save the shipment
         Shipment savedShipment = shipmentRepository.save(shipment);
@@ -90,13 +92,17 @@ public class ShipmentServiceImpl implements ShipmentService{
     }
 
     @Override
-    public List<ShipmentResponseModel> getAllShipments(Optional<String> userId) {
+    public List<ShipmentResponseModel> getAllShipments(Optional<String> userId, Optional<String> email) {
         List<Shipment> shipments;
 
         if (userId.isPresent()) {
             shipments = shipmentRepository.findShipmentByUserId(userId.get());
 
-        } else {
+        }
+        else if (email.isPresent()) {
+            shipments = shipmentRepository.findShipmentByEmail(email.get());
+
+        }else {
             shipments = shipmentRepository.findAll();
         }
 

@@ -19,8 +19,19 @@ function ShipmentsPage() {
     }).then(r => {console.log(r.data)}) 
   }
 
+  const getShipments = async () => {
+    await axios.get("http://localhost:8080/api/v1/movingexpress/shipments", {
+        headers: {
+            // @ts-ignore
+
+            "X-XSRF-TOKEN": auth.getXsrfToken(),
+        }
+    }).then(r => {console.log(r.data)}) 
+  }
+
   useEffect(() => {
     checkIfProfileExists();
+    getShipments();
   },[])
 
   return (

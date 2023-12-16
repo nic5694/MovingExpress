@@ -22,10 +22,11 @@ public class ShipmentController {
     private final ShipmentService shipmentService;
 
     @GetMapping
-    public ResponseEntity<List<ShipmentResponseModel>> getAllShipments(@AuthenticationPrincipal OidcUser principal,
-                                                                       @RequestParam Optional<String> userId) {
-        List<ShipmentResponseModel> shipments = shipmentService.getAllShipments(userId);
-        principal.getSubject();
+    public ResponseEntity<List<ShipmentResponseModel>> getAllShipments(
+                                                                       @RequestParam Optional<String> userId,
+                                                                       @RequestParam Optional<String> email) {
+        List<ShipmentResponseModel> shipments = shipmentService.getAllShipments(userId, email);
+//        principal.getSubject();
         return ResponseEntity.ok(shipments);
     }
 

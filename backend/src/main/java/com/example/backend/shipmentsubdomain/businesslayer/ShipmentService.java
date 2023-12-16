@@ -9,6 +9,6 @@ import java.util.Optional;
 public interface ShipmentService {
     String generateShipmentConfirmationEmail(String shipmentId);
     ShipmentResponseModel createShipment(QuoteResponseModel quoteResponseModel);
-    List<ShipmentResponseModel> getAllShipments(Optional<String> userId);
+    List<ShipmentResponseModel> getAllShipments(Optional<String> userId, Optional<String> email);
 
 }

@@ -19,4 +19,5 @@ public class ShipmentResponseModel {
     private ShipmentStatus shipmentStatus;
     private String shipmentName;
     private double shipmentWeight;
+    private String email;
 }
