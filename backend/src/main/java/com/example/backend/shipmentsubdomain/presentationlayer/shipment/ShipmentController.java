@@ -5,6 +5,8 @@ import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponseMode
 import com.example.backend.util.EmailUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,8 +22,10 @@ public class ShipmentController {
     private final ShipmentService shipmentService;
 
     @GetMapping
-    public ResponseEntity<List<ShipmentResponseModel>> getAllShipments(@RequestParam Optional<String> userId) {
+    public ResponseEntity<List<ShipmentResponseModel>> getAllShipments(@AuthenticationPrincipal OidcUser principal,
+                                                                       @RequestParam Optional<String> userId) {
         List<ShipmentResponseModel> shipments = shipmentService.getAllShipments(userId);
+        principal.getSubject();
         return ResponseEntity.ok(shipments);
     }
 
