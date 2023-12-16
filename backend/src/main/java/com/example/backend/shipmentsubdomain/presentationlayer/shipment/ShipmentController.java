@@ -4,8 +4,11 @@ import com.example.backend.shipmentsubdomain.businesslayer.ShipmentService;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponseModel;
 import com.example.backend.util.EmailUtil;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -15,6 +18,12 @@ import org.springframework.web.bind.annotation.*;
 public class ShipmentController {
     private final EmailUtil emailUtil;
     private final ShipmentService shipmentService;
+
+    @GetMapping
+    public ResponseEntity<List<ShipmentResponseModel>> getAllShipments(@RequestParam Optional<String> userId) {
+        List<ShipmentResponseModel> shipments = shipmentService.getAllShipments(userId);
+        return ResponseEntity.ok(shipments);
+    }
 
     @ResponseStatus(org.springframework.http.HttpStatus.CREATED)
     @PostMapping()
@@ -29,4 +38,5 @@ public class ShipmentController {
         String text = shipmentService.generateShipmentConfirmationEmail("TR67MH6F4K5NMOJK6");
         emailUtil.SslEmail(to, subject, text);
     }
+
 }

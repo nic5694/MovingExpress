@@ -25,11 +25,15 @@ public class Shipment {
     @Nullable
     @Embedded
     private TruckIdentifier truckIdentifier;
+
     @Enumerated(EnumType.STRING)
     private ShipmentStatus shipmentStatus;
+
     private LocalDate expectedMovingDate;
+
     @Nullable
     private LocalDate actualMovingDate;
+
     @Nullable
     private double approximateWeight;
     private String name;
@@ -55,6 +59,10 @@ public class Shipment {
         this.name = name;
         this.departureAddress = departureAddress;
         this.arrivalAddress = arrivalAddress;
+        this.shipmentIdentifier = new ShipmentIdentifier();
+    }
+
+    public Shipment() {
         this.shipmentIdentifier = new ShipmentIdentifier();
     }
 }
