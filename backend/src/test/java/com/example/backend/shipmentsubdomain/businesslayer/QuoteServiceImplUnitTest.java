@@ -1,8 +1,8 @@
 package com.example.backend.shipmentsubdomain.businesslayer;
 
 import com.example.backend.shipmentsubdomain.datalayer.*;
-import com.example.backend.shipmentsubdomain.datamapperlayer.QuoteRequestMapper;
-import com.example.backend.shipmentsubdomain.datamapperlayer.QuoteResponseMapper;
+import com.example.backend.shipmentsubdomain.datamapperlayer.quote.QuoteRequestMapper;
+import com.example.backend.shipmentsubdomain.datamapperlayer.quote.QuoteResponseMapper;
 import com.example.backend.shipmentsubdomain.exceptions.NotFoundException;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteRequestModel;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponseModel;
@@ -76,13 +76,13 @@ class QuoteServiceImplUnitTest {
 
         sampleQuote = buildQuote();
 
-        sampleQuoteResponse = buildQuoteResponse();
+        sampleQuoteResponseModel = buildQuoteResponse();
 
-        Mockito.when(quoteResponseMapper.entityToResponseModel(sampleQuote)).thenReturn(sampleQuoteResponse);
+        Mockito.when(quoteResponseMapper.entityToResponseModel(sampleQuote)).thenReturn(sampleQuoteResponseModel);
         Mockito.when(quoteRepository.findByQuoteIdentifier_QuoteId(quoteId)).thenReturn(sampleQuote);
 
         //Act
-        QuoteResponse quoteResponse=quoteService.getQuote(quoteId);
+        QuoteResponseModel quoteResponse=quoteService.getQuote(quoteId);
 
         assertThat(quoteResponse.getExpectedMovingDate()).isEqualTo(sampleQuote.getExpectedMovingDate());
         assertThat(quoteResponse.getContactMethod()).isEqualTo(sampleQuote.getContactMethod());
@@ -120,12 +120,12 @@ class QuoteServiceImplUnitTest {
 
         sampleQuote = buildQuote();
 
-        sampleQuoteResponse = buildQuoteResponse();
+        sampleQuoteResponseModel = buildQuoteResponse();
 
         Mockito.when(quoteRepository.findByQuoteIdentifier_QuoteId(quoteId)).thenThrow(new NotFoundException("quoteId not found: "+ quoteId));
 
         try {
-            QuoteResponse quoteResponse = quoteService.getQuote(quoteId);
+            QuoteResponseModel quoteResponse = quoteService.getQuote(quoteId);
 
             fail("Expected NotFoundException, but got QuoteResponse: " + quoteResponse);
         } catch (NotFoundException e) {
@@ -191,8 +191,8 @@ class QuoteServiceImplUnitTest {
                 .build();
     }
 
-    private QuoteResponse buildQuoteResponse(){
-        return QuoteResponse.builder()
+    private QuoteResponseModel buildQuoteResponse(){
+        return QuoteResponseModel.builder()
                 .quoteId("341dbe66-36b1-4398-b708-dc55aaf60986")
                 .pickupStreetAddress("123 Main St")
                 .pickupCity("Anytown")
