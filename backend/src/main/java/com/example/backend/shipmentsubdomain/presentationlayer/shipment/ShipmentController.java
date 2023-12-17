@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -22,10 +23,11 @@ public class ShipmentController {
     private final ShipmentService shipmentService;
 
     @GetMapping
-    public ResponseEntity<List<ShipmentResponseModel>> getAllShipments(@RequestParam Optional<String> userId,
-                                                                       @RequestParam Optional<String> email) {
+    public ResponseEntity<List<ShipmentResponseModel>> getAllShipments(@RequestParam Map<String, String> requestParams) {
+        Optional<String> userId = Optional.ofNullable(requestParams.get("userId"));
+        Optional<String> email = Optional.ofNullable(requestParams.get("email"));
+
         List<ShipmentResponseModel> shipments = shipmentService.getAllShipments(userId, email);
-//        principal.getSubject();
         return ResponseEntity.ok(shipments);
     }
 

@@ -54,7 +54,6 @@ public class SpringSecurityConfigurationBeans {
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/v1/movingexpress/shipments")).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/v1/movingexpress/customers}")).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/v1/movingexpress/security/user-info}")).permitAll()
-                        .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/v1/movingexpress/shipments}")).permitAll()
                         .anyRequest().permitAll()
                 )
                 .exceptionHandling(exceptionHandling -> {
@@ -92,9 +91,7 @@ public class SpringSecurityConfigurationBeans {
                                 new AntPathRequestMatcher("/api/v1/movingexpress/security/redirect", HttpMethod.GET.toString()),
                                 new AntPathRequestMatcher("/api/v1/movingexpress/quotes/request", HttpMethod.POST.toString()),
                                 new AntPathRequestMatcher("/api/v1/movingexpress/shipments", HttpMethod.POST.toString()),
-                                new AntPathRequestMatcher("/api/v1/movingexpress/customers", HttpMethod.GET.toString()),
-                                new AntPathRequestMatcher("/api/v1/movingexpress/security/user-info", HttpMethod.GET.toString())
-
+                                new AntPathRequestMatcher("/api/v1/movingexpress/customers", HttpMethod.GET.toString())
 
                         )
                 )
