@@ -58,10 +58,16 @@ function ShipmentsPage() {
     fontWeight: 'bold',
   };
 
+  const containerStyle = {
+    display: 'flex' as 'flex',
+    flexDirection: 'column' as 'column',
+    minHeight: '72.8vh',
+  };
+
   return (
-    <div>
+    <div style={containerStyle}>
       <NormalNavBar />
-      <div style={{ padding: '20px' }}>
+      <div style={{ flex: 1, padding: '20px' }}>
         <h2 id="shipmentsHeader">
           <span id="allText" style={styleAll}>ALL </span>
           <span id="shipmentsText" style={styleShipments}>SHIPMENTS</span>
@@ -117,5 +123,6 @@ function ShipmentsPage() {
     </div>
   );
 }
+
 
 export default ShipmentsPage;
