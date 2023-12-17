@@ -59,20 +59,18 @@ public class ShipmentServiceImpl implements ShipmentService{
     public ShipmentResponseModel createShipment(QuoteResponseModel quoteResponseModel) {
         // TODO: Add validation
         // Create and save the departure address
-        Address departureAddress = addressMapper.toAddress(
+        Address pickupAddress = addressMapper.toAddress(
                 quoteResponseModel.getPickupStreetAddress(),
                 quoteResponseModel.getPickupCity(),
-                quoteResponseModel.getPickupPostalCode(),
                 quoteResponseModel.getPickupCountry());
-        Address savedDepartureAddress = addressRepository.save(departureAddress);
+        Address savedDepartureAddress = addressRepository.save(pickupAddress);
 
         // Create and save the arrival address
-        Address arrivalAddress = addressMapper.toAddress(
+        Address destinationAddress = addressMapper.toAddress(
                 quoteResponseModel.getDestinationStreetAddress(),
                 quoteResponseModel.getDestinationCity(),
-                quoteResponseModel.getDestinationPostalCode(),
                 quoteResponseModel.getDestinationCountry());
-        Address savedArrivalAddress = addressRepository.save(arrivalAddress);
+        Address savedArrivalAddress = addressRepository.save(destinationAddress);
 
         // Map the QuoteResponseModel to Shipment using your mapper
         Shipment shipment = quoteResponseToShipmentMapper.toShipment(quoteResponseModel, addressMapper);

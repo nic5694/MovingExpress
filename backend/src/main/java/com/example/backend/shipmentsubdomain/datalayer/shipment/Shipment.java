@@ -39,6 +39,8 @@ public class Shipment {
 
     @Nullable
     private double approximateWeight;
+    @Nullable
+    private double weight;
     private String name;
 
 
