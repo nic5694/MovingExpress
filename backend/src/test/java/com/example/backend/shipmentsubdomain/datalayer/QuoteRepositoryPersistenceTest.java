@@ -129,7 +129,39 @@ class QuoteRepositoryPersistenceTest {
     }
 
 
+    @Test
+    public void whenDeclineEvent_thenQuoteStatusUpdatedToDeclined() {
+        // Arrange
+        Quote quote = buildQuote();
+        quote = quoteRepository.save(quote);
+        String quoteId = quote.getQuoteIdentifier().getQuoteId();
 
+        // Act
+        Quote retrievedQuote = quoteRepository.findByQuoteIdentifier_QuoteId(quoteId);
+        retrievedQuote.setQuoteStatus(QuoteStatus.DECLINED);
+        quoteRepository.save(retrievedQuote);
+
+        // Assert
+        Quote updatedQuote = quoteRepository.findByQuoteIdentifier_QuoteId(quoteId);
+        assertNotNull(updatedQuote);
+        assertEquals(QuoteStatus.DECLINED, updatedQuote.getQuoteStatus());
+    }
+
+
+    @Test
+    public void whenEventWithInvalidStatus_thenThrowIllegalArgumentException() {
+        String invalidStatus = "Invalid";
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            Quote quote = buildQuote();
+            quote.setQuoteStatus(QuoteStatus.valueOf(invalidStatus));
+            quoteRepository.save(quote);
+        });
+
+        // Assert:
+        String expectedMessage = "Unexpected event value: " + invalidStatus;
+        assertThat(exception.getMessage().contains(expectedMessage));
+    }
 
     private Quote buildQuote(){
         return Quote.builder()
@@ -172,4 +204,5 @@ class QuoteRepositoryPersistenceTest {
                 .shipmentName("Sample Shipment")
                 .build();
     }
+
 }
