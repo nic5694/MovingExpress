@@ -70,8 +70,11 @@ class QuoteServiceImplUnitTest {
                 .contactMethod(ContactMethod.EMAIL)
                 .expectedMovingDate(LocalDate.now())
                 .comment("Moving soon")
+                .shipmentName("This is John's shipment.")
                 .build();
 
+        sampleQuote = buildQuote();
+        sampleQuoteResponseModel = buildQuoteResponse();
     }
 
     @Test

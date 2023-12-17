@@ -38,16 +38,7 @@ class QuoteControllerIntegrationTest {
 
     @BeforeEach
     public void setUp(){
-        Quote quote = new Quote(
-                new PickupAddress("123 Main St", "CityA", Country.CA, "12345", 101, true, "Apartment"),
-                new DestinationAddress("456 Oak St", "CityB", Country.USA, "54321", 202, false, "House"),
-                new ContactDetails("John", "Doe", "john.doe@example.com", "123-456-7890"),
-                ContactMethod.EMAIL,
-                LocalDate.of(2023, 1, 1),
-                "Additional comments go here",
-                "Moving out of parents house"
-        );
-        quoteRepository.save(quote);
+
     }
 
     @AfterEach
@@ -59,7 +50,7 @@ class QuoteControllerIntegrationTest {
     public void WhenGetAllQuotesByStatusPending_ThenReturnPendingQuotes(){
         String URL_PENDING_QUOTES = "/api/v1/movingexpress/quotes?quoteStatus=PENDING";
 
-        int expectedSize = 1;
+        int expectedSize = 2;
         webTestClient.get()
                 .uri(URL_PENDING_QUOTES)
                 .exchange()
@@ -80,7 +71,7 @@ class QuoteControllerIntegrationTest {
     @Test
     public void whenQuoteWithValidQuoteIdExists_thenReturnQuote(){
         webTestClient.get()
-                .uri(BASE_URI_QUOTES_RETRIEVE+"/"+VALID_QUOTE_ID)
+                .uri(BASE_URI_QUOTES_RETRIEVE+"?quoteId="+VALID_QUOTE_ID)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -140,6 +131,7 @@ class QuoteControllerIntegrationTest {
                 .expectedMovingDate(LocalDate.of(2023, 1, 1))
                 .contactMethod(ContactMethod.EMAIL)
                 .comment("Additional comments go here")
+                .shipmentName("This is John's shipment.")
                 .build();
 
         //act and assert
