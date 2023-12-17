@@ -23,13 +23,20 @@ public class Shipment {
     private String userId;
 
     @Nullable
+    private String email;
+
+    @Nullable
     @Embedded
     private TruckIdentifier truckIdentifier;
+
     @Enumerated(EnumType.STRING)
     private ShipmentStatus shipmentStatus;
+
     private LocalDate expectedMovingDate;
+
     @Nullable
     private LocalDate actualMovingDate;
+
     @Nullable
     private double approximateWeight;
     private String name;
@@ -45,7 +52,7 @@ public class Shipment {
     @JoinColumn(name = "arrival_address_id", referencedColumnName = "addressId")
     private Address arrivalAddress;
 
-    public Shipment(String userId, TruckIdentifier truckIdentifier, ShipmentStatus shipmentStatus, LocalDate expectedMovingDate, LocalDate actualMovingDate, double approximateWeight, String name, Address departureAddress, Address arrivalAddress) {
+    public Shipment(String userId, TruckIdentifier truckIdentifier, ShipmentStatus shipmentStatus, LocalDate expectedMovingDate, LocalDate actualMovingDate, double approximateWeight, String name, Address departureAddress, Address arrivalAddress, String email) {
         this.userId = userId;
         this.truckIdentifier = truckIdentifier;
         this.shipmentStatus = shipmentStatus;
@@ -55,6 +62,12 @@ public class Shipment {
         this.name = name;
         this.departureAddress = departureAddress;
         this.arrivalAddress = arrivalAddress;
+        this.shipmentIdentifier = new ShipmentIdentifier();
+        this.email = email;
+
+    }
+
+    public Shipment() {
         this.shipmentIdentifier = new ShipmentIdentifier();
     }
 }

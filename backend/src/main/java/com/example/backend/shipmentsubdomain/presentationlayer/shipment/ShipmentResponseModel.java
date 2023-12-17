@@ -14,8 +14,10 @@ public class ShipmentResponseModel {
     private String shipmentId;
     private Address departureAddress;
     private Address arrivalAddress;
-    private String clientId;
-    @Nullable
+    private String userId;
     private String truckId;
     private ShipmentStatus shipmentStatus;
+    private String shipmentName;
+    private double shipmentWeight;
+    private String email;
 }

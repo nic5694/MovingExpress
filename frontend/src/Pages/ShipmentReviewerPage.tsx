@@ -434,7 +434,7 @@ function ShipmentReviewerPage() {
         contactMethod: item.wayToContact,
         expectedMovingDate: item.movingDate,
         comment: item.additionalComments,
-        shipmentName: item.shipmentName,
+        shipmentName: item.name,
       }));
 
       setPendingQuotes(mappedQuoteForms)

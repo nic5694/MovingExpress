@@ -19,6 +19,9 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import java.io.StringWriter;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -79,11 +82,33 @@ public class ShipmentServiceImpl implements ShipmentService{
         shipment.setDepartureAddress(savedDepartureAddress);
         shipment.setArrivalAddress(savedArrivalAddress);
         shipment.setShipmentStatus(ShipmentStatus.QUOTED);
+        shipment.setEmail(quoteResponseModel.getEmailAddress());
+
 
         // Save the shipment
         Shipment savedShipment = shipmentRepository.save(shipment);
 
         return shipmentResponseMapper.entityToResponseModel(savedShipment);
+    }
+
+    @Override
+    public List<ShipmentResponseModel> getAllShipments(Optional<String> userId, Optional<String> email) {
+        List<Shipment> shipments;
+
+        if (userId.isPresent()) {
+            shipments = shipmentRepository.findShipmentByUserId(userId.get());
+
+        }
+        else if (email.isPresent()) {
+            shipments = shipmentRepository.findShipmentByEmail(email.get());
+
+        }else {
+            shipments = shipmentRepository.findAll();
+        }
+
+        return shipments.stream()
+                .map(shipmentResponseMapper::entityToResponseModel)
+                .collect(Collectors.toList());
     }
 
 
