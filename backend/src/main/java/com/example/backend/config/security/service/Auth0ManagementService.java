@@ -178,10 +178,11 @@ public class Auth0ManagementService {
 
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(response.body());
-
+            log.info("This is the json Node: " + jsonNode.toString());
             return UserInfoResponseModel.builder()
                     .username(jsonNode.path("username").asText())
                     .name(jsonNode.path("name").asText())
+                    .userId(jsonNode.path("user_id").asText())
                     .picture(jsonNode.path("picture").asText())
                     .user_metadata(getUserMetadata(jsonNode))
                     .build();

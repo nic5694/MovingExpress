@@ -58,7 +58,6 @@ public class ShipmentServiceImpl implements ShipmentService{
     @Transactional
     public ShipmentResponseModel createShipment(QuoteResponseModel quoteResponseModel) {
         // TODO: Add validation
-
         // Create and save the departure address
         Address departureAddress = addressMapper.toAddress(
                 quoteResponseModel.getPickupStreetAddress(),
@@ -83,7 +82,6 @@ public class ShipmentServiceImpl implements ShipmentService{
         shipment.setArrivalAddress(savedArrivalAddress);
         shipment.setShipmentStatus(ShipmentStatus.QUOTED);
         shipment.setEmail(quoteResponseModel.getEmailAddress());
-
 
         // Save the shipment
         Shipment savedShipment = shipmentRepository.save(shipment);

@@ -6,6 +6,7 @@ import com.example.backend.config.security.service.Auth0ManagementService;
 import com.example.backend.customersubdomain.buisnesslayer.CustomerService;
 import com.example.backend.customersubdomain.presentationlayer.CustomerRequestModel;
 import lombok.AllArgsConstructor;
+import lombok.Generated;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import java.net.URI;
 @CrossOrigin(origins = "http://localhost:3000",allowCredentials = "true")
 @RestController
 @Slf4j
+@Generated
 @AllArgsConstructor
 @RequestMapping("/api/v1/movingexpress/security")
 public class SecurityController {

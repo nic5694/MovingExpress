@@ -5,6 +5,7 @@ import com.example.backend.config.security.csrf.SpaCsrfToken;
 import com.example.backend.config.security.filters.CsrfCustomFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,6 +37,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@Generated
 @RequiredArgsConstructor
 public class SpringSecurityConfigurationBeans {
     @Value("${okta.oauth2.issuer}")

@@ -1,5 +1,6 @@
 package com.example.backend.util;
 
+import lombok.Generated;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +10,7 @@ import javax.mail.internet.MimeMessage;
 import java.util.Date;
 import java.util.Properties;
 
+@Generated
 @Component
 public class EmailUtil {
     @Value("${spring.mail.username}")

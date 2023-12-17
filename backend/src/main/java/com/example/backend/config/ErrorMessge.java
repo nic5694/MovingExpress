@@ -1,7 +1,9 @@
 package com.example.backend.config;
 
+import lombok.Generated;
 import lombok.Value;
 
+@Generated
 @Value
 public class ErrorMessge {
     private String message;
