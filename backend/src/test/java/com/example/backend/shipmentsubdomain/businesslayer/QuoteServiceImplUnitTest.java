@@ -17,6 +17,8 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class QuoteServiceImplUnitTest {
@@ -95,17 +97,17 @@ class QuoteServiceImplUnitTest {
     @Test
     void addQuote_ShouldSucceed() {
         // Arrange
-        Mockito.when(quoteRequestMapper.requestModelToEntity(any(QuoteRequestModel.class))).thenReturn(sampleQuote);
-        Mockito.when(quoteRepository.save(any(Quote.class))).thenReturn(sampleQuote);
-        Mockito.when(quoteResponseMapper.entityToResponseModel(any(Quote.class))).thenReturn(sampleQuoteResponseModel);
+        when(quoteRequestMapper.requestModelToEntity(any(QuoteRequestModel.class))).thenReturn(sampleQuote);
+        when(quoteRepository.save(any(Quote.class))).thenReturn(sampleQuote);
+        when(quoteResponseMapper.entityToResponseModel(any(Quote.class))).thenReturn(sampleQuoteResponseModel);
 
         // Act
         QuoteResponseModel result = quoteService.addQuote(sampleQuoteRequestModel);
 
         // Assert
         assertEquals(sampleQuoteResponseModel, result);
-        Mockito.verify(quoteRequestMapper, Mockito.times(1)).requestModelToEntity(any(QuoteRequestModel.class));
-        Mockito.verify(quoteRepository, Mockito.times(1)).save(any(Quote.class));
-        Mockito.verify(quoteResponseMapper, Mockito.times(1)).entityToResponseModel(any(Quote.class));
+        verify(quoteRequestMapper, Mockito.times(1)).requestModelToEntity(any(QuoteRequestModel.class));
+        verify(quoteRepository, Mockito.times(1)).save(any(Quote.class));
+        verify(quoteResponseMapper, Mockito.times(1)).entityToResponseModel(any(Quote.class));
     }
 }
