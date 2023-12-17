@@ -10,4 +10,9 @@ class BackendApplicationTests {
     void contextLoads() {
     }
 
+    @Test
+    public void main() {
+        BackendApplication.main(new String[] {});
+    }
+
 }

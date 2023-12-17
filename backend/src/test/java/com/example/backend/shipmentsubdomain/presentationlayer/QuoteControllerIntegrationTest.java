@@ -1,8 +1,7 @@
 package com.example.backend.shipmentsubdomain.presentationlayer;
 
-import com.example.backend.shipmentsubdomain.datalayer.ContactMethod;
-import com.example.backend.shipmentsubdomain.datalayer.Country;
-import com.example.backend.shipmentsubdomain.datalayer.QuoteRepository;
+import com.example.backend.shipmentsubdomain.datalayer.*;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
-
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -34,7 +35,43 @@ class QuoteControllerIntegrationTest {
 
     @BeforeEach
     public void setUp(){
+        Quote quote = new Quote(
+                new PickupAddress("123 Main St", "CityA", Country.CA, "12345", 101, true, "Apartment"),
+                new DestinationAddress("456 Oak St", "CityB", Country.USA, "54321", 202, false, "House"),
+                new ContactDetails("John", "Doe", "john.doe@example.com", "123-456-7890"),
+                ContactMethod.EMAIL,
+                LocalDate.of(2023, 1, 1),
+                "Additional comments go here",
+                "Moving out of parents house"
+        );
+        quoteRepository.save(quote);
+    }
 
+    @AfterEach
+    public void tearDown(){
+        quoteRepository.deleteAll();
+    }
+
+    @Test
+    public void WhenGetAllQuotesByStatusPending_ThenReturnPendingQuotes(){
+        String URL_PENDING_QUOTES = "/api/v1/movingexpress/quotes?quoteStatus=PENDING";
+
+        int expectedSize = 1;
+        webTestClient.get()
+                .uri(URL_PENDING_QUOTES)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(QuoteResponseModel.class)
+                .consumeWith(response -> {
+
+                    List<QuoteResponseModel> quoteResponseModels = response.getResponseBody();
+
+                    assertThat(quoteResponseModels).isNotEmpty();
+
+                    assertEquals(quoteResponseModels.size(), expectedSize);
+
+                    assertThat(quoteResponseModels.get(0).getQuoteStatus()).isEqualTo(QuoteStatus.PENDING);
+                });
     }
 
     @Test

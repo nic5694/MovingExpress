@@ -43,7 +43,7 @@ public class Quote {
         this.initiationDate=LocalDateTime.now();
         this.contactMethod=contactMethod;
         this.comment=comment;
-        this.quoteStatus=QuoteStatus.CREATED;
+        this.quoteStatus=QuoteStatus.PENDING;
         this.shipmentName=shipmentName;
     }
 }
