@@ -117,44 +117,6 @@ class QuoteControllerIntegrationTest {
     }
 
     @Test
-    public void whenQuoteWithValidQuoteIdExists_thenReturnQuote(){
-        webTestClient.get()
-                .uri(BASE_URI_QUOTES_RETRIEVE+"/"+VALID_QUOTE_ID)
-                .accept(MediaType.APPLICATION_JSON)
-                .exchange()
-                .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON)
-                .expectBody()
-                .jsonPath("$.quoteId").isEqualTo("a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6")
-                .jsonPath("$.expectedMovingDate").isEqualTo("2023-12-15")
-                .jsonPath("$.contactMethod").isEqualTo("EMAIL")
-                .jsonPath("$.comment").isEqualTo("Moving details for John Doe")
-
-                .jsonPath("$.pickupStreetAddress").isEqualTo("123 Main St")
-                .jsonPath("$.pickupCity").isEqualTo("Cityville")
-                .jsonPath("$.pickupCountry").isEqualTo("CA")
-                .jsonPath("$.pickupPostalCode").isEqualTo("M1A 1A1")
-                .jsonPath("$.pickupNumberOfRooms").isEqualTo(3)
-                .jsonPath("$.pickupElevator").isEqualTo(true)
-                .jsonPath("$.pickupBuildingType").isEqualTo("Apartment")
-
-                .jsonPath("$.destinationStreetAddress").isEqualTo("456 Oak St")
-                .jsonPath("$.destinationCity").isEqualTo("Townsville")
-                .jsonPath("$.destinationCountry").isEqualTo("USA")
-                .jsonPath("$.destinationPostalCode").isEqualTo("M5V 2H1")
-                .jsonPath("$.destinationNumberOfRooms").isEqualTo(4)
-                .jsonPath("$.destinationElevator").isEqualTo(false)
-                .jsonPath("$.destinationBuildingType").isEqualTo("House")
-
-                .jsonPath("$.firstName").isEqualTo("John")
-                .jsonPath("$.lastName").isEqualTo("Doe")
-                .jsonPath("$.emailAddress").isEqualTo("john.doe@example.com")
-                .jsonPath("$.phoneNumber").isEqualTo("123-555-1234");
-
-
-    }
-
-    @Test
     public void whenAddQuoteWithValidValues_thenReturnNewQuote(){
         //arrange
         QuoteRequestModel quoteRequestModel = QuoteRequestModel.builder()

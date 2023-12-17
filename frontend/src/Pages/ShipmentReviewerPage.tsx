@@ -73,7 +73,7 @@ function ShipmentReviewerPage() {
     pickupCity: string;
     pickupCountry: string;
     pickupPostalCode: string;
-    pickupNumberOfRooms: number; // Assuming it's a number, adjust the type accordingly
+    pickupNumberOfRooms: number;
     pickupElevator: boolean;
     pickupBuildingType: string;
     destinationStreetAddress: string;
@@ -91,7 +91,7 @@ function ShipmentReviewerPage() {
     expectedMovingDate: string;
     initiationDate: string;
     comment: string;
-    shipmentName: string;
+    name: string;
   }
 
   const [selectedQuote, setSelectedQuote] = useState<Quote>({
@@ -119,7 +119,7 @@ function ShipmentReviewerPage() {
     expectedMovingDate: '',
     initiationDate: '',
     comment: '',
-    shipmentName: '',
+    name: '',
   });
   const [displayDetail, setDisplayDetail] = useState(false)
 
@@ -161,7 +161,7 @@ function ShipmentReviewerPage() {
         expectedMovingDate: data.expectedMovingDate,
         initiationDate: data.initiationDate,
         comment: data.comment,
-        shipmentName: data.shipmentName,
+        name: data.name,
       };
 
       console.log(quoteDetail)
@@ -179,6 +179,11 @@ function ShipmentReviewerPage() {
         theme: 'light',
       })
     }
+  }
+
+  //handle accept or decline quote
+  const updateQuoteStatus = async (quoteId: string) => {
+
   }
 
   const menuIcon = () => {
@@ -261,9 +266,6 @@ function ShipmentReviewerPage() {
 
           <hr className='mb-5 mt-2' />
 
-
-          {/* ${displayDetail ? 'bg-black opacity-50' : 'bg-white'} */}
-
           <div className='absolute w-[96%] max-h-96 overflow-y-auto overflow-x-auto border'>
             <table className='border w-[100%]'>
 
@@ -290,13 +292,13 @@ function ShipmentReviewerPage() {
 
                     <tr id={quote.quoteId} className='text-center text-sm'>
                       {//@ts-ignore
-                      <td name={quote.shipmentName} className='border px-3'>{quote.shipmentName}</td> }
+                        <td name={quote.shipmentName} className='border px-3'>{quote.shipmentName}</td>}
                       <td className='border px-3'>{quote.emailAddress}</td>
                       <td className='border px-3 hidden lg:table-cell'>{quote.phoneNumber}</td>
                       <td className='border px-3 hidden lg:table-cell'>{quote.firstName}</td>
                       <td className='border px-3 hidden lg:table-cell'>{quote.lastName}</td>
                       <td className='border px-3 '>{quote.quoteStatus}</td>
-                      <td className='border px-3 '><button onClick={() => { getQuoteDetails(quote.quoteId) }} style={{ fontFamily: 'Bebas Neue, cursive' }} className="bg-companyYellow text-white py-1 px-10 rounded-sm text-sm">View</button></td>
+                      <td className='border px-3 '><button id={`btn-${quote.quoteId}`} onClick={() => { getQuoteDetails(quote.quoteId) }} style={{ fontFamily: 'Bebas Neue, cursive' }} className="bg-companyYellow text-white py-1 px-10 rounded-sm text-sm">View</button></td>
                     </tr>
 
                   ))
@@ -319,12 +321,12 @@ function ShipmentReviewerPage() {
 
                 <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='text-xl'>Personal <span className="text-companyYellow">Information</span></div>
                 <div className='flex flex-row gap-4'>
-                  <div className="flex flex-col gap-1">
+                  <div className="flex flex-col gap-1 w-[49%]">
                     <input
                       type="text"
                       className="border border-[lightgray] text-xs h-[35px] px-4 rounded-sm"
-                      id="ShipmentId"
-                      name="ShipmentId"
+                      id="DetailQuoteId"
+                      name="DetailQuoteId"
                       required
                       readOnly
                       value={selectedQuote.quoteId || ''}
@@ -336,7 +338,7 @@ function ShipmentReviewerPage() {
                       }}
                       className="text-[#696969] text-xs"
                     >
-                      ShipmentId
+                      Quote ID
                     </label>
                   </div>
                   <div className="flex flex-col gap-1">
@@ -347,7 +349,7 @@ function ShipmentReviewerPage() {
                       name="ShipmentName"
                       required
                       readOnly
-                      value={selectedQuote.shipmentName || ''}
+                      value={selectedQuote.name || ''}
                     />
                     <label
                       style={{
@@ -525,6 +527,26 @@ function ShipmentReviewerPage() {
                     </div>
                   </div>
                 </div>
+                <div className="flex flex-col gap-1">
+                  <input
+                    type="text"
+                    className="border border-[lightgray] text-xs h-[35px] px-4 rounded-sm"
+                    id="Comment"
+                    name="Comment"
+                    required
+                    readOnly
+                    value={selectedQuote.comment || ''}
+                  />
+                  <label
+                    style={{
+                      fontFamily:
+                        'Bebas Neue, cursive',
+                    }}
+                    className="text-[#696969] text-xs"
+                  >
+                    Additionnal Comments
+                  </label>
+                </div>
                 <div>
 
                 </div>
@@ -537,7 +559,7 @@ function ShipmentReviewerPage() {
                     name="PickupAddress"
                     required
                     readOnly
-                    value={selectedQuote.pickupStreetAddress || ''}
+                    value={`${selectedQuote.pickupStreetAddress || ''}, ${selectedQuote.pickupCountry || ''}`}
                   />
                   <label
                     style={{
@@ -683,7 +705,7 @@ function ShipmentReviewerPage() {
                     name="DestinationAddress"
                     required
                     readOnly
-                    value={selectedQuote.destinationStreetAddress || ''}
+                    value={`${selectedQuote.destinationStreetAddress || ''}, ${selectedQuote.destinationCountry || ''}`}
                   />
                   <label
                     style={{
@@ -821,8 +843,8 @@ function ShipmentReviewerPage() {
                   </div>
                 </div>
                 <div className="flex flex-row gap-1 justify-end mb-5">
-                  <div><button className='px-2.5 py-1 bg-green-500 text-white rounded-sm'>Accept</button></div>
-                  <div><button className='px-2.5 py-1 bg-red-500 text-white rounded-sm'>Decline</button></div>
+                  <div><button onClick={() => { updateQuoteStatus(selectedQuote.quoteId) }} className='px-2.5 py-1 bg-green-500 text-white rounded-sm'>Accept</button></div>
+                  <div><button onClick={() => { updateQuoteStatus(selectedQuote.quoteId) }} className='px-2.5 py-1 bg-red-500 text-white rounded-sm'>Decline</button></div>
                 </div>
               </form>
             </div>
