@@ -36,6 +36,7 @@ public class QuoteController {
         return quoteService.addQuote(quoteRequestModel);
     }
 
+    @ResponseStatus(org.springframework.http.HttpStatus.CREATED)
     @PostMapping(value = "/{quoteId}/events")
     public EventResponseModel createQuoteEvent(@RequestBody EventRequestModel eventRequestModel,
                                                @PathVariable String quoteId){
@@ -46,7 +47,7 @@ public class QuoteController {
 //            case "accept":
 //                return quoteService.acceptQuote(quoteId);
             default:
-                throw new IllegalStateException("Unexpected value: " + eventRequestModel.getEvent());
+                throw new IllegalArgumentException("Unexpected event value: " + eventRequestModel.getEvent());
         }
     }
 
