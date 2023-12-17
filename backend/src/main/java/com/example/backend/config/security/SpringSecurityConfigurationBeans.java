@@ -50,6 +50,7 @@ public class SpringSecurityConfigurationBeans {
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/v1/movingexpress/quotes")).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/v1/movingexpress/quotes/request")).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/v1/movingexpress/shipments")).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/v1/movingexpress/customers}")).permitAll()
@@ -91,7 +92,9 @@ public class SpringSecurityConfigurationBeans {
                                 new AntPathRequestMatcher("/api/v1/movingexpress/security/redirect", HttpMethod.GET.toString()),
                                 new AntPathRequestMatcher("/api/v1/movingexpress/quotes/request", HttpMethod.POST.toString()),
                                 new AntPathRequestMatcher("/api/v1/movingexpress/shipments", HttpMethod.POST.toString()),
-                                new AntPathRequestMatcher("/api/v1/movingexpress/customers", HttpMethod.GET.toString())
+                                new AntPathRequestMatcher("/api/v1/movingexpress/customers", HttpMethod.GET.toString()),
+                                new AntPathRequestMatcher("/api/v1/movingexpress/quotes", HttpMethod.GET.toString())
+
 
                         )
                 )
