@@ -17,8 +17,8 @@ function LandingPage() {
 
                 <div className="flex gap-5 align-middle">
                     <div>
-                        <Link to={"/Reviewer"} style={{fontFamily : "Bebas Neue, cursive"}} className="border-[3px] border-companyYellow px-7 py-2 rounded-md text-white">Reviewer</Link>
-                        <Link to={"/Estimator"} style={{fontFamily : "Bebas Neue, cursive"}} className="border-[3px] border-companyYellow px-7 py-2 rounded-md text-white">Estimator</Link>
+                        <Link id='reviewerBtn' to={"/Reviewer"} style={{fontFamily : "Bebas Neue, cursive"}} className="border-[3px] border-companyYellow px-7 py-2 rounded-md text-white">Reviewer</Link>
+                        <Link id='estimatorBtn' to={"/Estimator"} style={{fontFamily : "Bebas Neue, cursive"}} className="border-[3px] border-companyYellow px-7 py-2 rounded-md text-white">Estimator</Link>
                     </div>
                     <div>
                         <a

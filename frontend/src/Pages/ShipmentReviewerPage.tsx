@@ -567,13 +567,15 @@ function ShipmentReviewerPage() {
                 {
                   pendingQuotes.map((quote:any) => (
 
-                    <tr className='text-center text-sm'>
-                      <td className='border px-3'>{quote.shipmentName}</td>
+                    <tr id={quote.quoteId} className='text-center text-sm'>
+                      {//@ts-ignore
+                      <td name={quote.shipmentName} className='border px-3'>{quote.shipmentName}</td> }
                       <td className='border px-3'>{quote.emailAddress}</td>
                       <td className='border px-3 hidden lg:table-cell'>{quote.phoneNumber}</td>
                       <td className='border px-3 hidden lg:table-cell'>{quote.firstName}</td>
                       <td className='border px-3 hidden lg:table-cell'>{quote.lastName}</td>
-                      <td className='border px-3 '>{quote.quoteStatus}</td>
+                      {//@ts-ignore
+                      <td value={quote.quoteStatus} className='border px-3 '>{quote.quoteStatus}</td>}
                       <td className='border px-3 '><button onClick={() => {getQuoteDetails(quote.quoteId)}} style={{ fontFamily: 'Bebas Neue, cursive' }} className="bg-companyYellow text-white py-1 px-10 rounded-sm text-sm">View</button></td>
                     </tr>
 

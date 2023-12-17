@@ -12,6 +12,7 @@ function NavBar1() {
           </a> */}
 
                 <Link
+                    id='logoLink'
                     to={'/'}
                     style={{ fontFamily: 'Bebas Neue, cursive' }}
                     className="text-white text-lg"
