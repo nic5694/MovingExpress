@@ -6,6 +6,7 @@ import com.example.backend.customersubdomain.datamapperlayer.CustomerRequestMapp
 import com.example.backend.customersubdomain.datamapperlayer.CustomerResponseMapper;
 import com.example.backend.customersubdomain.presentationlayer.CustomerRequestModel;
 import com.example.backend.customersubdomain.presentationlayer.CustomerResponseModel;
+import com.example.backend.shipmentsubdomain.datalayer.shipment.ShipmentRepository;
 import com.example.backend.util.exceptions.CustomerNotFoundException;
 import com.example.backend.util.exceptions.InvalidRequestException;
 import jakarta.transaction.Transactional;
@@ -20,6 +21,7 @@ public class CustomerServiceImpl implements CustomerService{
     private final CustomerRepository customerRepository;
     private final CustomerResponseMapper customerResponseMapper;
     private final CustomerRequestMapper customerRequestMapper;
+    private final ShipmentRepository shipmentRepository;
     @Override
     public CustomerResponseModel getCustomerByUserId(String userId) {
         Customer customer = customerRepository.findCustomerByUserId(userId);
@@ -60,16 +62,24 @@ public class CustomerServiceImpl implements CustomerService{
         return customerResponseMapper.toCustomerResponse(customer);
     }
 
-    @Override
-    @Transactional
-    public void deleteCustomer(String userId) {
-        if (customerRepository.existsByUserId(userId))
-            throw new InvalidRequestException("Customer does not exist, could not be deleted.");
-        customerRepository.deleteCustomerByUserId(userId);
-        if (!customerRepository.existsByUserId(userId))
-            throw new InvalidRequestException("Customer could not be deleted.");
-
-    }
+//    @Override
+//    @Transactional
+//    public void deleteCustomer(String userId) {
+//        if (customerRepository.existsByUserId(userId))
+//            throw new InvalidRequestException("Customer does not exist, could not be deleted.");
+//        shipmentRepository.deleteAll(shipmentRepository.findShipmentByUserId(userId));
+////        shipmentRepository.findShipmentByUserId(userId).forEach(shipment -> {
+////            if(shipment.getShipmentStatus().equals(ShipmentStatus.TRANSIT) || shipment.getShipmentStatus().equals(ShipmentStatus.LOADING) || shipment.getShipmentStatus().equals(ShipmentStatus.QUOTED)){
+////                throw new InvalidRequestException("Customer has pending shipments, could not be deleted.");
+////            } else if (shipment.getShipmentStatus().equals(ShipmentStatus.DELIVERED)) {
+////                shipmentRepository.delete(shipment);
+////            }
+////        });
+//        customerRepository.deleteCustomerByUserId(userId);
+//        if (!customerRepository.existsByUserId(userId))
+//            throw new InvalidRequestException("Customer could not be deleted.");
+//
+//    }
     @Override
     public boolean checkIfCustomerExists(String userId) {
         return customerRepository.existsByUserId(userId);

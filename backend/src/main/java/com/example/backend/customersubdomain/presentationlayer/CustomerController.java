@@ -20,16 +20,16 @@ import java.util.Map;
 public class CustomerController {
     private final CustomerService customerService;
 
-    @DeleteMapping
-    public ResponseEntity<Void> deleteCustomer(@AuthenticationPrincipal OidcUser principal) {
-        String userId = principal.getSubject();
-        log.info("Delete customer with userId: {}", userId);
-
-        customerService.deleteCustomer(userId);
-
-        return ResponseEntity.noContent().build();
-
-    }
+//    @DeleteMapping
+//    public ResponseEntity<Void> deleteCustomer(@AuthenticationPrincipal OidcUser principal) {
+//        String userId = principal.getSubject();
+//        log.info("Delete customer with userId: {}", userId);
+//
+//        customerService.deleteCustomer(userId);
+//
+//        return ResponseEntity.noContent().build();
+//
+//    }
 
 
     @GetMapping

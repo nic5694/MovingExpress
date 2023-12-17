@@ -6,14 +6,14 @@ import com.example.backend.customersubdomain.datamapperlayer.CustomerRequestMapp
 import com.example.backend.customersubdomain.datamapperlayer.CustomerResponseMapper;
 import com.example.backend.customersubdomain.presentationlayer.CustomerRequestModel;
 import com.example.backend.customersubdomain.presentationlayer.CustomerResponseModel;
-import com.example.backend.util.exceptions.InvalidRequestException;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class CustomerServiceImplTest {
@@ -306,30 +306,30 @@ class CustomerServiceImplTest {
 
     }
 
-    @Test
-    void deleteCustomer() {
-        // Given
-        String userId = "auth|123456789";
-        Mockito.when(customerRepository.existsByUserId(userId)).thenReturn(true, false);
-        // When
-        customerService.deleteCustomer(userId);
-        // Then
-        Mockito.verify(customerRepository, Mockito.times(2)).existsByUserId(userId);
-        Mockito.verify(customerRepository, Mockito.times(1)).deleteCustomerByUserId(userId);
-    }
+//    @Test
+//    void deleteCustomer() {
+//        // Given
+//        String userId = "auth|123456789";
+//        Mockito.when(customerRepository.existsByUserId(userId)).thenReturn(true, false);
+//        // When
+//        customerService.deleteCustomer(userId);
+//        // Then
+//        Mockito.verify(customerRepository, Mockito.times(2)).existsByUserId(userId);
+//        Mockito.verify(customerRepository, Mockito.times(1)).deleteCustomerByUserId(userId);
+//    }
 
 
 
-    @Test
-    void deleteFailsForCustomer() {
-
-        String userId = "auth|123456789";
-
-        Mockito.when(customerRepository.existsByUserId(userId)).thenReturn(true);
-
-        assertThrows(InvalidRequestException.class, () -> customerService.deleteCustomer(userId));
-
-    }
+//    @Test
+//    void deleteFailsForCustomer() {
+//
+//        String userId = "auth|123456789";
+//
+//        Mockito.when(customerRepository.existsByUserId(userId)).thenReturn(true);
+//
+//        assertThrows(InvalidRequestException.class, () -> customerService.deleteCustomer(userId));
+//
+//    }
     @Test
     void checkIfCustomerExists() {
 
