@@ -7,5 +7,5 @@ import java.util.List;
 public interface QuoteRepository extends JpaRepository<Quote, Integer> {
 
     List<Quote> findAllByQuoteStatus(QuoteStatus quoteStatus);
-
+    Quote findByQuoteIdentifier_QuoteId(String quoteId);
 }

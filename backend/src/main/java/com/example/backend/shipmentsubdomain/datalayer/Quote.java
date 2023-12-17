@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name="quotes")
 @Data
+@Builder
+@AllArgsConstructor
 public class Quote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
