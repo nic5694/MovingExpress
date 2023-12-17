@@ -837,7 +837,7 @@ function ShipmentEstimatorPage() {
                   </div>
                 </div>
                 <div className="flex flex-row gap-1 justify-end mb-5">
-                  <div><button onClick={() => { updateQuoteStatus(selectedQuote.quoteId) }} className='px-2.5 py-1 bg-green-500 text-white rounded-sm'>Accept</button></div>
+                  <div><button onClick={() => { updateQuoteStatus(selectedQuote.quoteId) }} className='px-2.5 py-1 bg-companyYellow text-white rounded-sm'>Request Shipment</button></div>
                   <div><button onClick={() => { updateQuoteStatus(selectedQuote.quoteId) }} className='px-2.5 py-1 bg-red-500 text-white rounded-sm'>Decline</button></div>
                 </div>
               </form>
