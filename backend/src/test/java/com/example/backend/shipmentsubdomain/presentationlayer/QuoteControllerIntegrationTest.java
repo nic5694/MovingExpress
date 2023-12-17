@@ -39,16 +39,37 @@ class QuoteControllerIntegrationTest {
 
         @BeforeEach
         public void setUp() {
-                Quote quote = new Quote(
-                                new PickupAddress("123 Main St", "CityA", Country.CA, "12345", 101, true, "Apartment"),
-                                new DestinationAddress("456 Oak St", "CityB", Country.USA, "54321", 202, false,
-                                                "House"),
-                                new ContactDetails("John", "Doe", "john.doe@example.com", "123-456-7890"),
-                                ContactMethod.EMAIL,
-                                LocalDate.of(2023, 1, 1),
-                                "Additional comments go here",
-                                "Moving out of parents house");
-                quoteRepository.save(quote);
+
+                PickupAddress pickupAddress = new PickupAddress("123 Main St",
+                                "CityA",
+                                Country.CA,
+                                "12345",
+                                4,
+                                true,
+                                "Apartment");
+
+                DestinationAddress destinationAddress = new DestinationAddress("456 Oak St",
+                                "CityB",
+                                Country.USA,
+                                "54321",
+                                4,
+                                false,
+                                "House");
+
+                ContactDetails contactDetails = new ContactDetails("John",
+                                "Doe", "Example.doe@example.com", "123-456-7890");
+
+                this.existingQuote = new Quote();
+
+                existingQuote.setPickupAddress(pickupAddress);
+                existingQuote.setDestinationAddress(destinationAddress);
+                existingQuote.setContactDetails(contactDetails);
+                existingQuote.setExpectedMovingDate(LocalDate.of(2023, 1, 1));
+                existingQuote.setContactMethod(ContactMethod.EMAIL);
+                existingQuote.setQuoteStatus(QuoteStatus.PENDING);
+                existingQuote.setComment("Additional comments go here");
+
+                quoteRepository.save(existingQuote);
         }
 
         @AfterEach
