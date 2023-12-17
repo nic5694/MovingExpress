@@ -27,6 +27,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @ActiveProfiles("test")
 @Sql({ "/data-mysql.sql" })
 class QuoteControllerIntegrationTest {
+        private final String BASE_URI_QUOTES = "/api/v1/movingexpress/quotes/";
         private final String BASE_URI_QUOTES_REQUEST = "/api/v1/movingexpress/quotes/request";
         private final String BASE_URI_QUOTES_RETRIEVE = "/api/v1/movingexpress/quotes/retrieve";
 
@@ -36,6 +37,8 @@ class QuoteControllerIntegrationTest {
         WebTestClient webTestClient;
         @Autowired
         QuoteRepository quoteRepository;
+
+        Quote existingQuote;
 
         @BeforeEach
         public void setUp() {
@@ -81,7 +84,7 @@ class QuoteControllerIntegrationTest {
         public void WhenGetAllQuotesByStatusPending_ThenReturnPendingQuotes() {
                 String URL_PENDING_QUOTES = "/api/v1/movingexpress/quotes?quoteStatus=PENDING";
 
-                int expectedSize = 1;
+                int expectedSize = 3;
                 webTestClient.get()
                                 .uri(URL_PENDING_QUOTES)
                                 .exchange()
@@ -196,4 +199,53 @@ class QuoteControllerIntegrationTest {
                                 .jsonPath("$.comment").isEqualTo("Additional comments go here");
 
         }
+
+        @Test
+        public void whenCreateQuoteEventWithValidValues_decline_thenReturnNewEvent(){
+                //arrange
+                String quoteId = existingQuote.getQuoteIdentifier().getQuoteId();
+
+
+                EventRequestModel eventRequestModel = EventRequestModel.builder()
+                        .event("decline")
+                        .build();
+
+                //act and assert
+                webTestClient.post()
+                        .uri(BASE_URI_QUOTES + quoteId +"/events")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(eventRequestModel)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .exchange()
+                        .expectStatus().isCreated()
+                        .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                        .expectBody();
+
+
+                assertEquals(QuoteStatus.DECLINED,
+                        quoteRepository.findByQuoteIdentifier_QuoteId(quoteId).getQuoteStatus());
+
+        }
+
+        @Test
+        public void whenCreateQuoteEventWithInvalidValues_thenThrowException() {
+                // arrange
+                String quoteId = existingQuote.getQuoteIdentifier().getQuoteId();
+
+                EventRequestModel eventRequestModel = EventRequestModel.builder()
+                        .event("NotGOOD")
+                        .build();
+
+                // act and assert
+                webTestClient.post()
+                        .uri(BASE_URI_QUOTES + "/" + quoteId + "/events")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(eventRequestModel)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .exchange()
+                        .expectStatus().isBadRequest()
+                        .expectBody(String.class)
+                        .isEqualTo("Unexpected event value: NotGOOD");
+        }
+
 }
