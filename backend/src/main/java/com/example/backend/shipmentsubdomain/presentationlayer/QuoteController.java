@@ -22,8 +22,9 @@ public class QuoteController {
         return  quoteService.getAllQuotes(quoteStatus);
     }
 
-    @GetMapping("/retrieve/{quoteId}")
-    public QuoteResponse getQuote(@PathVariable String quoteId){
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/retrieve")
+    public QuoteResponseModel getQuote(@RequestParam String quoteId){
         return quoteService.getQuote(quoteId);
     }
 
