@@ -25,11 +25,12 @@ class QuoteRepositoryPersistenceTest {
     @BeforeEach
     public void setUp() {
         quoteRepository.deleteAll();
-        savedQuote=quoteRepository.save(buildQuote());
     }
 
     @Test
     public void findByQuoteIdentifier_QuoteId_shouldSucceed(){
+        savedQuote=quoteRepository.save(buildQuote());
+
         //act
         Quote found=quoteRepository.findByQuoteIdentifier_QuoteId(savedQuote.getQuoteIdentifier().getQuoteId());
 
