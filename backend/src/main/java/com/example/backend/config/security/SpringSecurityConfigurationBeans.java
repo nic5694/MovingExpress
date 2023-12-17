@@ -90,13 +90,13 @@ public class SpringSecurityConfigurationBeans {
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(new SpaCsrfToken())
                         .ignoringRequestMatchers(
+                                new AntPathRequestMatcher("/api/v1/movingexpress/quotes/*/events", HttpMethod.POST.toString()),
                                 new AntPathRequestMatcher("/api/v1/movingexpress/logout", HttpMethod.POST.toString()),
                                 new AntPathRequestMatcher("/api/v1/movingexpress/security/redirect", HttpMethod.GET.toString()),
                                 new AntPathRequestMatcher("/api/v1/movingexpress/quotes/request", HttpMethod.POST.toString()),
                                 new AntPathRequestMatcher("/api/v1/movingexpress/shipments", HttpMethod.POST.toString()),
                                 new AntPathRequestMatcher("/api/v1/movingexpress/customers", HttpMethod.GET.toString()),
-                                new AntPathRequestMatcher("/api/v1/movingexpress/quotes", HttpMethod.GET.toString()),
-                                new AntPathRequestMatcher("/api/v1/movingexpress/quotes/*/events", HttpMethod.POST.toString())
+                                new AntPathRequestMatcher("/api/v1/movingexpress/quotes", HttpMethod.GET.toString())
 
                         )
                 )
