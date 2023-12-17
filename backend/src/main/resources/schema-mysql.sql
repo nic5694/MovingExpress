@@ -10,7 +10,6 @@ CREATE TABLE IF NOT EXISTS customers (
     phone_number VARCHAR(15) NULL,
     street_address VARCHAR(255) NULL,
     city VARCHAR(255) NULL,
-    province VARCHAR(255) NULL,
     country VARCHAR(255) NULL,
     postal_code VARCHAR(10) NULL
     );

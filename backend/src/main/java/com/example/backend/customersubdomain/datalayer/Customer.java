@@ -34,8 +34,6 @@ public class Customer {
     @Nullable
     private String city;
     @Nullable
-    private String province;
-    @Nullable
     private String country;
     @Nullable
     private String postalCode;

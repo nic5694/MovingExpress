@@ -42,7 +42,7 @@ public class SecurityController {
         } else {
             log.info("Customer does not exist");
             CustomerRequestModel customerRequestModel = CustomerRequestModel.builder()
-                    .clientId(principal.getSubject())
+                    .userId(principal.getSubject())
                     .email(principal.getEmail())
                     .firstName(principal.getName())
                     .profilePictureUrl(principal.getClaim("picture"))
@@ -52,7 +52,7 @@ public class SecurityController {
         }
         if(!customerService.checkIfCustomerExists(principal.getSubject())){
             CustomerRequestModel customerRequestModel = CustomerRequestModel.builder()
-                    .clientId(principal.getSubject())
+                    .userId(principal.getSubject())
                     .email(principal.getEmail())
                     .firstName(principal.getName())
                     .profilePictureUrl(principal.getClaim("picture"))

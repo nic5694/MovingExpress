@@ -31,4 +31,9 @@ public class Address {
     public Address() {
         this.addressIdentifier = new AddressIdentifier();
     }
+
+    @Transient
+    public String getAddressId() {
+        return addressIdentifier.getAddressId();
+    }
 }

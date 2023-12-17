@@ -8,6 +8,7 @@ import com.example.backend.customersubdomain.presentationlayer.CustomerRequestMo
 import com.example.backend.customersubdomain.presentationlayer.CustomerResponseModel;
 import com.example.backend.util.exceptions.CustomerNotFoundException;
 import com.example.backend.util.exceptions.InvalidRequestException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,10 +30,10 @@ public class CustomerServiceImpl implements CustomerService{
     }
     @Override
     public CustomerResponseModel addCustomer(CustomerRequestModel customerRequest) {
-        if (customerRepository.existsByUserId(customerRequest.getClientId()))
-            throw new InvalidRequestException("Customer with userId: " + customerRequest.getClientId() + " already exists.");
+        if (customerRepository.existsByUserId(customerRequest.getUserId()))
+            throw new InvalidRequestException("Customer with userId: " + customerRequest.getUserId() + " already exists.");
         Customer customer = customerRequestMapper.toCustomer(customerRequest);
-        customer.setUserId(customerRequest.getClientId());
+        customer.setUserId(customerRequest.getUserId());
         customerRepository.save(customer);
         return customerResponseMapper.toCustomerResponse(customer);
     }
@@ -52,6 +53,7 @@ public class CustomerServiceImpl implements CustomerService{
         customer.setPostalCode(customerRequest.getPostalCode() != null ? customerRequest.getPostalCode() : customer.getPostalCode());
         customer.setCity(customerRequest.getCity() != null ? customerRequest.getCity() : customer.getCity());
         customer.setCountry(customerRequest.getCountry() != null ? customerRequest.getCountry() : customer.getCountry());
+        customer.setProfilePictureUrl(customerRequest.getProfilePictureUrl() != null ? customerRequest.getProfilePictureUrl() : customer.getProfilePictureUrl());
 
         customerRepository.save(customer);
 
@@ -59,11 +61,13 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
+    @Transactional
     public void deleteCustomer(String userId) {
-        customerRepository.deleteCustomerByUserId(userId);
-
         if (customerRepository.existsByUserId(userId))
             throw new InvalidRequestException("Customer does not exist, could not be deleted.");
+        customerRepository.deleteCustomerByUserId(userId);
+        if (!customerRepository.existsByUserId(userId))
+            throw new InvalidRequestException("Customer could not be deleted.");
 
     }
     @Override
