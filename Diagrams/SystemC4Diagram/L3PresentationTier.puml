@@ -29,13 +29,12 @@ System_Boundary(ReactApplication, "ReactApplication") {
 
     rectangle "Components" as Components {
         Container(landingpage, "Landing Page", "TSX", "Displays the landing page of the application.", $sprite="typescript", $tags="webSite")
-        Container(signuppage, "Signup Page", "TSX", "Handles user registration.", $sprite="typescript", $tags="webSite")
-        Container(loginpage, "Login Page", "TSX", "Handles user login.", $sprite="typescript", $tags="webSite")
-        Container(userhomepage, "User Home Page", "TSX", "Displays user dashboard.", $sprite="typescript", $tags="webSite")
+        Container(auth0page, "Auth0SignUpSignIn", "TSX", "Handles user registration and authentication.", $sprite="typescript", $tags="webSite")
+        Container(userhomepage, "User Home Page", "TSX", "Displays user shipment flow.", $sprite="typescript", $tags="webSite")
         Container(shipmentquote, "Shipment Quote", "TSX", "Provides shipment quotations.", $sprite="typescript", $tags="webSite")
         Container(profilepage, "Profile Page", "TSX", "Manages user profile.", $sprite="typescript", $tags="webSite")
         Container(contactuspage, "Contact Us Page", "TSX", "Provides contact information.", $sprite="typescript", $tags="webSite")
-        Container(shipmentspage, "Shipments Page", "TSX", "Displays all shipments.", $sprite="typescript", $tags="webSite")
+        Container(shipmentspage, "Shipments Page", "TSX", "Displays all of the clients shipments.", $sprite="typescript", $tags="webSite")
         Container(shipmentdetails, "Shipment Details", "TSX", "Provides detailed view of shipments.", $sprite="typescript", $tags="webSite")
         Container(shipmentreviewer, "Shipment Reviewer", "TSX", "Reviews shipment details.", $sprite="typescript", $tags="webSite")
         Container(shipmentestimator, "Shipment Estimator", "TSX", "Estimates shipment costs.", $sprite="typescript", $tags="webSite")
@@ -51,16 +50,16 @@ rectangle "Services" as Services {
 }
 
 Rel(index, landingpage, "Starts with", $tags="a_rel")
-Rel(landingpage, loginpage, "Navigates to", $tags="a_rel")
 Rel(landingpage, contactuspage, "Navigates to", $tags="a_rel")
 Rel(landingpage, shipmentquote, "Navigates to", $tags="a_rel")
-Rel(landingpage, signuppage, "Navigates to", $tags="a_rel")
+Rel(landingpage, auth0page, "Redirects to https://{domain}:{port}/oauth2/authorization/okta", $tags="a_rel")
+Rel(shipmentquote, movingExpress, "Sends the request quote", tags="a_rel")
 
-Rel(loginpage, userhomepage, "After Login", $tags="a_rel")
-Rel(signuppage, userhomepage, "After Signup", $tags="a_rel")
-Rel(shipmentspage, shipmentdetails, "Navigates to", $tags="a_rel")
-Rel(landingpage, reactRouter, "Uses for navigation", $tags="a_rel")
+Rel(auth0page, userhomepage, "After Login as Shipment_Owner", $tags="a_rel")
+Rel(auth0page, shipmentestimator, "After Login as Shipment_Estimator", $tags="a_rel")
+Rel(auth0page, shipmentreviewer, "After Login as Shipment_Reviewer", $tags="a_rel")
 
+Rel(auth0page, usershipments, "After Login as Shipment_Reviewer", $tags="a_rel")
 Rel(userhomepage, profilepage, "Navigates to profile", $tags="a_rel")
 Rel(userhomepage, shipmentspage, "Views shipments", $tags="a_rel")
 Rel(shipmentdetails, userhomepage, "Back to shipments", $tags="a_rel")

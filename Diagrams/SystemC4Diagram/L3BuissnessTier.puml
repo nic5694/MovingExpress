@@ -23,7 +23,6 @@ Container(email, "Gmail SMTP System", "Email Service", "The internal google emai
 
 Container(singlePageApp, "Single-Page Application", "TypeScript, ReactJs", "Proivdes all the moving system's functionality to the users via their web browser.", $sprite="react", $tags="SPA")
 Rectangle "API" as API #line.dashed{
-    Container(securityFilter, "Security Filter", "Component: Spring Security Filter", "Filters all API requests.", $sprite="java", $tags="service")
     Package "Customer"{
         Container(customerController, "Customer Controller", "Component: Spring Boot REST Controller", "Provides users with the ability to manage their account.", $sprite="java", $tags="service")
         Container(customerService, "CustomerService", "Component: Sprint Boot Service" ,"Provides the functionalities to get, update, create and delete.", $sprite="java", $tags="service")
@@ -46,6 +45,8 @@ Rectangle "API" as API #line.dashed{
         Container(driverService, "Driver Service", "Component: Sprint Boot Service", "Provides the functionalities to get, update, create and delete.", $sprite="java", $tags="service")
         Container(shipmentRepository, "ShipmentRepository","Component: JPA Repository","Makes requests to the database to fetch or update data.", $sprite="java", $tags="service")
         Container(driverRepository, "Driver Repository", "Component: JPA Repository", "Makes requests to the database to fetch or update data.", $sprite="java", $tags="service")
+        Container(addressRepository, "AddressRepository","Component: JPA Repository","Makes requests to the database to fetch or update data.", $sprite="java", $tags="service")
+        shipmentService -[dashed]-> addressRepository: "**uses**"
         shipmentController -[dashed]-> shipmentService: "**uses**"
         shipmentService -[dashed]-> shipmentRepository: "**uses**"
         shipmentService -[dashed]-> inventoryRepository: "**uses**"
@@ -55,34 +56,54 @@ Rectangle "API" as API #line.dashed{
         shipmentService -[dashed]-> driverRepository: "**uses**"
       
     }
-    Package "Configuration"{
+    Package "Config"{
         Package "Security"{
-            Container(springSecurityConfig, "Spring Security Configuration", "Component: Spring Boot Configuration Bean", "Configures Amazon Cognito usage in the system.", $sprite="java", $tags="service")
-            springSecurityConfig -[dashed]-> auth: "**Uses**\n[HTTPS/JSON]"
+            Container(springSecurityConfigurationBeans, "Spring Security Bean Configuration", "Component: Spring Boot Configuration Beans", "Configures Auth0 usage in the system.", $sprite="java", $tags="service")
+            Package "controllers"{
+                Container(securityController, "Security Controller", "Component: Spring Boot Rest Controller", "Provides users with the ability to sucessfully log in with their JWT tokens.", $sprite="java", $tags="service")
+            }
+            Package "filters"{
+                Container(ResponseHeaderFilter, "Response Header Filter", "Component: Spring Boot Component Filter", "Provides the system with the ability to filter all API request response headers according to specific criteria.", $sprite="java", $tags="service")
+            }
+            Package "Service"{
+                Container(Auth0LoginService, "Auth0 Login Service", "Component: Spring Boot Service", "Provides the functionalities to login and redirect users with their JWT tokens.", $sprite="java", $tags="service")
+                Container(Auth0ManagementService, "Auth0 Management Service", "Component: Spring Boot Service", "Provides the functionalities to manage users within auth0.", $sprite="java", $tags="service")
+            }
+            springSecurityConfigurationBeans -[dashed]-> auth: "**Uses**\n[HTTPS/JSON]"
+            springSecurityConfigurationBeans -[dashed]-> Auth0LoginService: "**Uses**"
+            springSecurityConfigurationBeans -[dashed]-> Auth0ManagementService: "**Uses**
+            ResponseHeaderFilter -[dashed]-> securityController: "**Inserted By**"
+            securityController -[dashed]-> Auth0LoginService: "**Uses**"
+            securityController -[dashed]-> Auth0ManagementService: "**Uses**"
+            
+
         }
-        securityFilter -[dashed]-> springSecurityConfig: "**Is Configured by**"
-    }
-    Package "Notification"{
-        Container(notificationService, "Spring Notification Service", "Sends notification email to target adress.","testing the new thing", $sprite="java", $tags="service")
-        notificationService -[dashed]-> email : "**Sends email using**\n[SMTP/TCP/IP]"
+        ' Container(ErrorMessage, "ErrorMessage", "Error Message", "Component ")
+        ResponseHeaderFilter -[dashed]-> springSecurityConfigurationBeans: "**Is Configured by**"
     }
     Package "Reports Service" {
-        Container(reportsService, "Spring Reports Service", "Component: Spring Reports Service", "Generates spwcific reports.", $sprite="java", $tags="service")
+        Container(reportsService, "Spring Reports Service", "Component: Spring Boot Reports Service", "Generates specific reports.", $sprite="java", $tags="service")
     }
-        securityFilter -[dashed]-> inventoryController: "**Direct Request**"
-        securityFilter -[dashed]-> customerController: "**Direct Request**"
-        securityFilter -[dashed]-> shipmentController: "**Direct Request**"
-        customerService -[dashed]--> notificationService: "**uses**"
-        shipmentService -[dashed]--> notificationService: "**uses**"
+    Package "Util"{
+        Container(EmailUtil, "Spring Email Util Component", "Component: Spring Boot Component", "Generates and sends notification email to target adress.", $sprite="java", $tags="service")
+        EmailUtil -[dashed]-> email : "**Sends email using**\n[SSL/SMTP]"
+        customerService -[dashed]--> EmailUtil: "**uses**"
+        shipmentService -[dashed]--> EmailUtil: "**uses**"
+    }
+        ResponseHeaderFilter -[dashed]-> inventoryController: "**Direct Request**"
+        ResponseHeaderFilter -[dashed]-> customerController: "**Direct Request**"
+        ResponseHeaderFilter -[dashed]-> shipmentController: "**Direct Request**"
+        ResponseHeaderFilter -[dashed]-> driverController: "**Direct Request**"
+
         inventoryService -[dashed]-> reportsService: "**uses**"
         shipmentService -[dashed]-> reportsService: "**uses**
 }
 inventoryService -[dashed]-> shipmentRepository: "**uses**"
-inventoryService -[dashed]-> customerRepository: "**uses**
 ContainerDb(database, "Database", "MySQL", "Stores client data, shipment information and user contact details", $sprite="mysql", $tags="storage")
 inventoryRepository -[dashed]-> database: "**Makes calls via**\nSQL/TCP\n[JDBC]"
 shipmentRepository -[dashed]-> database: "**Makes calls via**\nSQL/TCP\n[JDBC]"
+addressRepository -[dashed]-> database: "**Makes calls via**\nSQL/TCP\n[JDBC]"
 customerRepository -[dashed]-> database: "**Makes calls via**\nSQL/TCP\n[JDBC]"
-singlePageApp -[dashed]-> securityFilter : "**Makes API calls to**\n[HTTPS/JSON]"
+singlePageApp -[dashed]-> ResponseHeaderFilter : "**Makes API calls to**\n[HTTPS/JSON]"
 SHOW_LEGEND()
 @enduml
