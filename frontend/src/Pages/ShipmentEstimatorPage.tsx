@@ -239,11 +239,7 @@ function ShipmentEstimatorPage() {
     setDisplayDetail(true)
 
     try {
-      const response = await axios.get('http://localhost:8080/api/v1/movingexpress/quotes/retrieve', {
-        params: {
-          quoteId: quoteId,
-        }
-      });
+      const response = await axios.get(`http://localhost:8080/api/v1/movingexpress/quotes/${quoteId}`, {});
 
       var data = response.data;
 
@@ -295,28 +291,44 @@ function ShipmentEstimatorPage() {
 
   const declineQuote = async (quoteId: string) => {
     try {
-        const response = await axios.post(
-            `http://localhost:8080/api/v1/movingexpress/quotes/${quoteId}/events`, 
-            {
-                event: 'decline'
-            }
-        );
+      const response = await axios.post(
+        `http://localhost:8080/api/v1/movingexpress/quotes/${quoteId}/events`,
+        {
+          event: 'decline'
+        }
+      );
 
-        console.log('Response:', response.data);
+      console.log('Response:', response.data);
 
-        setDisplayDetail(false)
-        fetchData()
+      setDisplayDetail(false)
+      fetchData()
 
 
     } catch (error) {
-        console.error('Error:', error);
+      console.error('Error:', error);
     }
 
   };
 
-  //handle accept or decline quote
-  const updateQuoteStatus = async (quoteId: string) => {
+  //create shipment from quote
+  const createShipment = async (quoteId: string) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/api/v1/movingexpress/quotes/${quoteId}/events`,
+        {
+          event: 'convert'
+        }
+      );
 
+      console.log('Response:', response.data);
+
+      setDisplayDetail(false)
+      fetchData()
+
+
+    } catch (error) {
+      console.error('Error:', error);
+    }
   }
 
   const menuIcon = () => {
@@ -424,7 +436,7 @@ function ShipmentEstimatorPage() {
                       <td className='border px-3 hidden lg:table-cell'>{quote.phoneNumber}</td>
                       <td className='border px-3 hidden lg:table-cell'>{quote.firstName}</td>
                       <td className='border px-3 hidden lg:table-cell'>{quote.lastName}</td>
-                      <td className='border px-3 '>{quote.quoteStatus}</td>
+                      <td id={`accepted-${quote.quoteId}`} className='border px-3 '>{quote.quoteStatus}</td>
                       <td className='border px-3 '><button id={`btn-${quote.quoteId}`} onClick={() => { getQuoteDetails(quote.quoteId) }} style={{ fontFamily: 'Bebas Neue, cursive' }} className="bg-companyYellow text-white py-1 px-10 rounded-sm text-sm">View</button></td>
                     </tr>
 
@@ -439,13 +451,13 @@ function ShipmentEstimatorPage() {
                       <td className='border px-3 hidden lg:table-cell'>{quote.phoneNumber}</td>
                       <td className='border px-3 hidden lg:table-cell'>{quote.firstName}</td>
                       <td className='border px-3 hidden lg:table-cell'>{quote.lastName}</td>
-                      <td className='border px-3 '>{quote.quoteStatus}</td>
+                      <td id={`created-${quote.quoteId}`} className='border px-3 '>{quote.quoteStatus}</td>
                       <td className='border px-3 '><button id={`btn-${quote.quoteId}`} onClick={() => { getQuoteDetails(quote.quoteId) }} style={{ fontFamily: 'Bebas Neue, cursive' }} className="bg-companyYellow text-white py-1 px-10 rounded-sm text-sm">View</button></td>
                     </tr>
 
                   ))
                 }
-                
+
                 {
                   declinedQuotes.map((quote: any) => (
 
@@ -999,13 +1011,13 @@ function ShipmentEstimatorPage() {
                   </div>
                 </div>
                 {
-                //@ts-ignore
-                ((selectedQuote.quoteStatus !== "DECLINED") && (selectedQuote.quoteStatus !== "CREATED")) ? 
-                <div className="flex flex-row gap-1 justify-end mb-5">
-                  <div><button onClick={() => { updateQuoteStatus(selectedQuote.quoteId) }} className='px-2.5 py-1 bg-companyYellow text-white rounded-sm'>Request Shipment</button></div>
-                  <div><button id='declineBtn' onClick={() => { declineQuote(selectedQuote.quoteId) }} className='px-2.5 py-1 bg-red-500 text-white rounded-sm'>Decline</button></div>
-                </div>
-                : <div></div>
+                  //@ts-ignore
+                  ((selectedQuote.quoteStatus !== "DECLINED") && (selectedQuote.quoteStatus !== "CREATED")) ?
+                    <div className="flex flex-row gap-1 justify-end mb-5">
+                      <div><button id='createBtn' onClick={() => { createShipment(selectedQuote.quoteId) }} className='px-2.5 py-1 bg-companyYellow text-white rounded-sm'>Request Shipment</button></div>
+                      <div><button id='declineBtn' onClick={() => { declineQuote(selectedQuote.quoteId) }} className='px-2.5 py-1 bg-red-500 text-white rounded-sm'>Decline</button></div>
+                    </div>
+                    : <div></div>
                 }
               </div>
             </div>

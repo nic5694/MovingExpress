@@ -112,8 +112,8 @@ async function test_case() {
     const close = await driver.findElement(By.id('CloseDetail'));
     close.click()
 
-    // Close the browser after waiting for another 5 seconds
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    // Close the browser after waiting for another 2 seconds
+    await new Promise((resolve) => setTimeout(resolve, 2000))
     await driver.quit()
 }
 test_case()
