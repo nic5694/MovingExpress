@@ -9,8 +9,10 @@ participant ShipmentQuotePage as "<<View>>\nShipmentQuotePage"
 participant UserHomePage as "<<View>>\nUserHomePage"
 participant ShipmentController as "<<Controller>>\nShipmentController"
 participant QuoteService as "<<Service>>\nQuoteService"
+participant QuoteRequestMapper as "<<Mapper>>\nQuoteRequestMapper"
 participant QuoteRepository as "<<Repository>>\nQuoteRepository"
 participant Database as "<<Database>>\nDatabase"
+participant QuoteResponseMapper as "<<Mapper>>\nQuoteResponseMapper"
 
 Client -> ReactApplication : Access website
 activate ReactApplication
@@ -22,14 +24,17 @@ alt Client is logged in
     LandingPage -> UserHomePage : Navigate to profile after login
     deactivate LandingPage
     activate UserHomePage
-
-    UserHomePage -> ShipmentQuotePage : Select 'Request Quote'
-    deactivate UserHomePage
 else
     LandingPage -> ShipmentQuotePage : Select 'Shipment Quote'
     deactivate LandingPage
+    activate ShipmentQuotePage
 end
-activate ShipmentQuotePage
+
+alt Client is logged in
+    UserHomePage -> ShipmentQuotePage : Select 'Request Quote'
+    deactivate UserHomePage
+    activate ShipmentQuotePage
+end
 
 ShipmentQuotePage --> Client : Display quote form
 Client -> ShipmentQuotePage : Fill up quote details Form
@@ -38,22 +43,31 @@ activate ShipmentQuotePage
 ShipmentQuotePage -> ShipmentController : POST /quote
 activate ShipmentController
 
-ShipmentController -> QuoteService : createQuote()
-activate QuoteService
+ShipmentController -> QuoteRequestMapper : mapRequestToEntity()
+activate QuoteRequestMapper
 
-QuoteService -> QuoteRepository : save(quoteData)
+QuoteRequestMapper -> QuoteService : addQuote()
+activate QuoteService
+QuoteRequestMapper --> ShipmentController : QuoteRequest
+
+QuoteService -> QuoteRepository : save(quote)
 activate QuoteRepository
+QuoteService --> QuoteRepository : Quote
 
 QuoteRepository -> Database : INSERT INTO quotes
 activate Database
 Database --> QuoteRepository : Success
-deactivate Database
+QuoteRepository --> QuoteService : savedQuote
 
-QuoteRepository --> QuoteService : Quote saved
+deactivate Database
 deactivate QuoteRepository
 
-QuoteService --> ShipmentController : QuoteResponse
-deactivate QuoteService
+QuoteService -> QuoteResponseMapper : entityToResponseModel(savedQuote)
+activate QuoteResponseMapper
+QuoteService --> ShipmentController : QuoteResponseModel
+
+QuoteResponseMapper --> ShipmentController : QuoteResponse
+deactivate QuoteResponseMapper
 
 ShipmentController --> ShipmentQuotePage : Show success message
 deactivate ShipmentController
@@ -63,46 +77,54 @@ deactivate ShipmentQuotePage
 
 alt Client is logged in (Post-Quote Creation)
     UserHomePage -> ShipmentController : View Quote Status
+    activate UserHomePage
     activate ShipmentController
 
-    ShipmentController -> QuoteService : retrieveQuoteStatus()
+    ShipmentController -> QuoteService : getQuote()
     activate QuoteService
+    ShipmentController --> QuoteService : QuoteId
 
-    QuoteService -> QuoteRepository : SELECT quote
+    QuoteService -> QuoteRepository : findByQuoteIdentifier_QuoteId(QuoteId)
     activate QuoteRepository
+    QuoteService --> QuoteRepository : Quote
 
     QuoteRepository -> Database : Query quote data
     activate Database
     Database --> QuoteRepository : Query Results
-    deactivate Database
+    QuoteRepository --> QuoteService : existingQuote
 
-    QuoteRepository --> QuoteService : Quote Status
+    deactivate Database
     deactivate QuoteRepository
 
-    QuoteService --> ShipmentController : QuoteStatusResponse
-    deactivate QuoteService
+    QuoteService -> QuoteResponseMapper : entityToResponseModel(existingQuote)
+    activate QuoteResponseMapper
+    QuoteService --> ShipmentController : QuoteResponseModel
+
+    QuoteResponseMapper --> ShipmentController : QuoteStatusResponse
+    deactivate QuoteResponseMapper
 
     ShipmentController --> UserHomePage : Display Quote Status
     deactivate ShipmentController
-
-    UserHomePage --> Client : Show Quote Status
     deactivate UserHomePage
 
     UserHomePage -> ShipmentController : Edit Quote
+    activate UserHomePage
     activate ShipmentController
 
     ShipmentController -> QuoteService : editQuote()
     activate QuoteService
+    UserHomePage --> ShipmentController : QuoteId, QuoteRequestModel
 
     QuoteService -> QuoteRepository : UPDATE quote
     activate QuoteRepository
+    QuoteService --> QuoteRepository : Quote
 
     QuoteRepository -> Database : Update quote data
     activate Database
     Database --> QuoteRepository : Update Results
-    deactivate Database
+    QuoteRepository --> QuoteService : updatedQuote
 
-    QuoteRepository --> QuoteService : Update Confirmation
+    deactivate Database
     deactivate QuoteRepository
 
     QuoteService --> ShipmentController : EditResponse

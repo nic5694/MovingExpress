@@ -1,21 +1,28 @@
 @startuml
-title Global Shipment Management Sequence Diagram
+title Global Shipment Management and Request Sequence Diagram
 
-actor Client
 actor "Moving Estimator / Shipment Reviewer" as Admin
+actor Client
 
 participant ReactApplication as "<<View>>\nReactApplication"
 participant LandingPage as "<<View>>\nLandingPage"
+participant AdminHomePage as "<<View>>\nAdminHomePage"
 participant UserHomePage as "<<View>>\nUserHomePage"
 participant ShipmentsPage as "<<View>>\nShipmentsPage"
+participant QuoteShipmentPopup as "<<Popup>>\nQuoteShipmentPopup"
 participant ShipmentDetailsPage as "<<View>>\nShipmentDetailsPage"
-participant ShipmentQuotesPage as "<<View>>\nShipmentQuotesPage"
 participant ShipmentController as "<<Controller>>\nShipmentController"
 participant ShipmentService as "<<Service>>\nShipmentService"
+participant QuoteResponseToShipmentMapper as "<<Mapper>>\nQuoteResponseToShipmentMapper"
+participant ShipmentResponseMapper as "<<Mapper>>\nShipmentResponseMapper"
+participant ShipmentRequestMapper as "<<Mapper>>\nShipmentRequestMapper"
 participant ShipmentRepository as "<<Repository>>\nShipmentRepository"
+participant EmailService as "<<Service>>\nEmailService"
 participant Database as "<<Database>>\nDatabase"
 
+
 == Client Sequence ==
+
 Client -> ReactApplication : Access website
 activate ReactApplication
 
@@ -47,6 +54,11 @@ deactivate Database
 ShipmentRepository --> ShipmentService : Shipments
 deactivate ShipmentRepository
 
+ShipmentService -> ShipmentResponseMapper : entitiesToResponseModels()
+activate ShipmentResponseMapper
+ShipmentResponseMapper --> ShipmentService : ShipmentsResponse
+deactivate ShipmentResponseMapper
+
 ShipmentService --> ShipmentController : ShipmentsResponse
 deactivate ShipmentService
 
@@ -70,6 +82,10 @@ else Update Shipment Status
     activate ShipmentController
     ShipmentController -> ShipmentService : updateStatus()
     activate ShipmentService
+    ShipmentService -> ShipmentRequestMapper : quoteRequestToShipmentMapper()
+    activate ShipmentRequestMapper
+    ShipmentRequestMapper --> ShipmentService : Shipment
+    deactivate ShipmentRequestMapper
     ShipmentService -> ShipmentRepository : updateStatus()
     activate ShipmentRepository
     ShipmentRepository -> Database : UPDATE shipment
@@ -103,6 +119,7 @@ else Cancel Shipment
     deactivate ShipmentDetailsPage
 end
 
+
 == Admin Sequence ==
 
 Admin -> ReactApplication : Access website
@@ -111,39 +128,60 @@ activate ReactApplication
 ReactApplication -> LandingPage : render()
 activate LandingPage
 
-LandingPage -> ShipmentQuotesPage : Admin logs in
+LandingPage -> AdminHomePage : Admin logs in
 deactivate LandingPage
-activate ShipmentQuotesPage
+activate AdminHomePage
 
-ShipmentQuotesPage -> ShipmentController : GET /shipmentQuotes
+AdminHomePage -> ShipmentController : GET /quotes
 activate ShipmentController
 
-ShipmentController -> ShipmentService : getAllShipmentQuotes()
+ShipmentController -> ShipmentService : getAllQuotes()
 activate ShipmentService
 
 ShipmentService -> ShipmentRepository : findAllQuotes()
 activate ShipmentRepository
 
-ShipmentRepository -> Database : SELECT * FROM shipmentQuotes
+ShipmentRepository -> Database : SELECT * FROM quotes
 activate Database
-Database --> ShipmentRepository : ShipmentQuotes
+Database --> ShipmentRepository : Quotes
 deactivate Database
 
-ShipmentRepository --> ShipmentService : ShipmentQuotes
+ShipmentRepository --> ShipmentService : Quotes
 deactivate ShipmentRepository
 
-ShipmentService --> ShipmentController : ShipmentQuotesResponse
+ShipmentService -> ShipmentResponseMapper : entitiesToResponseModels()
+activate ShipmentResponseMapper
+ShipmentResponseMapper --> ShipmentService : QuotesResponse
+deactivate ShipmentResponseMapper
+
+ShipmentService --> ShipmentController : QuotesResponse
 deactivate ShipmentService
 
-ShipmentController --> ShipmentQuotesPage : Display shipment quotes
+ShipmentController --> AdminHomePage : Display quotes
 deactivate ShipmentController
 
-ShipmentQuotesPage -> ShipmentDetailsPage : Select 'View Details' of an accepted quote
-deactivate ShipmentQuotesPage
-activate ShipmentDetailsPage
+AdminHomePage -> QuoteShipmentPopup : Select 'View Details' of a quote
+activate QuoteShipmentPopup
 
-alt Print Shipment Report
-    ShipmentDetailsPage -> ShipmentController : GET /printReport
+alt Accept Quote (Request Shipment)
+    QuoteShipmentPopup -> ShipmentController : PUT /acceptQuote
+    activate ShipmentController
+    ShipmentController -> ShipmentService : acceptQuote()
+    activate ShipmentService
+    ShipmentService -> QuoteResponseToShipmentMapper : toShipment()
+    activate QuoteResponseToShipmentMapper
+    QuoteResponseToShipmentMapper --> ShipmentService : Shipment
+    deactivate QuoteResponseToShipmentMapper
+    ShipmentService -> EmailService : sendShipmentConfirmation()
+    activate EmailService
+    EmailService --> ShipmentService : Success
+    deactivate EmailService
+    ShipmentService --> ShipmentController : SuccessResponse
+    deactivate ShipmentService
+    ShipmentController --> QuoteShipmentPopup : Show acceptance confirmation
+    deactivate ShipmentController
+else Print Shipment Report
+    QuoteShipmentPopup -> ShipmentController : GET /printReport
     activate ShipmentController
     ShipmentController -> ShipmentService : generateReport()
     activate ShipmentService
@@ -151,7 +189,7 @@ alt Print Shipment Report
     deactivate ShipmentService
     deactivate ShipmentController
 else Update Shipment Details
-    ShipmentDetailsPage -> ShipmentController : PUT /updateDetails
+    QuoteShipmentPopup -> ShipmentController : PUT /updateDetails
     activate ShipmentController
     ShipmentController -> ShipmentService : updateDetails()
     activate ShipmentService
@@ -165,10 +203,10 @@ else Update Shipment Details
     deactivate ShipmentRepository
     ShipmentService --> ShipmentController : SuccessResponse
     deactivate ShipmentService
-    ShipmentController --> ShipmentDetailsPage : Show details update confirmation
+    ShipmentController --> QuoteShipmentPopup : Show details update confirmation
     deactivate ShipmentController
 else Cancel Shipment
-    ShipmentDetailsPage -> ShipmentController : DELETE /cancelShipment
+    QuoteShipmentPopup -> ShipmentController : DELETE /cancelShipment
     activate ShipmentController
     ShipmentController -> ShipmentService : cancelShipment()
     activate ShipmentService
@@ -182,10 +220,10 @@ else Cancel Shipment
     deactivate ShipmentRepository
     ShipmentService --> ShipmentController : SuccessResponse
     deactivate ShipmentService
-    ShipmentController --> ShipmentDetailsPage : Show cancellation confirmation message
+    ShipmentController --> QuoteShipmentPopup : Show cancellation confirmation message
     deactivate ShipmentController
-    ShipmentDetailsPage --> Admin : 'Shipment Canceled Successfully'
-    deactivate ShipmentDetailsPage
+    QuoteShipmentPopup --> Admin : 'Shipment Canceled Successfully'
+    deactivate QuoteShipmentPopup
 end
 
 @enduml

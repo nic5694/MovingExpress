@@ -5,26 +5,22 @@ package "shipmentsubdomain" {
 
     package "businesslayer" {
         interface QuoteService {
-            + getQuotes() : List<QuoteResponse>
-            + getQuoteDetails(quoteId: String) : QuoteResponse
-            + addQuote(quoteRequest: QuoteRequest) : QuoteResponse
-            + cancelQuote(quoteId: String) : boolean
-            + updateQuoteStatus(quoteId: String, status: String) : boolean
-            + updateQuote(quoteRequest: QuoteRequest) : QuoteResponse
-            + deleteQuote(quoteId: String) : boolean
+            + getAllQuotes(quoteStatus: QuoteStatus) : List<QuoteResponseModel>
+            + getQuote(quoteId: String) : QuoteResponseModel
+            + addQuote(quoteRequest: QuoteRequestModel) : QuoteResponseModel
+            + declineQuote(quoteId: String) : EventResponseModel
+            + acceptQuote(quoteId: String) : EventResponseModel
         }
 
         class QuoteServiceImpl {
             - quoteRepository : QuoteRepository
             - quoteRequestMapper : QuoteRequestMapper
             - quoteResponseMapper : QuoteResponseMapper
-            + getQuotes() : List<QuoteResponse>
-            + getQuoteDetails(quoteId: String) : QuoteResponse
-            + addQuote(quoteRequest: QuoteRequest) : QuoteResponse
-            + cancelQuote(quoteId: String) : boolean
-            + updateQuoteStatus(quoteId: String, status: String) : boolean
-            + updateQuote(quoteRequest: QuoteRequest) : QuoteResponse
-            + deleteQuote(quoteId: String) : boolean
+            + getAllQuotes(quoteStatus: QuoteStatus) : List<QuoteResponseModel>
+            + getQuote(quoteId: String) : QuoteResponseModel
+            + addQuote(quoteRequest: QuoteRequestModel) : QuoteResponseModel
+            + declineQuote(quoteId: String) : EventResponseModel
+            + acceptQuote(quoteId: String) : EventResponseModel
         }
     }
 
@@ -47,39 +43,38 @@ package "shipmentsubdomain" {
             CA
         }
 
-        class PickupAddress{
+        class PickupAddress {
             - pickupStreetAddress : String
-            - pickupCity:String
-            - pickupProvince:String
-            - pickupCountry:String
-            - pickupPostalCode:String
-            - pickupRoomNumber:int
-            - pickupElevator:boolean
-            - pickupBuildingType:String
+            - pickupCity : String
+            - pickupCountry : Country
+            - pickupPostalCode : String
+            - pickupNumberOfRooms : int
+            - pickupElevator : boolean
+            - pickupBuildingType : String
         }
 
-        class DestinationAddress{
+        class DestinationAddress {
             - destinationStreetAddress : String
-            - destinationCity:String
-            - destinationProvince:String
-            - destinationCountry:String
-            - destinationPostalCode:String
-            - destinationRoomNumber:int
-            - destinationElevator:boolean
-            - destinationBuildingType:String
+            - destinationCity : String
+            - destinationCountry : Country
+            - destinationPostalCode : String
+            - destinationNumberOfRooms : int
+            - destinationElevator : boolean
+            - destinationBuildingType : String
         }
 
         class Quote {
             - id : Integer
-            - quoteIdentifier: QuoteIdentifier
+            - quoteIdentifier : QuoteIdentifier
             - pickupAddress : PickupAddress
             - destinationAddress : DestinationAddress
             - contactDetails : ContactDetails
-            - contactMethod: ContactMethod
-            - expectedMovingDate: LocalDate
-            - initiationDate: LocalDateTime
-            - comment: String
-            - movingEstimatorIdentifier: MovingEstimatorIdentifier
+            - contactMethod : ContactMethod
+            - expectedMovingDate : LocalDate
+            - initiationDate : LocalDateTime
+            - comment : String
+            - quoteStatus : QuoteStatus
+            - shipmentName : String
         }
 
         class MovingEstimatorIdentifier {
@@ -90,86 +85,100 @@ package "shipmentsubdomain" {
             - quoteId : String
         }
 
-        interface QuoteRepository {
-            + findByQuoteId(quoteId: String): Quote
+        enum QuoteStatus {
+            PENDING
+            CREATED
+            ACCEPTED
+            DECLINED
+        }
+
+        interface QuoteRepository extends JpaRepository {
+            + findAllByQuoteStatus(quoteStatus: QuoteStatus) : List<Quote>
+            + findByQuoteIdentifier_QuoteId(quoteId: String) : Quote
         }
     }
 
     package "datamapperlayer" {
         interface QuoteRequestMapper {
-            + requestModelToEntity(quoteRequest: QuoteRequest) : Quote
-            + requestModelsToEntities(quoteRequests: List<QuoteRequest>) : List<Quote>
+            + requestModelToEntity(quoteRequest: QuoteRequestModel) : Quote
         }
 
         interface QuoteResponseMapper {
-            + entityToResponseModel(quote: Quote) : QuoteResponse
-            + entitiesToResponseModels(quotes: List<Quote>): List<QuoteResponse>
+            + entityToResponseModel(quote: Quote) : QuoteResponseModel
+            + entitiesListToResponseList(quotes: List<Quote>) : List<QuoteResponseModel>
         }
     }
 
     package "presentationlayer" {
-        class QuoteRequest {
+        class QuoteRequestModel {
             - pickupStreetAddress : String
             - pickupCity : String
-            - pickupProvince : String
             - pickupCountry : Country
             - pickupPostalCode : String
-            - pickupRoomNumber : int
+            - pickupNumberOfRooms : int
             - pickupElevator : boolean
             - pickupBuildingType : String
             - destinationStreetAddress : String
             - destinationCity : String
-            - destinationProvince : String
             - destinationCountry : Country
             - destinationPostalCode : String
-            - destinationRoomNumber : int
+            - destinationNumberOfRooms : int
             - destinationElevator : boolean
             - destinationBuildingType : String
             - firstName : String
             - lastName : String
             - emailAddress : String
             - phoneNumber : String
-            - contactMethod : ContactMethod
             - expectedMovingDate : LocalDate
+            - contactMethod : ContactMethod
             - comment : String
+            - shipmentName : String
         }
 
-        class QuoteResponse {
+        class QuoteResponseModel {
             - quoteId : String
-            - movingEstimatorId: String
             - pickupStreetAddress : String
             - pickupCity : String
-            - pickupProvince : String
             - pickupCountry : Country
             - pickupPostalCode : String
-            - pickupRoomNumber : int
+            - pickupNumberOfRooms : int
             - pickupElevator : boolean
             - pickupBuildingType : String
             - destinationStreetAddress : String
             - destinationCity : String
-            - destinationProvince : String
             - destinationCountry : Country
             - destinationPostalCode : String
-            - destinationRoomNumber : int
+            - destinationNumberOfRooms : int
             - destinationElevator : boolean
             - destinationBuildingType : String
             - firstName : String
             - lastName : String
-            - emailAddress : String
             - phoneNumber : String
+            - emailAddress : String
             - contactMethod : ContactMethod
             - expectedMovingDate : LocalDate
-            - initiationDate: LocalDateTime
+            - initiationDate : LocalDateTime
             - comment : String
+            - quoteStatus : QuoteStatus
+            - name : String
         }
 
         class QuoteController {
             - quoteService : QuoteService
-            + getQuotes(): List<QuoteResponse>
-            + getQuoteDetails(quoteId: String) : QuoteResponse
-            + addQuote(quoteRequest: QuoteRequest) : QuoteResponse
-            + cancelQuote(quoteId: String) : boolean
-            + updateQuote(quoteRequest: QuoteRequest) : QuoteResponse
+            + getAllQuotes(quoteStatus: QuoteStatus) : ResponseEntity<List<QuoteResponseModel>>
+            + getQuote(quoteId: String) : ResponseEntity<QuoteResponseModel>
+            + addQuote(quoteRequest: QuoteRequestModel) : ResponseEntity<QuoteResponseModel>
+            + createQuoteEvent(eventRequestModel: EventRequestModel, quoteId: String) : EventResponseModel
+        }
+
+        class EventRequestModel {
+            - event : String
+        }
+
+        class EventResponseModel {
+            - event : String
+            - resultType : String
+            - href : String
         }
     }
 
@@ -189,10 +198,14 @@ package "shipmentsubdomain" {
     PickupAddress -up-^ Country : uses
     DestinationAddress -up-^ Country : uses
     QuoteController -right-> QuoteService : uses
-    QuoteController -down-> QuoteRequest : uses
-    QuoteController -down-> QuoteResponse : uses
-    QuoteRequestMapper -up-^ QuoteRequest : uses
-    QuoteResponseMapper -up-^ QuoteResponse : uses
+    QuoteController -down-> QuoteRequestModel : uses
+    QuoteController -down-> QuoteResponseModel : uses
+    QuoteController -down-> EventRequestModel : uses
+    QuoteController -down-> EventResponseModel : uses
+    QuoteRequestMapper -up-^ QuoteRequestModel : uses
+    QuoteResponseMapper -up-^ QuoteResponseModel : uses
+    QuoteService -down-> QuoteStatus : uses
+    QuoteServiceImpl -down-> QuoteStatus : uses
 }
 
 @enduml

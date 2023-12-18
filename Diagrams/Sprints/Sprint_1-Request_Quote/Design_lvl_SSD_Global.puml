@@ -1,23 +1,26 @@
 @startuml
-title Request Quote Use Case Sequence Diagram
+title Global Actions in Quote Management Sequence Diagram
 
-actor Client
 actor "Shipment Reviewer / Moving Estimator" as Admin
+actor Client
 
 participant ReactApplication as "<<View>>\nReactApplication"
 participant LandingPage as "<<View>>\nLandingPage"
+participant ShipmentReviewerPage as "<<View>>\nShipmentReviewer&EstimatorPage"
+participant QuotePopup as "<<Popup>>\nQuoteDetailsPopup"
 participant ShipmentQuotePage as "<<View>>\nShipmentQuotePage"
 participant UserHomePage as "<<View>>\nUserHomePage"
 participant ShipmentController as "<<Controller>>\nShipmentController"
 participant QuoteService as "<<Service>>\nQuoteService"
 participant QuoteRepository as "<<Repository>>\nQuoteRepository"
+participant QuoteRequestMapper as "<<Mapper>>\nQuoteRequestMapper"
+participant QuoteResponseMapper as "<<Mapper>>\nQuoteResponseMapper"
+participant QuoteResponseToShipmentMapper as "<<Mapper>>\nQuoteResponseToShipmentMapper"
 participant Database as "<<Database>>\nDatabase"
-participant ShipmentQuotes as "<<View>>\nShipmentQuotes"
 
-== Client Sequence ==
+' Client Actions
 Client -> ReactApplication : Access website
 activate ReactApplication
-
 ReactApplication -> LandingPage : render()
 activate LandingPage
 
@@ -25,14 +28,17 @@ alt Client is logged in
     LandingPage -> UserHomePage : Navigate to profile after login
     deactivate LandingPage
     activate UserHomePage
-
-    UserHomePage -> ShipmentQuotePage : Select 'Request Quote'
-    deactivate UserHomePage
 else
     LandingPage -> ShipmentQuotePage : Select 'Shipment Quote'
     deactivate LandingPage
+    activate ShipmentQuotePage
 end
-activate ShipmentQuotePage
+
+alt Client is logged in
+    UserHomePage -> ShipmentQuotePage : Select 'Request Quote'
+    deactivate UserHomePage
+    activate ShipmentQuotePage
+end
 
 ShipmentQuotePage --> Client : Display quote form
 Client -> ShipmentQuotePage : Fill up quote details Form
@@ -41,22 +47,31 @@ activate ShipmentQuotePage
 ShipmentQuotePage -> ShipmentController : POST /quote
 activate ShipmentController
 
-ShipmentController -> QuoteService : createQuote()
-activate QuoteService
+ShipmentController -> QuoteRequestMapper : mapRequestToEntity()
+activate QuoteRequestMapper
 
-QuoteService -> QuoteRepository : save(quoteData)
+QuoteRequestMapper -> QuoteService : addQuote()
+activate QuoteService
+QuoteRequestMapper --> ShipmentController : QuoteRequest
+
+QuoteService -> QuoteRepository : save(quote)
 activate QuoteRepository
+QuoteService --> QuoteRepository : Quote
 
 QuoteRepository -> Database : INSERT INTO quotes
 activate Database
 Database --> QuoteRepository : Success
-deactivate Database
+QuoteRepository --> QuoteService : savedQuote
 
-QuoteRepository --> QuoteService : Quote saved
+deactivate Database
 deactivate QuoteRepository
 
-QuoteService --> ShipmentController : QuoteResponse
-deactivate QuoteService
+QuoteService -> QuoteResponseMapper : entityToResponseModel(savedQuote)
+activate QuoteResponseMapper
+QuoteService --> ShipmentController : QuoteResponseModel
+
+QuoteResponseMapper --> ShipmentController : QuoteResponse
+deactivate QuoteResponseMapper
 
 ShipmentController --> ShipmentQuotePage : Show success message
 deactivate ShipmentController
@@ -66,46 +81,54 @@ deactivate ShipmentQuotePage
 
 alt Client is logged in (Post-Quote Creation)
     UserHomePage -> ShipmentController : View Quote Status
+    activate UserHomePage
     activate ShipmentController
 
-    ShipmentController -> QuoteService : retrieveQuoteStatus()
+    ShipmentController -> QuoteService : getQuote()
     activate QuoteService
+    ShipmentController --> QuoteService : QuoteId
 
-    QuoteService -> QuoteRepository : SELECT quote
+    QuoteService -> QuoteRepository : findByQuoteIdentifier_QuoteId(QuoteId)
     activate QuoteRepository
+    QuoteService --> QuoteRepository : Quote
 
     QuoteRepository -> Database : Query quote data
     activate Database
     Database --> QuoteRepository : Query Results
-    deactivate Database
+    QuoteRepository --> QuoteService : existingQuote
 
-    QuoteRepository --> QuoteService : Quote Status
+    deactivate Database
     deactivate QuoteRepository
 
-    QuoteService --> ShipmentController : QuoteStatusResponse
-    deactivate QuoteService
+    QuoteService -> QuoteResponseMapper : entityToResponseModel(existingQuote)
+    activate QuoteResponseMapper
+    QuoteService --> ShipmentController : QuoteResponseModel
+
+    QuoteResponseMapper --> ShipmentController : QuoteStatusResponse
+    deactivate QuoteResponseMapper
 
     ShipmentController --> UserHomePage : Display Quote Status
     deactivate ShipmentController
-
-    UserHomePage --> Client : Show Quote Status
     deactivate UserHomePage
 
     UserHomePage -> ShipmentController : Edit Quote
+    activate UserHomePage
     activate ShipmentController
 
     ShipmentController -> QuoteService : editQuote()
     activate QuoteService
+    UserHomePage --> ShipmentController : QuoteId, QuoteRequestModel
 
     QuoteService -> QuoteRepository : UPDATE quote
     activate QuoteRepository
+    QuoteService --> QuoteRepository : Quote
 
     QuoteRepository -> Database : Update quote data
     activate Database
     Database --> QuoteRepository : Update Results
-    deactivate Database
+    QuoteRepository --> QuoteService : updatedQuote
 
-    QuoteRepository --> QuoteService : Update Confirmation
+    deactivate Database
     deactivate QuoteRepository
 
     QuoteService --> ShipmentController : EditResponse
@@ -119,68 +142,117 @@ alt Client is logged in (Post-Quote Creation)
 end
 
 == Admin Sequence ==
-Admin -> ReactApplication : Access website
-activate ReactApplication
 
-ReactApplication -> LandingPage : render()
-activate LandingPage
-
-LandingPage -> ShipmentQuotes : Admin logs in
+Admin -> ReactApplication : Access website (if not already)
+ReactApplication -> LandingPage : render() (if not already)
+LandingPage -> ShipmentReviewerPage : Admin logs in
 deactivate LandingPage
-activate ShipmentQuotes
+activate ShipmentReviewerPage
 
-ShipmentQuotes --> Admin : Display quotes management options (View/Edit/Delete/Review/Accept)
-Admin -> ShipmentQuotes : Select action (View/Edit/Delete/Review/Accept)
-activate ShipmentQuotes
+ShipmentReviewerPage -> ShipmentController : Retrieve all quotes
+activate ShipmentController
 
-ShipmentQuotes -> ShipmentController : Admin actions (View/Edit/Delete/Review/Accept)
+ShipmentController -> QuoteService : retrieveAllQuotes()
+activate QuoteService
+
+QuoteService -> QuoteRepository : findAllQuotes()
+activate QuoteRepository
+
+QuoteRepository -> Database : SELECT all quotes
+activate Database
+Database --> QuoteRepository : Quotes Data
+
+deactivate Database
+QuoteRepository --> QuoteService : Quotes Retrieved
+
+deactivate QuoteRepository
+QuoteService -> QuoteResponseMapper : entitiesListToResponseList()
+activate QuoteResponseMapper
+QuoteResponseMapper --> ShipmentController : List<QuoteResponseModel>
+
+deactivate QuoteResponseMapper
+ShipmentController --> ShipmentReviewerPage : Display all quotes
+deactivate ShipmentController
+
+ShipmentReviewerPage --> Admin : Display quotes list
+Admin -> ShipmentReviewerPage : Select quote to view/edit
+
+ShipmentReviewerPage -> QuotePopup : Open quote details
+activate QuotePopup
+
+QuotePopup --> Admin : Display quote details and management options
+Admin -> QuotePopup : Perform action (View/Edit/Delete/Review/Accept/Decline)
+activate QuotePopup
+
+QuotePopup -> ShipmentController : Admin action on quote
 activate ShipmentController
 
 ShipmentController -> QuoteService : processAdminAction()
 activate QuoteService
 
-alt Action is View
-    QuoteService -> QuoteRepository : retrieveQuotes()
-    activate QuoteRepository
+alt Action is Accept
+    QuoteService -> QuoteResponseToShipmentMapper : transformQuoteToShipment()
+    activate QuoteResponseToShipmentMapper
+    QuoteResponseToShipmentMapper --> QuoteService : Shipment
 
-    QuoteRepository -> Database : SELECT quotes
-    activate Database
-    Database --> QuoteRepository : Quotes Data
-    deactivate Database
-
-    QuoteRepository --> QuoteService : Quotes Retrieved
-    deactivate QuoteRepository
-else Action is Accept
     QuoteService -> QuoteRepository : markQuoteAsAccepted()
     activate QuoteRepository
 
-    QuoteRepository -> Database : UPDATE quotes status
+    QuoteRepository -> Database : UPDATE quote status to Accepted
     activate Database
     Database --> QuoteRepository : Update Success
-    deactivate Database
 
-    QuoteRepository --> QuoteService : Action completed
+    deactivate Database
     deactivate QuoteRepository
-else Action is Edit/Delete/Review
-    QuoteService -> QuoteRepository : updateQuoteData()
+    deactivate QuoteResponseToShipmentMapper
+
+else Action is View/Edit/Delete/Review/Decline
+    QuoteService -> QuoteRepository : performActionOnQuote()
     activate QuoteRepository
 
-    QuoteRepository -> Database : UPDATE quotes
+    QuoteRepository -> Database : UPDATE/DELETE quote
     activate Database
-    Database --> QuoteRepository : Update Success
-    deactivate Database
+    Database --> QuoteRepository : Action Success
 
-    QuoteRepository --> QuoteService : Action completed
+    deactivate Database
     deactivate QuoteRepository
 end
 
 QuoteService --> ShipmentController : AdminResponse
 deactivate QuoteService
 
-ShipmentController --> ShipmentQuotes : Show result/response message
+ShipmentController --> QuotePopup : Show action result
 deactivate ShipmentController
 
-ShipmentQuotes --> Admin : 'Action Completed' or 'Quotes Displayed' message
-deactivate ShipmentQuotes
+QuotePopup --> ShipmentReviewerPage : Close popup and refresh quotes list
+deactivate QuotePopup
+
+ShipmentReviewerPage -> ShipmentController : Retrieve updated quotes
+activate ShipmentController
+
+ShipmentController -> QuoteService : retrieveAllQuotes()
+activate QuoteService
+
+QuoteService -> QuoteRepository : findAllQuotes()
+activate QuoteRepository
+
+QuoteRepository -> Database : SELECT all quotes
+activate Database
+Database --> QuoteRepository : Updated Quotes Data
+
+deactivate Database
+QuoteRepository --> QuoteService : Quotes Retrieved
+
+deactivate QuoteRepository
+QuoteService -> QuoteResponseMapper : entitiesListToResponseList()
+activate QuoteResponseMapper
+QuoteResponseMapper --> ShipmentController : List<QuoteResponseModel>
+
+deactivate QuoteResponseMapper
+ShipmentController --> ShipmentReviewerPage : Display updated quotes
+deactivate ShipmentController
+
+ShipmentReviewerPage --> Admin : Display updated quotes list
+deactivate ShipmentReviewerPage
 
 @enduml
