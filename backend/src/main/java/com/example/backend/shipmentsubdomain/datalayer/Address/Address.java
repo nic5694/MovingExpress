@@ -18,6 +18,7 @@ public class Address {
     private AddressIdentifier addressIdentifier;
     private String city;
     private String streetAddress;
+    @Enumerated(EnumType.STRING)
     private Country country;
     private String postalCode;
     public Address(@NotNull String city, @NotNull String streetAddress, @NotNull Country country, @NotNull String postalCode) {
