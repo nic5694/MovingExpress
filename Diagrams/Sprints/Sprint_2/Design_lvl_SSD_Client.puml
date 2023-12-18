@@ -10,6 +10,8 @@ participant ShipmentsPage as "<<View>>\nShipmentsPage"
 participant ShipmentDetailsPage as "<<View>>\nShipmentDetailsPage"
 participant ShipmentController as "<<Controller>>\nShipmentController"
 participant ShipmentService as "<<Service>>\nShipmentService"
+participant ShipmentRequestMapper as "<<Mapper>>\nShipmentRequestMapper"
+participant ShipmentResponseMapper as "<<Mapper>>\nShipmentResponseMapper"
 participant ShipmentRepository as "<<Repository>>\nShipmentRepository"
 participant Database as "<<Database>>\nDatabase"
 
@@ -44,6 +46,11 @@ deactivate Database
 ShipmentRepository --> ShipmentService : Shipments
 deactivate ShipmentRepository
 
+ShipmentService -> ShipmentResponseMapper : entitiesToResponseModels()
+activate ShipmentResponseMapper
+ShipmentResponseMapper --> ShipmentService : ShipmentsResponse
+deactivate ShipmentResponseMapper
+
 ShipmentService --> ShipmentController : ShipmentsResponse
 deactivate ShipmentService
 
@@ -67,6 +74,10 @@ else Update Shipment Status
     activate ShipmentController
     ShipmentController -> ShipmentService : updateStatus()
     activate ShipmentService
+    ShipmentService -> ShipmentRequestMapper : quoteRequestToShipmentMapper()
+    activate ShipmentRequestMapper
+    ShipmentRequestMapper --> ShipmentService : Shipment
+    deactivate ShipmentRequestMapper
     ShipmentService -> ShipmentRepository : updateStatus()
     activate ShipmentRepository
     ShipmentRepository -> Database : UPDATE shipment
