@@ -5,20 +5,21 @@ import com.example.backend.shipmentsubdomain.datalayer.Address.Address;
 import com.example.backend.shipmentsubdomain.datalayer.Address.AddressRepository;
 import com.example.backend.shipmentsubdomain.datalayer.shipment.Shipment;
 import com.example.backend.shipmentsubdomain.datalayer.shipment.ShipmentRepository;
-import com.example.backend.shipmentsubdomain.datalayer.shipment.ShipmentStatus;
+import com.example.backend.shipmentsubdomain.datalayer.shipment.Status;
 import com.example.backend.shipmentsubdomain.datamapperlayer.shipment.AddressMapper;
 import com.example.backend.shipmentsubdomain.datamapperlayer.shipment.QuoteResponseToShipmentMapper;
 import com.example.backend.shipmentsubdomain.datamapperlayer.shipment.ShipmentResponseMapper;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponseModel;
 import com.example.backend.shipmentsubdomain.presentationlayer.shipment.ShipmentResponseModel;
+import com.example.backend.util.EmailUtil;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.Generated;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import java.io.StringWriter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,22 +36,19 @@ public class ShipmentServiceImpl implements ShipmentService{
     private final AddressMapper addressMapper;
     private final CustomerService customerService;
     private final AddressRepository addressRepository;
-    @Override
-    public String generateShipmentConfirmationEmail(String shipmentId) {
-        // Create a Thymeleaf context and add variables
-        Context context = new Context();
+    private final EmailUtil emailUtil;
 
-        context.setVariable("shipmentID", shipmentId != null ? String.valueOf(shipmentId) : "");
+    @Generated
+    String generateShipmentConfirmationEmailContentString(String shipmentId) {
+        try {
+            Context context = new Context();
+            context.setVariable("shipmentID", shipmentId != null ? shipmentId : "");
 
-        // Process the Thymeleaf template
-        StringWriter stringWriter = new StringWriter();
-        templateEngine.process("shipmentConfirmation", context, stringWriter);
-
-        log.info("stringWriter: " + stringWriter.toString());
-        log.info("shipmentId: " + shipmentId);
-
-        // Get the final HTML content as a string
-        return stringWriter.toString();
+            return templateEngine.process("shipmentConfirmation", context);
+        } catch (Exception e) {
+            log.error("Error while generating shipment confirmation email", e);
+            return "";
+        }
     }
 
 
@@ -62,6 +60,7 @@ public class ShipmentServiceImpl implements ShipmentService{
         Address pickupAddress = addressMapper.toAddress(
                 quoteResponseModel.getPickupStreetAddress(),
                 quoteResponseModel.getPickupCity(),
+                quoteResponseModel.getPickupPostalCode(),
                 quoteResponseModel.getPickupCountry());
         Address savedDepartureAddress = addressRepository.save(pickupAddress);
 
@@ -69,6 +68,7 @@ public class ShipmentServiceImpl implements ShipmentService{
         Address destinationAddress = addressMapper.toAddress(
                 quoteResponseModel.getDestinationStreetAddress(),
                 quoteResponseModel.getDestinationCity(),
+                quoteResponseModel.getDestinationPostalCode(),
                 quoteResponseModel.getDestinationCountry());
         Address savedArrivalAddress = addressRepository.save(destinationAddress);
 
@@ -76,14 +76,15 @@ public class ShipmentServiceImpl implements ShipmentService{
         Shipment shipment = quoteResponseToShipmentMapper.toShipment(quoteResponseModel, addressMapper);
 
         // Set the saved addresses in the Shipment entity
-        shipment.setDepartureAddress(savedDepartureAddress);
-        shipment.setArrivalAddress(savedArrivalAddress);
-        shipment.setShipmentStatus(ShipmentStatus.QUOTED);
+        shipment.setPickupAddress(savedDepartureAddress);
+        shipment.setDestinationAddress(savedArrivalAddress);
+        shipment.setStatus(Status.QUOTED);
         shipment.setEmail(quoteResponseModel.getEmailAddress());
 
         // Save the shipment
         Shipment savedShipment = shipmentRepository.save(shipment);
-
+        //send email to user
+        emailUtil.SslEmail(shipment.getEmail(), "Shipment Creation Confirmation", generateShipmentConfirmationEmailContentString(savedShipment.getShipmentIdentifier().getShipmentId()));
         return shipmentResponseMapper.entityToResponseModel(savedShipment);
     }
 

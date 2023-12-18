@@ -1,7 +1,7 @@
 package com.example.backend.shipmentsubdomain.datalayer.shipment;
 
 
-public enum ShipmentStatus {
+public enum Status {
     QUOTED,
     LOADING,
     TRANSIT,

@@ -4,8 +4,6 @@ import com.example.backend.shipmentsubdomain.datalayer.Address.Address;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 
@@ -22,15 +20,16 @@ public class Shipment {
     @Nullable
     private String userId;
 
-    @Nullable
     private String email;
+
+    private String phoneNumber;
 
     @Nullable
     @Embedded
     private TruckIdentifier truckIdentifier;
 
     @Enumerated(EnumType.STRING)
-    private ShipmentStatus shipmentStatus;
+    private Status status;
 
     private LocalDate expectedMovingDate;
 
@@ -39,34 +38,32 @@ public class Shipment {
 
     @Nullable
     private double approximateWeight;
+
     @Nullable
     private double weight;
+
     private String name;
 
+    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JoinColumn(name = "pickup_address_id", referencedColumnName = "addressId")
+    private Address pickupAddress;
 
-    @OneToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "departure_address_id", referencedColumnName = "addressId")
-    private Address departureAddress;
-
-    @OneToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "arrival_address_id", referencedColumnName = "addressId")
-    private Address arrivalAddress;
-
-    public Shipment(String userId, TruckIdentifier truckIdentifier, ShipmentStatus shipmentStatus, LocalDate expectedMovingDate, LocalDate actualMovingDate, double approximateWeight, String name, Address departureAddress, Address arrivalAddress, String email) {
+    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JoinColumn(name = "destination_address_id", referencedColumnName = "addressId")
+    private Address destinationAddress;
+    public Shipment(String userId, TruckIdentifier truckIdentifier, Status status, LocalDate expectedMovingDate, LocalDate actualMovingDate, double approximateWeight, String name, Address pickupAddress, Address destinationAddress, String email, String phoneNumber) {
         this.userId = userId;
         this.truckIdentifier = truckIdentifier;
-        this.shipmentStatus = shipmentStatus;
+        this.status = status;
         this.expectedMovingDate = expectedMovingDate;
         this.actualMovingDate = actualMovingDate;
         this.approximateWeight = approximateWeight;
         this.name = name;
-        this.departureAddress = departureAddress;
-        this.arrivalAddress = arrivalAddress;
+        this.pickupAddress = pickupAddress;
+        this.destinationAddress = destinationAddress;
         this.shipmentIdentifier = new ShipmentIdentifier();
         this.email = email;
-
+        this.phoneNumber = phoneNumber;
     }
 
     public Shipment() {

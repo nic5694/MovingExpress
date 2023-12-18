@@ -9,7 +9,6 @@ import com.example.backend.customersubdomain.presentationlayer.CustomerResponseM
 import com.example.backend.shipmentsubdomain.datalayer.shipment.ShipmentRepository;
 import com.example.backend.util.exceptions.CustomerNotFoundException;
 import com.example.backend.util.exceptions.InvalidRequestException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -43,7 +42,6 @@ public class CustomerServiceImpl implements CustomerService{
     @Override
     public CustomerResponseModel updateCustomer(CustomerRequestModel customerRequest, String userId) {
         Customer customer = customerRepository.findCustomerByUserId(userId);
-
         if (customer == null)
             throw new CustomerNotFoundException("Customer with userId" + userId + " was not found.");
 
@@ -69,9 +67,9 @@ public class CustomerServiceImpl implements CustomerService{
 //            throw new InvalidRequestException("Customer does not exist, could not be deleted.");
 //        shipmentRepository.deleteAll(shipmentRepository.findShipmentByUserId(userId));
 ////        shipmentRepository.findShipmentByUserId(userId).forEach(shipment -> {
-////            if(shipment.getShipmentStatus().equals(ShipmentStatus.TRANSIT) || shipment.getShipmentStatus().equals(ShipmentStatus.LOADING) || shipment.getShipmentStatus().equals(ShipmentStatus.QUOTED)){
+////            if(shipment.getStatus().equals(Status.TRANSIT) || shipment.getStatus().equals(Status.LOADING) || shipment.getStatus().equals(Status.QUOTED)){
 ////                throw new InvalidRequestException("Customer has pending shipments, could not be deleted.");
-////            } else if (shipment.getShipmentStatus().equals(ShipmentStatus.DELIVERED)) {
+////            } else if (shipment.getStatus().equals(Status.DELIVERED)) {
 ////                shipmentRepository.delete(shipment);
 ////            }
 ////        });

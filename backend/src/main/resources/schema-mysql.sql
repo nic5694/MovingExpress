@@ -39,13 +39,14 @@ CREATE TABLE IF NOT EXISTS shipments (
     name VARCHAR(255),
     approximate_weight DOUBLE NULL,
     weight DOUBLE NULL,
-    departure_address_id VARCHAR(36),
-    arrival_address_id VARCHAR(36),
+    pickup_address_id VARCHAR(36),
+    destination_address_id VARCHAR(36),
     vin VARCHAR(17) UNIQUE NULL,
     user_id VARCHAR(36),
     email VARCHAR(255) NULL,
-    FOREIGN KEY (departure_address_id) REFERENCES addresses(address_id),
-    FOREIGN KEY (arrival_address_id) REFERENCES addresses(address_id),
+    phone_number VARCHAR(15) NULL,
+    FOREIGN KEY (pickup_address_id) REFERENCES addresses(address_id),
+    FOREIGN KEY (destination_address_id) REFERENCES addresses(address_id),
     FOREIGN KEY (vin) REFERENCES trucks(vin),
     FOREIGN KEY (user_id) REFERENCES customers(user_id)
     );

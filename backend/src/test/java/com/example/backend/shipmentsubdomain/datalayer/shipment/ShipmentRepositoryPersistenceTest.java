@@ -2,6 +2,7 @@ package com.example.backend.shipmentsubdomain.datalayer.shipment;
 
 import com.example.backend.shipmentsubdomain.datalayer.Address.Address;
 import com.example.backend.shipmentsubdomain.datalayer.Address.AddressRepository;
+import com.example.backend.shipmentsubdomain.datalayer.Country;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,18 +24,18 @@ class ShipmentRepositoryPersistenceTest {
 
     @BeforeEach
     public void setUp() {
-        Address departureAddress1 = new Address("123 Main St", "CityA", "USA", "12345");
-        Address arrivalAddress1 = new Address("456 Oak St", "CityB", "USA", "54321");
+        Address departureAddress1 = new Address("123 Main St", "CityA", Country.USA, "12345");
+        Address arrivalAddress1 = new Address("456 Oak St", "CityB", Country.USA, "54321");
         addressRepository.save(departureAddress1);
         addressRepository.save(arrivalAddress1);
 
-        Address departureAddress2 = new Address("789 Elm St", "CityC", "USA", "67890");
-        Address arrivalAddress2 = new Address("321 Pine St", "CityD", "USA", "98765");
+        Address departureAddress2 = new Address("789 Elm St", "CityC", Country.USA, "67890");
+        Address arrivalAddress2 = new Address("321 Pine St", "CityD", Country.USA, "98765");
         addressRepository.save(departureAddress2);
         addressRepository.save(arrivalAddress2);
 
-        Shipment shipment1 = new Shipment("user123", null, ShipmentStatus.QUOTED, LocalDate.now(), null, 500.0, "Household", departureAddress1, arrivalAddress1, "user123@example.com");
-        Shipment shipment2 = new Shipment("user456", null, ShipmentStatus.DELIVERED, LocalDate.now().minusDays(10), LocalDate.now().minusDays(5), 700.0, "Office Move", departureAddress2, arrivalAddress2, "user456@example.com");
+        Shipment shipment1 = new Shipment("user123", null, Status.QUOTED, LocalDate.now(), null, 500.0, "Household", departureAddress1, arrivalAddress1, "user123@example.com", "1234567890");
+        Shipment shipment2 = new Shipment("user456", null, Status.DELIVERED, LocalDate.now().minusDays(10), LocalDate.now().minusDays(5), 700.0, "Office Move", departureAddress2, arrivalAddress2, "user456@example.com", "0987654321");
         shipmentRepository.save(shipment1);
         shipmentRepository.save(shipment2);
     }
@@ -47,7 +48,7 @@ class ShipmentRepositoryPersistenceTest {
         // Assert
         assertThat(foundShipments).hasSize(1);
         assertThat(foundShipments.get(0).getEmail()).isEqualTo("user123@example.com");
-        assertThat(foundShipments.get(0).getShipmentStatus()).isEqualTo(ShipmentStatus.QUOTED);
+        assertThat(foundShipments.get(0).getStatus()).isEqualTo(Status.QUOTED);
     }
 
     @Test
@@ -58,7 +59,7 @@ class ShipmentRepositoryPersistenceTest {
         // Assert
         assertThat(foundShipments).hasSize(1);
         assertThat(foundShipments.get(0).getUserId()).isEqualTo("user456");
-        assertThat(foundShipments.get(0).getShipmentStatus()).isEqualTo(ShipmentStatus.DELIVERED);
+        assertThat(foundShipments.get(0).getStatus()).isEqualTo(Status.DELIVERED);
     }
 
     @Test
