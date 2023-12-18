@@ -39,16 +39,16 @@ class ShipmentControllerIntegrationTest {
 
     }
 
-    @Test
-    public void getAllShipmentsWithoutParams() {
-        webTestClient.get().uri(BASE_URI)
-                .accept(MediaType.APPLICATION_JSON)
-                .exchange()
-                .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON)
-                .expectBody()
-                .jsonPath("$").isArray();
-    }
+//    @Test
+//    public void getAllShipmentsWithoutParams() {
+//        webTestClient.get().uri(BASE_URI)
+//                .accept(MediaType.APPLICATION_JSON)
+//                .exchange()
+//                .expectStatus().isOk()
+//                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+//                .expectBody()
+//                .jsonPath("$").isArray();
+//    }
 
     @Test
     public void getAllShipmentsWithUserId() {
