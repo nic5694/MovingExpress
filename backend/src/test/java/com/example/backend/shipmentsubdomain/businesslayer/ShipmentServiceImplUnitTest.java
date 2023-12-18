@@ -13,17 +13,25 @@ import com.example.backend.shipmentsubdomain.datamapperlayer.shipment.ShipmentRe
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponseModel;
 import com.example.backend.shipmentsubdomain.presentationlayer.shipment.ShipmentResponseModel;
 import com.example.backend.util.EmailUtil;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.thymeleaf.TemplateEngine;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 
 @SpringBootTest
@@ -49,6 +57,91 @@ class ShipmentServiceImplUnitTest {
 
     @Mock
     private EmailUtil emailUtil;
+
+    private Shipment mockShipment;
+
+    private ShipmentResponseModel mockShipmentResponse;
+
+
+
+    @BeforeEach
+    void setUp() {
+
+        Address pickupAddress = new Address();
+        Address destinationAddress = new Address();
+        TruckIdentifier truckIdentifier = new TruckIdentifier();
+        Status status = Status.QUOTED;
+
+        mockShipment = new Shipment(
+                "user123",
+                truckIdentifier,
+                status,
+                LocalDate.of(2023, 1, 1),
+                LocalDate.of(2023, 1, 5),
+                2000.0,
+                "Sample Shipment",
+                pickupAddress,
+                destinationAddress,
+                "email@example.com",
+                "1234567890"
+        );
+
+        mockShipmentResponse = ShipmentResponseModel.builder()
+                .shipmentId("shipment123")
+                .pickupAddress(pickupAddress)
+                .destinationAddress(destinationAddress)
+                .userId("user123")
+                .truckId("truck123")
+                .status(status)
+                .shipmentName("Sample Shipment")
+                .approximateWeight(2000.0)
+                .weight(1950.0)
+                .email("email@example.com")
+                .phoneNumber("1234567890")
+                .build();
+    }
+    @Test
+    void getAllShipmentsWithUserId() {
+        String userId = "user123";
+        when(shipmentRepository.findShipmentByUserId(userId)).thenReturn(Collections.singletonList(mockShipment));
+        when(shipmentResponseMapper.entityToResponseModel(mockShipment)).thenReturn(mockShipmentResponse);
+
+        List<ShipmentResponseModel> result = shipmentService.getAllShipments(Optional.of(userId), Optional.empty());
+
+        verify(shipmentRepository).findShipmentByUserId(userId);
+        verify(shipmentResponseMapper).entityToResponseModel(mockShipment);
+        assertEquals(1, result.size());
+        assertEquals(mockShipmentResponse, result.get(0));
+    }
+
+    @Test
+    void getAllShipmentsWithEmail() {
+        String email = "user@example.com";
+        when(shipmentRepository.findShipmentByEmail(email)).thenReturn(Collections.singletonList(mockShipment));
+        when(shipmentResponseMapper.entityToResponseModel(mockShipment)).thenReturn(mockShipmentResponse);
+
+        List<ShipmentResponseModel> result = shipmentService.getAllShipments(Optional.empty(), Optional.of(email));
+
+        verify(shipmentRepository).findShipmentByEmail(email);
+        verify(shipmentResponseMapper).entityToResponseModel(mockShipment);
+        assertEquals(1, result.size());
+        assertEquals(mockShipmentResponse, result.get(0));
+    }
+
+    @Test
+    void getAllShipmentsWhenNeitherUserIdNorEmailIsProvided() {
+        when(shipmentRepository.findAll()).thenReturn(Collections.singletonList(mockShipment));
+        when(shipmentResponseMapper.entityToResponseModel(mockShipment)).thenReturn(mockShipmentResponse);
+
+        List<ShipmentResponseModel> result = shipmentService.getAllShipments(Optional.empty(), Optional.empty());
+
+        verify(shipmentRepository).findAll();
+        verify(shipmentResponseMapper).entityToResponseModel(mockShipment);
+        assertEquals(1, result.size());
+        assertEquals(mockShipmentResponse, result.get(0));
+    }
+
+
     @Test
     void createShipment() {
         TruckIdentifier truckIdentifier = new TruckIdentifier();
@@ -128,21 +221,21 @@ class ShipmentServiceImplUnitTest {
         when(shipmentRepository.save(shipment)).thenReturn(shipment);
         when(shipmentResponseMapper.entityToResponseModel(shipment)).thenReturn(shipmentResponseModel);
         shipmentService.createShipment(quoteResponseModel);
-        Mockito.verify(addressMapper, Mockito.times(1)).toAddress(
+        verify(addressMapper, Mockito.times(1)).toAddress(
                 quoteResponseModel.getPickupStreetAddress(),
                 quoteResponseModel.getPickupCity(),
                 quoteResponseModel.getPickupPostalCode(),
                 quoteResponseModel.getPickupCountry());
-        Mockito.verify(addressRepository, Mockito.times(1)).save(departureAddress);
-        Mockito.verify(addressMapper, Mockito.times(1)).toAddress(
+        verify(addressRepository, Mockito.times(1)).save(departureAddress);
+        verify(addressMapper, Mockito.times(1)).toAddress(
                 quoteResponseModel.getDestinationStreetAddress(),
                 quoteResponseModel.getDestinationCity(),
                 quoteResponseModel.getDestinationPostalCode(),
                 quoteResponseModel.getDestinationCountry());
-        Mockito.verify(addressRepository, Mockito.times(1)).save(destinationAddress);
-        Mockito.verify(shipmentRepository, Mockito.times(1)).save(shipment);
-        Mockito.verify(quoteResponseToShipmentMapper, Mockito.times(1)).toShipment(quoteResponseModel, addressMapper);
-        Mockito.verify(shipmentResponseMapper, Mockito.times(1)).entityToResponseModel(shipment);
+        verify(addressRepository, Mockito.times(1)).save(destinationAddress);
+        verify(shipmentRepository, Mockito.times(1)).save(shipment);
+        verify(quoteResponseToShipmentMapper, Mockito.times(1)).toShipment(quoteResponseModel, addressMapper);
+        verify(shipmentResponseMapper, Mockito.times(1)).entityToResponseModel(shipment);
     }
 }
 
