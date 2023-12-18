@@ -101,6 +101,8 @@ public class ShipmentServiceImpl implements ShipmentService{
 
         }else {
             shipments = shipmentRepository.findAll();
+            log.info("Shipments: {}", shipments);
+            log.info("This is after the find allllll", shipments.get(0).getStatus());
         }
 
         return shipments.stream()

@@ -80,45 +80,45 @@ function ShipmentsPage() {
           delays, and misunderstandings during the transportation process.
         </p>
         <hr />
-        {
-          userShipments.length !== 0 ? (
-            <table id="shipmentsTable" style={{ width: '95%', borderCollapse: 'collapse', marginTop: '20px' }}>
-              <thead>
-                <tr>
-                  <th id="idHeader" style={{ padding: '10px', borderBottom: '1px solid #DDDDDD' }}>ID</th>
-                  <th id="nameHeader" style={{ padding: '10px', borderBottom: '1px solid #DDDDDD' }}>Shipment Name</th>
-                  <th id="statusHeader" style={{ padding: '10px', borderBottom: '1px solid #DDDDDD' }}>Status</th>
-                  <th id="weightHeader" style={{ padding: '10px', borderBottom: '1px solid #DDDDDD' }}>Approximate Weight</th>
-                </tr>
-              </thead>
-              <tbody>
-                {userShipments.map((shipment: any, index) => (
-                  <tr id={`shipmentRow-${index}`} key={shipment.shipmentId} style={{ background: '#FFFFFF', borderBottom: '1px solid #E0E0E0' }}>
-                    <td id={`shipmentId-${index}`} style={{ ...yellowTextStyle, padding: '10px', border: '1px solid #E0E0E0' }}>
-                      {shipment.shipmentId}
-                    </td>
-                    <td id={`shipmentName-${index}`} style={{ padding: '10px', border: '1px solid #E0E0E0' }}>
-                      {shipment.shipmentName}
-                    </td>
-                    <td id={`shipmentStatus-${index}`} style={{ ...yellowTextStyle, padding: '10px', border: '1px solid #E0E0E0' }}>
-                      {shipment.shipmentStatus}
-                    </td>
-                    <td id={`shipmentWeight-${index}`} style={{ ...yellowTextStyle, padding: '10px', border: '1px solid #E0E0E0' }}>
-                      {shipment.shipmentWeight.toLocaleString()} lbs
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <div id="noShipmentsMessage" style={{ textAlign: 'center', opacity: '0.5', fontSize: '18px' }}>
-              <h2>
-                <span style={styleAll}>Empty - User Has No </span>
-                <span style={styleShipments}>SHIPMENTS</span>
-              </h2>
-            </div>
-          )
-        }
+          {
+              userShipments.length !== 0 ? (
+                  <table id="shipmentsTable" style={{ width: '95%', borderCollapse: 'collapse', marginTop: '20px' }}>
+                      <thead>
+                      <tr>
+                          <th id="idHeader" style={{ padding: '10px', borderBottom: '1px solid #DDDDDD' }}>ID</th>
+                          <th id="nameHeader" style={{ padding: '10px', borderBottom: '1px solid #DDDDDD' }}>Shipment Name</th>
+                          <th id="statusHeader" style={{ padding: '10px', borderBottom: '1px solid #DDDDDD' }}>Status</th>
+                          <th id="weightHeader" style={{ padding: '10px', borderBottom: '1px solid #DDDDDD' }}>Approximate Weight</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      {userShipments.map((shipment: any, index) => (
+                          <tr id={`shipmentRow-${index}`} key={shipment.shipmentId} style={{ background: '#FFFFFF', borderBottom: '1px solid #E0E0E0' }}>
+                              <td id={`shipmentId-${index}`} style={{ ...yellowTextStyle, padding: '10px', border: '1px solid #E0E0E0' }}>
+                                  {shipment.shipmentId}
+                              </td>
+                              <td id={`shipmentName-${index}`} style={{ padding: '10px', border: '1px solid #E0E0E0' }}>
+                                  {shipment.shipmentName}
+                              </td>
+                              <td id={`status-${index}`} style={{ ...yellowTextStyle, padding: '10px', border: '1px solid #E0E0E0' }}>
+                                  {shipment.status}
+                              </td>
+                              <td id={`weight-${index}`} style={{ ...yellowTextStyle, padding: '10px', border: '1px solid #E0E0E0' }}>
+                                  {shipment.weight.toLocaleString()} lbs
+                              </td>
+                          </tr>
+                      ))}
+                      </tbody>
+                  </table>
+              ) : (
+                  <div id="noShipmentsMessage" style={{ textAlign: 'center', opacity: '0.5', fontSize: '18px' }}>
+                      <h2>
+                          <span style={styleAll}>Empty - User Has No </span>
+                          <span style={styleShipments}>SHIPMENTS</span>
+                      </h2>
+                  </div>
+              )
+          }
       </div>
     </div>
   );

@@ -54,10 +54,10 @@ public class Auth0LoginService {
         headers.add(HttpHeaders.SET_COOKIE, accessPermissionCookie.toString());
         headers.add(HttpHeaders.SET_COOKIE, pictureCookie.toString());
 
-        if (principal.getClaim("https://movingexpress.com/roles").toString().contains("ShipmentReviewer")) {
+        if (principal.getClaim("https://movingexpress.com/roles").toString().contains("Shipment_Reviewer")) {
             return ResponseEntity.status(HttpStatus.FOUND).headers(headers)
                     .location(URI.create("http://localhost:3000/Reviewer")).build();
-        } else if (principal.getClaim("https://movingexpress.com/roles").toString().contains("ShipmentEstimator")) {
+        } else if (principal.getClaim("https://movingexpress.com/roles").toString().contains("Shipment_Estimator")) {
             return ResponseEntity.status(HttpStatus.FOUND).headers(headers)
                     .location(URI.create("http://localhost:3000/Estimator")).build();
         } else {
