@@ -16,129 +16,158 @@ skinparam classAttribute {
 
 Database "MySQL" as BoundedContextMySQL #f29111 {
 
-        TABLE(Client) {
-            PRIMARY_KEY(id) INT AUTO_INCREMENT
-            clientId VARCHAR(36) UNIQUE NOT NULL
-            firstName VARCHAR(255)
-            lastName VARCHAR(255)
-            email VARCHAR(255)
-            phoneNumber VARCHAR(15)
-        }
+    TABLE(Customer) {
+        PRIMARY_KEY(id) INT AUTO_INCREMENT
+        FOREIGN_KEY(user_id) VARCHAR(36) UNIQUE NOT NULL
+        firstName VARCHAR(255)
+        lastName VARCHAR(255)
+        profilePictureUrl VARCHAR(255)
+        email VARCHAR(255)
+        phoneNumber VARCHAR(15)
+        streetAddress VARCHAR(255)
+        city VARCHAR(255)
+        country VARCHAR(255)
+        postalCode VARCHAR(10)
+    }
 
-        TABLE(Truck) {
-            PRIMARY_KEY(id) INT AUTO_INCREMENT
-            vin VARCHAR(17) UNIQUE NOT NULL
-            capacity DOUBLE
-        }
+    TABLE(Truck) {
+        PRIMARY_KEY(id) INT AUTO_INCREMENT
+        FOREIGN_KEY(vin) VARCHAR(17) UNIQUE NOT NULL
+        capacity DOUBLE
+    }
 
-        TABLE(Inventory) {
-            PRIMARY_KEY(id) INT AUTO_INCREMENT
-            inventoryId VARCHAR(36) UNIQUE NOT NULL
-            description VARCHAR(255)
-            FOREIGN_KEY(shipmentId) VARCHAR(36)
-        }
+    TABLE(Address) {
+        PRIMARY_KEY(id) INT AUTO_INCREMENT
+        FOREIGN_KEY(address_id) VARCHAR(36) UNIQUE NOT NULL
+        streetAddress VARCHAR(255)
+        city VARCHAR(255)
+        country VARCHAR(255)
+        postalCode VARCHAR(10)
+    }
 
-        TABLE(Item) {
-            PRIMARY_KEY(id) INT AUTO_INCREMENT
-            itemId VARCHAR(36) UNIQUE NOT NULL
-            itemName VARCHAR(255) NOT NULL
-            type ENUM('ITEM', 'BOX') NOT NULL
-            price DECIMAL(10, 2)
-            description VARCHAR(255)
-            weight DOUBLE
-            handlingInstructions VARCHAR(255)
-            FOREIGN_KEY(inventoryId) VARCHAR(36)
-        }
+    TABLE(Shipment) {
+        PRIMARY_KEY(id) INT AUTO_INCREMENT
+        FOREIGN_KEY(shipment_id) VARCHAR(36) UNIQUE
+        status VARCHAR(255)
+        expectedMovingDate Date
+        actualMovingDate Date NULL
+        name VARCHAR(255)
+        approximateWeight DOUBLE NULL
+        weight DOUBLE NULL
+        FOREIGN_KEY(pickup_address_id) VARCHAR(36)
+        FOREIGN_KEY(destination_address_id) VARCHAR(36)
+        FOREIGN_KEY(vin) VARCHAR(17) NULL
+        FOREIGN_KEY(user_id) VARCHAR(36) NULL
+        email VARCHAR(255) NULL
+        phoneNumber VARCHAR(15) NULL
+    }
 
-        TABLE(Quote){
-            PRIMARY_KEY(id) INT AUTO_INCREMENT
-            quoteId VARCHAR(36) UNIQUE NOT NULL
-            pickUpAddress VARCHAR(255)
-            pickupCity VARCHAR(255)
-            pickupPostalCode VARCHAR(10)
-            dropOffAddress VARCHAR(255)
-            dropoffCity VARCHAR(255)
-            dropoffPostalCode VARCHAR(10)
-            buildingTypePickUp VARCHAR(255)
-            numberOfRoomsPickUp INT
-            hasElevatorPickUp BOOLEAN
-            buildingTypeDropOff VARCHAR(255)
-            numberOfRoomsDropOff INT
-            hasElevatorDropOff BOOLEAN
-            clientEmail VARCHAR(255)
-            movingEstimatorId VARCHAR(36)
-            FOREIGN_KEY(clientEmail) VARCHAR(255)
-            FOREIGN_KEY(movingEstimatorId) VARCHAR(36)
-            FOREIGN_KEY(shipmentId) VARCHAR(36)
-        }
+    TABLE(Inventory) {
+        PRIMARY_KEY(id) INT AUTO_INCREMENT
+        FOREIGN_KEY(inventory_id) VARCHAR(36) UNIQUE NOT NULL
+        description VARCHAR(255)
+        FOREIGN_KEY(shipment_id) VARCHAR(36)
+    }
 
-        TABLE(Shipment) {
-            PRIMARY_KEY(id) INT AUTO_INCREMENT
-            shipmentId VARCHAR(36) UNIQUE NOT NULL
-            shipmentStatus VARCHAR(255)
-            shipmentDepartureAddress VARCHAR(255)
-            shipmentArrivalAddress VARCHAR(255)
-            FOREIGN_KEY(vin) VARCHAR(17)
-            FOREIGN_KEY(clientId) VARCHAR(36)
-        }
+    TABLE(Item) {
+        PRIMARY_KEY(id) INT AUTO_INCREMENT
+        FOREIGN_KEY(item_id) VARCHAR(36) UNIQUE NOT NULL
+        name VARCHAR(255) NOT NULL
+        type ENUM('ITEM', 'BOX') NOT NULL
+        price DECIMAL(10, 2)
+        description VARCHAR(255)
+        weight DOUBLE NULL
+        handlingInstructions VARCHAR(255)
+        FOREIGN_KEY(inventory_id) VARCHAR(36)
+    }
 
-        TABLE(MovingCrew) {
-            PRIMARY_KEY(id) INT AUTO_INCREMENT
-            movingCrewId VARCHAR(36) UNIQUE NOT NULL
-            type VARCHAR(255)
-            FOREIGN_KEY(shipmentId) VARCHAR(36)
-        }
+    TABLE(MovingEstimator) {
+        PRIMARY_KEY(id) INT AUTO_INCREMENT
+        FOREIGN_KEY(estimator_id) VARCHAR(36) UNIQUE NOT NULL
+        firstName VARCHAR(255)
+        lastName VARCHAR(255)
+        email VARCHAR(255) UNIQUE
+        phoneNumber VARCHAR(15)
+        FOREIGN_KEY(shipment_id) VARCHAR(36)
+    }
 
-        TABLE(Driver) {
-            PRIMARY_KEY(id) INT AUTO_INCREMENT
-            driverId VARCHAR(36) UNIQUE NOT NULL
-            firstName VARCHAR(255)
-            lastName VARCHAR(255)
-            phoneNumber VARCHAR(15)
-            email VARCHAR(255)
-            FOREIGN_KEY(shipmentId) VARCHAR(36)
-        }
+    TABLE(Quote) {
+        PRIMARY_KEY(id) INT AUTO_INCREMENT
+        FOREIGN_KEY(quote_id) VARCHAR(36) UNIQUE NOT NULL
+        pickupStreetAddress VARCHAR(255)
+        pickupCity VARCHAR(255)
+        pickupCountry VARCHAR(255)
+        pickupPostalCode VARCHAR(10)
+        pickupNumberOfRooms INT
+        pickupElevator BOOLEAN
+        pickupBuildingType VARCHAR(255)
+        destinationStreetAddress VARCHAR(255)
+        destinationCity VARCHAR(255)
+        destinationCountry VARCHAR(255)
+        destinationPostalCode VARCHAR(10)
+        destinationNumberOfRooms INT
+        destinationElevator BOOLEAN
+        destinationBuildingType VARCHAR(255)
+        firstName VARCHAR(255)
+        lastName VARCHAR(255)
+        emailAddress VARCHAR(255)
+        phoneNumber VARCHAR(15)
+        contactMethod VARCHAR(30)
+        expectedMovingDate Date
+        initiationDate DATETIME
+        comment VARCHAR(255)
+        quoteStatus VARCHAR(10)
+        shipmentName VARCHAR(255)
+    }
 
-        TABLE(ShipmentReviewer) {
-            PRIMARY_KEY(id) INT AUTO_INCREMENT
-            shipmentReviewerId VARCHAR(36)
-            firstName VARCHAR(255)
-            lastName VARCHAR(255)
-            email VARCHAR(255)
-            phoneNumber VARCHAR(15)
-        }
+    TABLE(MovingCrew) {
+        PRIMARY_KEY(id) INT AUTO_INCREMENT
+        FOREIGN_KEY(moving_crew_id) VARCHAR(36) UNIQUE NOT NULL
+        type VARCHAR(255)
+        FOREIGN_KEY(shipment_id) VARCHAR(36)
+    }
 
-        TABLE(Observer) {
-            PRIMARY_KEY(id) INT AUTO_INCREMENT
-            observerId VARCHAR(36) UNIQUE NOT NULL
-            firstName VARCHAR(255)
-            lastName VARCHAR(255)
-            email VARCHAR(255)
-            FOREIGN_KEY(shipmentId) VARCHAR(36)
-        }
+    TABLE(Driver) {
+        PRIMARY_KEY(id) INT AUTO_INCREMENT
+        FOREIGN_KEY(user_id) VARCHAR(36) UNIQUE NOT NULL
+        firstName VARCHAR(255)
+        lastName VARCHAR(255)
+        phoneNumber VARCHAR(15)
+        email VARCHAR(255) UNIQUE NOT NULL
+        FOREIGN_KEY(shipment_id) VARCHAR(36)
+    }
 
-        TABLE(MovingEstimator) {
-            PRIMARY_KEY(id) INT AUTO_INCREMENT
-            estimatorId VARCHAR(36) UNIQUE NOT NULL
-            firstName VARCHAR(255)
-            lastName VARCHAR(255)
-            email VARCHAR(255)
-            phoneNumber VARCHAR(15)
-            FOREIGN_KEY(shipmentId) VARCHAR(36)
-        }
+    TABLE(ShipmentReviewer) {
+        PRIMARY_KEY(id) INT AUTO_INCREMENT
+        FOREIGN_KEY(user_id) VARCHAR(36)
+        firstName VARCHAR(255)
+        lastName VARCHAR(255)
+        email VARCHAR(255) UNIQUE NOT NULL
+        phoneNumber VARCHAR(15)
+    }
 
-        TABLE(Report) {
-            PRIMARY_KEY(id) INT AUTO_INCREMENT
-            reportId VARCHAR(36) UNIQUE NOT NULL
-            name VARCHAR(50)
-            type VARCHAR(50)
-            date DATETIME
-            validity DATETIME
-        }
-}
+    TABLE(Observer) {
+        PRIMARY_KEY(id) INT AUTO_INCREMENT
+        FOREIGN_KEY(observer_id) VARCHAR(36) UNIQUE NOT NULL
+        firstName VARCHAR(255)
+        lastName VARCHAR(255)
+        email VARCHAR(255)
+        FOREIGN_KEY(shipment_id) VARCHAR(36)
+    }
 
-    Client ||--|{ Shipment
+    TABLE(Report) {
+        PRIMARY_KEY(id) INT AUTO_INCREMENT
+        FOREIGN_KEY(report_id) VARCHAR(36) UNIQUE NOT NULL
+        name VARCHAR(50)
+        type VARCHAR(50)
+        date DATETIME
+        validity DATETIME
+    }
+
+    Customer ||--|{ Shipment
     Truck }|--|| Shipment
+    Address ||--o{ Shipment : pickup_address_id
+    Address ||--o{ Shipment : destination_address_id
     Shipment ||--|{ MovingCrew
     MovingCrew ||--o| Report
     Driver }|--|| Shipment
@@ -146,9 +175,9 @@ Database "MySQL" as BoundedContextMySQL #f29111 {
     Shipment ||--|{ ShipmentReviewer
     Driver ||--|| Truck
     Inventory ||--o{ Item
-    Client ||--o| Report
+    Customer ||--o| Report
     Shipment ||--|{ Inventory
-    Client ||--|{ Quote
+    Customer ||--|{ Quote
     Quote ||--|{ Shipment
     MovingEstimator ||--|{ Quote
     MovingEstimator ||--o| Report
