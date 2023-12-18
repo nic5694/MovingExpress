@@ -1,11 +1,8 @@
 package com.example.backend.shipmentsubdomain.presentationlayer;
 
-import com.example.backend.shipmentsubdomain.datalayer.ContactMethod;
-import com.example.backend.shipmentsubdomain.datalayer.Country;
-import com.example.backend.shipmentsubdomain.datalayer.QuoteRepository;
-import com.example.backend.shipmentsubdomain.datalayer.QuoteStatus;
-import org.junit.jupiter.api.AfterEach;
+import com.example.backend.shipmentsubdomain.datalayer.*;
 import com.example.backend.shipmentsubdomain.presentationlayer.event.EventRequestModel;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
