@@ -305,6 +305,8 @@ function ShipmentEstimatorPage() {
         console.log('Response:', response.data);
 
         setDisplayDetail(false)
+        fetchData()
+
 
     } catch (error) {
         console.error('Error:', error);
@@ -465,7 +467,7 @@ function ShipmentEstimatorPage() {
           </div>
           {displayDetail && (
             <div className='relative w-100 h-100 flex justify-center bg-white opacity-100 divide-transparent rounded-lg' style={{ zIndex: 1 }}>
-              <form>
+              <div className='flex flex-col'>
                 <div className='flex flex-row items-center justify-between mt-6 mb-5'>
                   <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='text-2xl'>Shipment Quotes <span className="text-companyYellow">Details</span></div>
                   <div>
@@ -1001,11 +1003,11 @@ function ShipmentEstimatorPage() {
                 ((selectedQuote.quoteStatus !== "DECLINED") && (selectedQuote.quoteStatus !== "CREATED")) ? 
                 <div className="flex flex-row gap-1 justify-end mb-5">
                   <div><button onClick={() => { updateQuoteStatus(selectedQuote.quoteId) }} className='px-2.5 py-1 bg-companyYellow text-white rounded-sm'>Request Shipment</button></div>
-                  <div><button onClick={() => { declineQuote(selectedQuote.quoteId) }} className='px-2.5 py-1 bg-red-500 text-white rounded-sm'>Decline</button></div>
+                  <div><button id='declineBtn' onClick={() => { declineQuote(selectedQuote.quoteId) }} className='px-2.5 py-1 bg-red-500 text-white rounded-sm'>Decline</button></div>
                 </div>
                 : <div></div>
                 }
-              </form>
+              </div>
             </div>
           )}
         </div>

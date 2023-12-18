@@ -247,6 +247,7 @@ function ShipmentReviewerPage() {
         console.log('Response:', response.data);
 
         setDisplayDetail(false)
+        fetchData()
 
     } catch (error) {
         console.error('Error:', error);
@@ -377,8 +378,8 @@ function ShipmentReviewerPage() {
 
                 {
                   declinedQuotes.map((quote: any) => (
-
-                    <tr id={quote.quoteId} className='text-center text-sm'>
+                    //@ts-ignore
+                    <tr name={quote.name} id={quote.quoteId} className='text-center text-sm'>
                       {//@ts-ignore
                         <td name={quote.shipmentName} className='border px-3'>{quote.shipmentName}</td>}
                       <td className='border px-3'>{quote.emailAddress}</td>
@@ -386,8 +387,9 @@ function ShipmentReviewerPage() {
                       <td className='border px-3 hidden lg:table-cell'>{quote.firstName}</td>
                       <td className='border px-3 hidden lg:table-cell'>{quote.lastName}</td>
                       <td className='border px-3 '>{quote.quoteStatus}</td>
-                      <td className='border px-3 '><button id={`btn-${quote.quoteId}`} onClick={() => { getQuoteDetails(quote.quoteId) }} style={{ fontFamily: 'Bebas Neue, cursive' }} className="bg-companyYellow text-white py-1 px-10 rounded-sm text-sm">View</button></td>
-                    </tr>
+                      {//@ts-ignore
+                      <td name={quote.shipmentName} className='border px-3 '><button id={`btn-${quote.quoteId}`} onClick={() => { getQuoteDetails(quote.quoteId) }} style={{ fontFamily: 'Bebas Neue, cursive' }} className="bg-companyYellow text-white py-1 px-10 rounded-sm text-sm">View</button></td>
+                      }</tr>
 
                   ))
                 }
@@ -934,7 +936,7 @@ function ShipmentReviewerPage() {
                   {selectedQuote.quoteStatus !== "DECLINED" ? 
                   <div className=' flex flex-row gap-3'>
                     <div><button onClick={() => { }} className='px-2.5 py-1 bg-green-500 text-white rounded-sm'>Accept</button></div>
-                    <div><button onClick={() => { declineQuote(selectedQuote.quoteId) }} className='px-2.5 py-1 bg-red-500 text-white rounded-sm'>Decline</button></div>
+                    <div><button id='declineBtn' onClick={() => { declineQuote(selectedQuote.quoteId) }} className='px-2.5 py-1 bg-red-500 text-white rounded-sm'>Decline</button></div>
                   </div>
                   : <div> </div>
                 }
