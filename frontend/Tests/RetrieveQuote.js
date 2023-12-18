@@ -38,7 +38,7 @@ async function test_case() {
     const expectedDestinationBuildingType = 'House';
     const expectedFirstName = 'John';
     const expectedLastName = 'Doe';
-    const expectedEmailAddress = 'john.doe@example.com';
+    const expectedEmailAddress = 'emily.d@example.com';
     const expectedPhoneNumber = '123-555-1234';
     const expectedMovingDate = '2023-12-15';
     const expectedComment = 'Moving details for John Doe';
