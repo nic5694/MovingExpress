@@ -182,11 +182,7 @@ function ShipmentReviewerPage() {
     console.log(quoteId);
 
     try {
-      const response = await axios.get('http://localhost:8080/api/v1/movingexpress/quotes/retrieve', {
-        params: {
-          quoteId: quoteId,
-        }
-      });
+      const response = await axios.get(`http://localhost:8080/api/v1/movingexpress/quotes/${quoteId}`, {});
 
       var data = response.data;
 
@@ -237,26 +233,44 @@ function ShipmentReviewerPage() {
 
   const declineQuote = async (quoteId: string) => {
     try {
-        const response = await axios.post(
-            `http://localhost:8080/api/v1/movingexpress/quotes/${quoteId}/events`,
-            {
-                event: 'decline'
-            }
-        );
+      const response = await axios.post(
+        `http://localhost:8080/api/v1/movingexpress/quotes/${quoteId}/events`,
+        {
+          event: 'decline'
+        }
+      );
 
-        console.log('Response:', response.data);
+      console.log('Response:', response.data);
 
-        setDisplayDetail(false)
-        fetchData()
+      setDisplayDetail(false)
+      fetchData()
 
     } catch (error) {
-        console.error('Error:', error);
+      console.error('Error:', error);
     }
 
   };
 
   //handle accept or decline quote
+  const acceptQuote = async (quoteId: string) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/api/v1/movingexpress/quotes/${quoteId}/events`,
+        {
+          event: 'accept'
+        }
+      );
 
+      console.log('Response:', response.data);
+
+      setDisplayDetail(false)
+      fetchData()
+
+
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
 
   const menuIcon = () => {
     return (
@@ -300,7 +314,7 @@ function ShipmentReviewerPage() {
 
             <div className='pt-5'>
               <form action={`http://localhost:8080/api/v1/movingexpress/logout`} method="post">
-              <button className='hover:underline underline-offset-4 decoration-2 decoration-companyYellow' style={{ fontFamily: 'Bebas Neue, cursive', letterSpacing: "1px" }} type={'submit'} >LogOut</button>
+                <button className='hover:underline underline-offset-4 decoration-2 decoration-companyYellow' style={{ fontFamily: 'Bebas Neue, cursive', letterSpacing: "1px" }} type={'submit'} >LogOut</button>
               </form>
             </div>
           </div>
@@ -371,7 +385,7 @@ function ShipmentReviewerPage() {
                       <td className='border px-3 hidden lg:table-cell'>{quote.phoneNumber}</td>
                       <td className='border px-3 hidden lg:table-cell'>{quote.firstName}</td>
                       <td className='border px-3 hidden lg:table-cell'>{quote.lastName}</td>
-                      <td className='border px-3 '>{quote.quoteStatus}</td>
+                      <td id={`pending-${quote.quoteId}`} className='border px-3 '>{quote.quoteStatus}</td>
                       <td className='border px-3 '><button id={`btn-${quote.quoteId}`} onClick={() => { getQuoteDetails(quote.quoteId) }} style={{ fontFamily: 'Bebas Neue, cursive' }} className="bg-companyYellow text-white py-1 px-10 rounded-sm text-sm">View</button></td>
                     </tr>
 
@@ -390,7 +404,7 @@ function ShipmentReviewerPage() {
                       <td className='border px-3 hidden lg:table-cell'>{quote.lastName}</td>
                       <td className='border px-3 '>{quote.quoteStatus}</td>
                       {//@ts-ignore
-                      <td name={quote.shipmentName} className='border px-3 '><button id={`btn-${quote.quoteId}`} onClick={() => { getQuoteDetails(quote.quoteId) }} style={{ fontFamily: 'Bebas Neue, cursive' }} className="bg-companyYellow text-white py-1 px-10 rounded-sm text-sm">View</button></td>
+                        <td name={quote.shipmentName} className='border px-3 '><button id={`btn-${quote.quoteId}`} onClick={() => { getQuoteDetails(quote.quoteId) }} style={{ fontFamily: 'Bebas Neue, cursive' }} className="bg-companyYellow text-white py-1 px-10 rounded-sm text-sm">View</button></td>
                       }</tr>
 
                   ))
@@ -936,13 +950,13 @@ function ShipmentReviewerPage() {
                 </div>
                 <div className="flex flex-row gap-1 justify-end mb-5">
                   {selectedQuote.quoteStatus !== "DECLINED" ?
-                  <div className=' flex flex-row gap-3'>
-                    <div><button onClick={() => { }} className='px-2.5 py-1 bg-green-500 text-white rounded-sm'>Accept</button></div>
-                    <div><button id='declineBtn' onClick={() => { declineQuote(selectedQuote.quoteId) }} className='px-2.5 py-1 bg-red-500 text-white rounded-sm'>Decline</button></div>
-                  </div>
-                  : <div> </div>
-                }
-                  </div>
+                    <div className=' flex flex-row gap-3'>
+                      <div><button id='acceptBtn' onClick={() => { acceptQuote(selectedQuote.quoteId) }} className='px-2.5 py-1 bg-green-500 text-white rounded-sm'>Accept</button></div>
+                      <div><button id='declineBtn' onClick={() => { declineQuote(selectedQuote.quoteId) }} className='px-2.5 py-1 bg-red-500 text-white rounded-sm'>Decline</button></div>
+                    </div>
+                    : <div> </div>
+                  }
+                </div>
               </div>
             </div>
             // </div>
