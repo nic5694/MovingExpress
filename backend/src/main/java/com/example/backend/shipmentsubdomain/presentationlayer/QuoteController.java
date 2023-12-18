@@ -1,12 +1,12 @@
 package com.example.backend.shipmentsubdomain.presentationlayer;
 
 import com.example.backend.shipmentsubdomain.businesslayer.QuoteService;
-import com.example.backend.shipmentsubdomain.datalayer.Quote;
 import com.example.backend.shipmentsubdomain.datalayer.QuoteStatus;
 import com.example.backend.shipmentsubdomain.presentationlayer.event.EventRequestModel;
 import com.example.backend.shipmentsubdomain.presentationlayer.event.EventResponseModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,22 +18,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class QuoteController {
     private final QuoteService quoteService;
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping()
-    public List<QuoteResponseModel> getAllQuotes(@RequestParam QuoteStatus quoteStatus){
-        return  quoteService.getAllQuotes(quoteStatus);
+    public ResponseEntity<List<QuoteResponseModel>> getAllQuotes(@RequestParam QuoteStatus quoteStatus){
+        return ResponseEntity.ok().body(quoteService.getAllQuotes(quoteStatus));
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/retrieve")
-    public QuoteResponseModel getQuote(@RequestParam String quoteId){
-        return quoteService.getQuote(quoteId);
+    public ResponseEntity<QuoteResponseModel> getQuote(@RequestParam String quoteId){
+        return ResponseEntity.ok().body(quoteService.getQuote(quoteId));
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/request")
-    public QuoteResponseModel addQuote(@RequestBody QuoteRequestModel quoteRequestModel){
-        return quoteService.addQuote(quoteRequestModel);
+    public ResponseEntity<QuoteResponseModel> addQuote(@RequestBody QuoteRequestModel quoteRequestModel){
+        return ResponseEntity.status(HttpStatus.CREATED).body(quoteService.addQuote(quoteRequestModel));
     }
 
     @ResponseStatus(org.springframework.http.HttpStatus.CREATED)

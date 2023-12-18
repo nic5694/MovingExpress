@@ -65,6 +65,7 @@ jacoco {
 def testExclusionClasses = [
 //        "com/example/backend/config/**",
 //        "com/example/backend/shipmentsubdomain/datalayer/shipment/**"
+        "com/example/backend/shipmentsubdomain/datamapperlayer"
         ]
 
 jacocoTestReport {

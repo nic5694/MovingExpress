@@ -1,11 +1,10 @@
 package com.example.backend.shipmentsubdomain.datamapperlayer.shipment;
-import lombok.Generated;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+
 import com.example.backend.shipmentsubdomain.datalayer.shipment.Shipment;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponseModel;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-@Generated
 @Mapper(componentModel = "spring", uses = AddressMapper.class)
 public interface QuoteResponseToShipmentMapper {
 

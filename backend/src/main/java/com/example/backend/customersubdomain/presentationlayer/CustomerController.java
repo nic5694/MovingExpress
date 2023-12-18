@@ -67,10 +67,7 @@ public class CustomerController {
                                                            @Valid @RequestBody CustomerRequestModel customerRequest) {
         String userId = principal.getSubject();
         log.info("Update customer with userId: {}", userId);
-
-        CustomerResponseModel customerResponse = customerService.updateCustomer(customerRequest, userId);
-
-        return ResponseEntity.ok(customerResponse);
+        return ResponseEntity.ok(customerService.updateCustomer(customerRequest, userId));
 
     }
 }

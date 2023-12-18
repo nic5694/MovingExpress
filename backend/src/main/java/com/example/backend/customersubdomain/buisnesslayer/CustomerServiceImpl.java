@@ -42,8 +42,9 @@ public class CustomerServiceImpl implements CustomerService{
     @Override
     public CustomerResponseModel updateCustomer(CustomerRequestModel customerRequest, String userId) {
         Customer customer = customerRepository.findCustomerByUserId(userId);
-        if (customer == null)
+        if (customer == null) {
             throw new CustomerNotFoundException("Customer with userId" + userId + " was not found.");
+        }
 
         customer.setFirstName(customerRequest.getFirstName() != null ? customerRequest.getFirstName() : customer.getFirstName());
         customer.setLastName(customerRequest.getLastName() != null ? customerRequest.getLastName() : customer.getLastName());

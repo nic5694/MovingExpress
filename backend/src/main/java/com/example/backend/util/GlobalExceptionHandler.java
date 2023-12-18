@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 @RestControllerAdvice
-public class GlobalControllerHandler {
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+public class GlobalExceptionHandler {
     @ExceptionHandler(CustomerNotFoundException.class)
     public HttpErrorInfo handleCustomerNotFoundException(CustomerNotFoundException e) {
         return createHttpErrorInfo(HttpStatus.NOT_FOUND, e);

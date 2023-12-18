@@ -2,12 +2,10 @@ package com.example.backend.shipmentsubdomain.datamapperlayer.shipment;
 
 import com.example.backend.shipmentsubdomain.datalayer.shipment.Shipment;
 import com.example.backend.shipmentsubdomain.presentationlayer.shipment.ShipmentResponseModel;
-import lombok.Generated;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
-@Generated
 @Mapper(componentModel="spring")
 public interface ShipmentResponseMapper {
     @Mappings({
