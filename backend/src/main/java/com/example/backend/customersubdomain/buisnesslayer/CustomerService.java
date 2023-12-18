@@ -7,6 +7,6 @@ public interface CustomerService {
     CustomerResponseModel getCustomerByUserId(String userId);
     CustomerResponseModel addCustomer(CustomerRequestModel customerRequestModel);
     CustomerResponseModel updateCustomer(CustomerRequestModel customerRequestModel, String userId);
-    void deleteCustomer(String userId);
+//    void deleteCustomer(String userId);
     boolean checkIfCustomerExists(String userId);
 }

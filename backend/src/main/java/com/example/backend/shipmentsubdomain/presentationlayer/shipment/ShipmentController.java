@@ -5,13 +5,13 @@ import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponseMode
 import com.example.backend.util.EmailUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static org.springframework.http.HttpStatus.CREATED;
 
 
 @RestController
@@ -31,18 +31,8 @@ public class ShipmentController {
         return ResponseEntity.ok(shipments);
     }
 
-    @ResponseStatus(org.springframework.http.HttpStatus.CREATED)
     @PostMapping()
-    public ShipmentResponseModel createShipment(@RequestBody QuoteResponseModel quoteResponseModel){
-        return shipmentService.createShipment(quoteResponseModel);
+    public ResponseEntity<ShipmentResponseModel> createShipment(@RequestBody QuoteResponseModel quoteResponseModel){
+        return ResponseEntity.status(CREATED).body(shipmentService.createShipment(quoteResponseModel));
     }
-    //Email Test Endpoint
-    //TODO: Remove later
-    @GetMapping("/sendMail/{to}")
-    public void sendMail(@PathVariable String to) {
-        String subject = "Shipment Creation Confirmation";
-        String text = shipmentService.generateShipmentConfirmationEmail("TR67MH6F4K5NMOJK6");
-        emailUtil.SslEmail(to, subject, text);
-    }
-
 }

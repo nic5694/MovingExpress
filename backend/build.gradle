@@ -54,7 +54,8 @@ dependencies {
     testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     testImplementation 'io.projectreactor:reactor-test',
             'org.springframework.boot:spring-boot-starter-test',
-            'org.yaml:snakeyaml:2.2'
+            'org.yaml:snakeyaml:2.2',
+            'org.springframework.security:spring-security-test'
 }
 jacoco {
     toolVersion = '0.8.8'
@@ -62,8 +63,9 @@ jacoco {
 
 // Common exclusions for Jacoco tasks
 def testExclusionClasses = [
-        "com/example/backend/config/**",
-        "com/example/backend/shipmentsubdomain/datalayer/shipment/**"
+//        "com/example/backend/config/**",
+//        "com/example/backend/shipmentsubdomain/datalayer/shipment/**"
+        "com/example/backend/shipmentsubdomain/datamapperlayer"
         ]
 
 jacocoTestReport {

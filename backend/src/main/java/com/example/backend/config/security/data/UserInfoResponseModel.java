@@ -8,6 +8,7 @@ import java.util.HashMap;
 @Builder
 @Generated
 public class UserInfoResponseModel {
+    private String userId;
     private String username;
     private String name;
     private String picture;

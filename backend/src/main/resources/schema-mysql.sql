@@ -3,14 +3,13 @@ USE `movingsystem-db`;
 CREATE TABLE IF NOT EXISTS customers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id VARCHAR(36) UNIQUE NOT NULL,
-    first_name VARCHAR(255),
+    first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NULL,
     profile_picture_url VARCHAR(255) NULL,
     email VARCHAR(255) UNIQUE NULL,
     phone_number VARCHAR(15) NULL,
     street_address VARCHAR(255) NULL,
     city VARCHAR(255) NULL,
-    province VARCHAR(255) NULL,
     country VARCHAR(255) NULL,
     postal_code VARCHAR(10) NULL
     );
@@ -23,29 +22,31 @@ CREATE TABLE IF NOT EXISTS trucks (
 CREATE TABLE IF NOT EXISTS addresses (
                                        id INT AUTO_INCREMENT PRIMARY KEY,
                                        address_id VARCHAR(36) UNIQUE NOT NULL,
-    street_address VARCHAR(255),
-    city VARCHAR(255),
-    province VARCHAR(255),
-    country VARCHAR(255),
-    postal_code VARCHAR(10)
+    street_address VARCHAR(255) NOT NULL,
+    city VARCHAR(255) NOT NULL,
+    province VARCHAR(255) NOT NULL,
+    country VARCHAR(255) NOT NULL,
+    postal_code VARCHAR(10) NOT NULL
     );
 
 
 CREATE TABLE IF NOT EXISTS shipments (
                                          id INT AUTO_INCREMENT PRIMARY KEY,
-                                         shipment_id VARCHAR(36) UNIQUE NOT NULL,
-    shipment_status VARCHAR(255),
+                                         shipment_id VARCHAR(36) UNIQUE,
+    status VARCHAR(255),
     expected_moving_date Date,
     actual_moving_date Date NULL,
     name VARCHAR(255),
     approximate_weight DOUBLE NULL,
-    departure_address_id VARCHAR(36),
-    arrival_address_id VARCHAR(36),
-    vin VARCHAR(17) UNIQUE NULL,
-    user_id VARCHAR(36),
+    weight DOUBLE NULL,
+    pickup_address_id VARCHAR(36),
+    destination_address_id VARCHAR(36),
+    vin VARCHAR(17) NULL,
+    user_id VARCHAR(36) NULL,
     email VARCHAR(255) NULL,
-    FOREIGN KEY (departure_address_id) REFERENCES addresses(address_id),
-    FOREIGN KEY (arrival_address_id) REFERENCES addresses(address_id),
+    phone_number VARCHAR(15) NULL,
+    FOREIGN KEY (pickup_address_id) REFERENCES addresses(address_id),
+    FOREIGN KEY (destination_address_id) REFERENCES addresses(address_id),
     FOREIGN KEY (vin) REFERENCES trucks(vin),
     FOREIGN KEY (user_id) REFERENCES customers(user_id)
     );

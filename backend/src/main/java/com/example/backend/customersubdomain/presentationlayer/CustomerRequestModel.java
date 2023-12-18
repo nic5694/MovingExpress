@@ -12,7 +12,7 @@ import lombok.Value;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CustomerRequestModel {
     @NotBlank
-    String clientId;
+    String userId;
     String profilePictureUrl;
     @Email
     @NotBlank
@@ -23,7 +23,6 @@ public class CustomerRequestModel {
     String phoneNumber;
     String streetAddress;
     String city;
-    String province;
     String country;
     String postalCode;
 }
