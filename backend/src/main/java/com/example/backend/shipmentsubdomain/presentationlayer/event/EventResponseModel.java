@@ -8,7 +8,6 @@ import lombok.Value;
 @AllArgsConstructor
 @Builder
 public class EventResponseModel {
-
     private String event;
     private String resultType;
     private String href;

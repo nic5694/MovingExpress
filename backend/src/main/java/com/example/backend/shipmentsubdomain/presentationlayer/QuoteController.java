@@ -23,8 +23,8 @@ public class QuoteController {
         return ResponseEntity.ok().body(quoteService.getAllQuotes(quoteStatus));
     }
 
-    @GetMapping("/retrieve")
-    public ResponseEntity<QuoteResponseModel> getQuote(@RequestParam String quoteId){
+    @GetMapping("/{quoteId}")
+    public ResponseEntity<QuoteResponseModel> getQuote(@PathVariable String quoteId){
         return ResponseEntity.ok().body(quoteService.getQuote(quoteId));
     }
 
@@ -37,12 +37,13 @@ public class QuoteController {
     @PostMapping(value = "/{quoteId}/events")
     public EventResponseModel createQuoteEvent(@RequestBody EventRequestModel eventRequestModel,
                                                @PathVariable String quoteId){
-
         switch (eventRequestModel.getEvent()){
             case "decline":
                 return quoteService.declineQuote(quoteId);
-//            case "accept":
-//                return quoteService.acceptQuote(quoteId);
+            case "accept":
+                return quoteService.acceptQuote(quoteId);
+            case "convert":
+                return quoteService.convertQuoteToShipment(quoteId);
             default:
                 throw new IllegalArgumentException("Unexpected event value: " + eventRequestModel.getEvent());
         }

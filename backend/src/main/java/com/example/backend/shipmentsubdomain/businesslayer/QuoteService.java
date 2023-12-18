@@ -15,7 +15,6 @@ public interface QuoteService {
     QuoteResponseModel addQuote(QuoteRequestModel quoteRequest);
 
     EventResponseModel declineQuote(String quoteId);
-
     EventResponseModel acceptQuote(String quoteId);
-
+    EventResponseModel convertQuoteToShipment(String quoteId);
 }
