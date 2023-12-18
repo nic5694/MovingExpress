@@ -3,7 +3,7 @@ package com.example.backend.shipmentsubdomain.businesslayer;
 import com.example.backend.shipmentsubdomain.datalayer.*;
 import com.example.backend.shipmentsubdomain.datamapperlayer.quote.QuoteRequestMapper;
 import com.example.backend.shipmentsubdomain.datamapperlayer.quote.QuoteResponseMapper;
-import com.example.backend.shipmentsubdomain.exceptions.NotFoundException;
+import com.example.backend.util.exceptions.QuoteNotFoundException;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteRequestModel;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponseModel;
 import org.junit.jupiter.api.AfterEach;
@@ -22,7 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -128,13 +127,13 @@ class QuoteServiceImplUnitTest {
 
         sampleQuoteResponseModel = buildQuoteResponse();
 
-        Mockito.when(quoteRepository.findByQuoteIdentifier_QuoteId(quoteId)).thenThrow(new NotFoundException("quoteId not found: "+ quoteId));
+        Mockito.when(quoteRepository.findByQuoteIdentifier_QuoteId(quoteId)).thenThrow(new QuoteNotFoundException("quoteId not found: "+ quoteId));
 
         try {
             QuoteResponseModel quoteResponse = quoteService.getQuote(quoteId);
 
-            fail("Expected NotFoundException, but got QuoteResponse: " + quoteResponse);
-        } catch (NotFoundException e) {
+            fail("Expected QuoteNotFoundException, but got QuoteResponse: " + quoteResponse);
+        } catch (QuoteNotFoundException e) {
             assertThat(e.getMessage()).contains("quoteId not found: " + quoteId);
         }
     }
@@ -257,8 +256,79 @@ class QuoteServiceImplUnitTest {
         assertEquals(listOfQuoteResponseModelsResult.size(),listOfQuoteResponseModels.size());
         assertEquals(listOfQuoteResponseModelsResult.get(0).getQuoteStatus(), QuoteStatus.PENDING);
 
-
     }
+
+    @Test
+    void declineQuoteEvent_ShouldSucceed_WhenQuoteExists() {
+        // Arrange
+        String quoteId = "validQuoteId";
+        Quote quote = buildQuote();
+        quote.setQuoteIdentifier(new QuoteIdentifier());
+        when(quoteRepository.findByQuoteIdentifier_QuoteId(quoteId)).thenReturn(quote);
+
+        // Act
+        quoteService.declineQuote(quoteId);
+
+        // Assert
+        assertEquals(QuoteStatus.DECLINED, quote.getQuoteStatus());
+        verify(quoteRepository).save(quote);
+    }
+
+    @Test
+    void acceptExistingQuoteEvent_ShouldSucceed(){
+        //Arrange
+        String quoteId="341dbe66-36b1-4398-b708-dc55aaf60955";
+        Quote quote=buildQuote();
+        quote.setQuoteIdentifier(new QuoteIdentifier());
+        when(quoteRepository.findByQuoteIdentifier_QuoteId(quoteId)).thenReturn(quote);
+
+        //Act
+        quoteService.acceptQuote(quoteId);
+
+        //Assert
+        assertEquals(QuoteStatus.ACCEPTED, quote.getQuoteStatus());
+        verify(quoteRepository).save(quote);
+    }
+
+    @Test
+    void convertExistingQuoteEventToShipment_ShouldSucceed(){
+        //Arrange
+        String quoteId="341dbe66-36b1-4398-b708-dc55aaf60955";
+        Quote quote=buildQuote();
+        quote.setQuoteIdentifier(new QuoteIdentifier());
+        when(quoteRepository.findByQuoteIdentifier_QuoteId(quoteId)).thenReturn(quote);
+
+        //Act
+        quoteService.convertQuoteToShipment(quoteId);
+
+        //Assert
+        assertEquals(QuoteStatus.CREATED, quote.getQuoteStatus());
+        verify(quoteRepository).save(quote);
+    }
+
+    @Test
+    void declineQuote_ShouldThrowIllegalArgumentException_WhenInvalidStatusIsSet() {
+        // Arrange
+        String quoteId = "validQuoteId";
+        String invalidStatus = "InvalidStatus";
+        Quote quote = buildQuote();
+        when(quoteRepository.findByQuoteIdentifier_QuoteId(quoteId)).thenReturn(quote);
+
+
+        doAnswer(invocation -> {
+            throw new IllegalArgumentException("Unexpected event value: " + invalidStatus);
+        }).when(quoteRepository).save(any(Quote.class));
+
+        // Act & Assert
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            quoteService.declineQuote(quoteId);
+        });
+
+        // Assert
+        assertThat(exception.getMessage().contains("Unexpected event value: " + invalidStatus));
+    }
+
+
 
     private Quote buildQuote(){
         return Quote.builder()
@@ -300,45 +370,6 @@ class QuoteServiceImplUnitTest {
                 .shipmentName("Sample Shipment")
                 .build();
     }
-
-    @Test
-    void declineQuoteEvent_ShouldSucceed_WhenQuoteExists() {
-        // Arrange
-        String quoteId = "validQuoteId";
-        Quote quote = buildQuote();
-        quote.setQuoteIdentifier(new QuoteIdentifier());
-        when(quoteRepository.findByQuoteIdentifier_QuoteId(quoteId)).thenReturn(quote);
-
-        // Act
-        quoteService.declineQuote(quoteId);
-
-        // Assert
-        assertEquals(QuoteStatus.DECLINED, quote.getQuoteStatus());
-        verify(quoteRepository).save(quote);
-    }
-
-    @Test
-    void declineQuote_ShouldThrowIllegalArgumentException_WhenInvalidStatusIsSet() {
-        // Arrange
-        String quoteId = "validQuoteId";
-        String invalidStatus = "InvalidStatus";
-        Quote quote = buildQuote();
-        when(quoteRepository.findByQuoteIdentifier_QuoteId(quoteId)).thenReturn(quote);
-
-
-        doAnswer(invocation -> {
-            throw new IllegalArgumentException("Unexpected event value: " + invalidStatus);
-        }).when(quoteRepository).save(any(Quote.class));
-
-        // Act & Assert
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            quoteService.declineQuote(quoteId);
-        });
-
-        // Assert
-        assertThat(exception.getMessage().contains("Unexpected event value: " + invalidStatus));
-    }
-
 
     private QuoteResponseModel buildQuoteResponse(){
         return QuoteResponseModel.builder()

@@ -7,7 +7,7 @@ async function test_case() {
 
     await driver.get('http://localhost:3000/')
 
-    // Wait for 5 seconds
+    // Wait for 2 seconds
     await new Promise((resolve) => setTimeout(resolve, 2000))
 
     const shipmentQuoteBtn = await driver.findElement(By.id('shipmentQuoteBtn'))

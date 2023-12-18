@@ -3,7 +3,9 @@ package com.example.backend.shipmentsubdomain.businesslayer;
 import com.example.backend.shipmentsubdomain.datalayer.*;
 import com.example.backend.shipmentsubdomain.datamapperlayer.quote.QuoteRequestMapper;
 import com.example.backend.shipmentsubdomain.datamapperlayer.quote.QuoteResponseMapper;
-import com.example.backend.shipmentsubdomain.exceptions.NotFoundException;
+import com.example.backend.shipmentsubdomain.datamapperlayer.shipment.AddressMapper;
+import com.example.backend.shipmentsubdomain.datamapperlayer.shipment.QuoteResponseToShipmentMapper;
+import com.example.backend.util.exceptions.QuoteNotFoundException;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteController;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteRequestModel;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponseModel;
@@ -15,18 +17,21 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+
 @Service
 @RequiredArgsConstructor
 public class QuoteServiceImpl implements QuoteService {
     private final QuoteRepository quoteRepository;
     private final QuoteRequestMapper quoteRequestMapper;
     private final QuoteResponseMapper quoteResponseMapper;
+    private final QuoteResponseToShipmentMapper quoteResponseToShipmentMapper;
+    private final AddressMapper addressMapper;
 
     @Override
     public QuoteResponseModel getQuote(String quoteId) {
         Quote existingQuote = quoteRepository.findByQuoteIdentifier_QuoteId(quoteId);
         if (existingQuote == null) {
-            throw new NotFoundException("quoteId not found: " + quoteId);
+            throw new QuoteNotFoundException("quoteId not found: " + quoteId);
         }
 
         return quoteResponseMapper.entityToResponseModel(existingQuote);
@@ -92,9 +97,35 @@ public class QuoteServiceImpl implements QuoteService {
 
     @Override
     public EventResponseModel acceptQuote(String quoteId) {
-        // Change quote status to accepted
-        // Create a shipment with the quote details
-        // Return the shipment id in the event responseModel
-        return null;
+        Quote quote = quoteRepository.findByQuoteIdentifier_QuoteId(quoteId);
+        quote.setQuoteStatus(QuoteStatus.ACCEPTED);
+        quoteRepository.save(quote);
+        return EventResponseModel.builder()
+                .resultType("SUCCESS")
+                .event("accept")
+                .href(WebMvcLinkBuilder
+                        .linkTo(QuoteController.class)
+                        .slash(quoteId)
+                        .withSelfRel()
+                        .getHref())
+                .build();
+    }
+
+    @Override
+    public EventResponseModel convertQuoteToShipment(String quoteId) {
+        Quote quote = quoteRepository.findByQuoteIdentifier_QuoteId(quoteId);
+        quote.setQuoteStatus(QuoteStatus.CREATED);
+        quoteRepository.save(quote);
+
+        return EventResponseModel.builder()
+                .resultType("SUCCESS")
+                .event("convert")
+                // Dynamically generate the link to the current quote
+                .href(WebMvcLinkBuilder
+                        .linkTo(QuoteController.class)
+                        .slash(quoteId)
+                        .withSelfRel()
+                        .getHref())
+                .build();
     }
 }

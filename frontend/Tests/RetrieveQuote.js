@@ -38,7 +38,7 @@ async function test_case() {
     const expectedDestinationBuildingType = 'House';
     const expectedFirstName = 'John';
     const expectedLastName = 'Doe';
-    const expectedEmailAddress = 'john.doe@example.com';
+    const expectedEmailAddress = 'emily.d@example.com';
     const expectedPhoneNumber = '123-555-1234';
     const expectedMovingDate = '2023-12-15';
     const expectedComment = 'Moving details for John Doe';
@@ -112,8 +112,8 @@ async function test_case() {
     const close = await driver.findElement(By.id('CloseDetail'));
     close.click()
 
-    // Close the browser after waiting for another 5 seconds
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    // Close the browser after waiting for another 2 seconds
+    await new Promise((resolve) => setTimeout(resolve, 2000))
     await driver.quit()
 }
 test_case()

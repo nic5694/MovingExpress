@@ -204,5 +204,4 @@ class QuoteRepositoryPersistenceTest {
                 .shipmentName("Sample Shipment")
                 .build();
     }
-
 }
