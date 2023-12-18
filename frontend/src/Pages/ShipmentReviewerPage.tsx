@@ -238,7 +238,7 @@ function ShipmentReviewerPage() {
   const declineQuote = async (quoteId: string) => {
     try {
         const response = await axios.post(
-            `http://localhost:8080/api/v1/movingexpress/quotes/${quoteId}/events`, 
+            `http://localhost:8080/api/v1/movingexpress/quotes/${quoteId}/events`,
             {
                 event: 'decline'
             }
@@ -299,7 +299,9 @@ function ShipmentReviewerPage() {
             </div>
 
             <div className='pt-5'>
-              <button className='hover:underline underline-offset-4 decoration-2 decoration-companyYellow' style={{ fontFamily: 'Bebas Neue, cursive', letterSpacing: "1px" }} >LogOut</button>
+              <form action={`http://localhost:8080/api/v1/movingexpress/logout`} method="post">
+              <button className='hover:underline underline-offset-4 decoration-2 decoration-companyYellow' style={{ fontFamily: 'Bebas Neue, cursive', letterSpacing: "1px" }} type={'submit'} >LogOut</button>
+              </form>
             </div>
           </div>
         </div>
@@ -933,7 +935,7 @@ function ShipmentReviewerPage() {
                   </div>
                 </div>
                 <div className="flex flex-row gap-1 justify-end mb-5">
-                  {selectedQuote.quoteStatus !== "DECLINED" ? 
+                  {selectedQuote.quoteStatus !== "DECLINED" ?
                   <div className=' flex flex-row gap-3'>
                     <div><button onClick={() => { }} className='px-2.5 py-1 bg-green-500 text-white rounded-sm'>Accept</button></div>
                     <div><button id='declineBtn' onClick={() => { declineQuote(selectedQuote.quoteId) }} className='px-2.5 py-1 bg-red-500 text-white rounded-sm'>Decline</button></div>
