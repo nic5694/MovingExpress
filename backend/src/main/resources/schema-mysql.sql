@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS customers (
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NULL,
     profile_picture_url VARCHAR(255) NULL,
-    email VARCHAR(255) UNIQUE NYLL,
+    email VARCHAR(255) UNIQUE NULL,
     phone_number VARCHAR(15) NULL,
     street_address VARCHAR(255) NULL,
     city VARCHAR(255) NULL,
