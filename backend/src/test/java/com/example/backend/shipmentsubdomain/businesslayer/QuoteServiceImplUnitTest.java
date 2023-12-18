@@ -19,13 +19,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class QuoteServiceImplUnitTest {
@@ -302,6 +300,45 @@ class QuoteServiceImplUnitTest {
                 .shipmentName("Sample Shipment")
                 .build();
     }
+
+    @Test
+    void declineQuoteEvent_ShouldSucceed_WhenQuoteExists() {
+        // Arrange
+        String quoteId = "validQuoteId";
+        Quote quote = buildQuote();
+        quote.setQuoteIdentifier(new QuoteIdentifier());
+        when(quoteRepository.findByQuoteIdentifier_QuoteId(quoteId)).thenReturn(quote);
+
+        // Act
+        quoteService.declineQuote(quoteId);
+
+        // Assert
+        assertEquals(QuoteStatus.DECLINED, quote.getQuoteStatus());
+        verify(quoteRepository).save(quote);
+    }
+
+    @Test
+    void declineQuote_ShouldThrowIllegalArgumentException_WhenInvalidStatusIsSet() {
+        // Arrange
+        String quoteId = "validQuoteId";
+        String invalidStatus = "InvalidStatus";
+        Quote quote = buildQuote();
+        when(quoteRepository.findByQuoteIdentifier_QuoteId(quoteId)).thenReturn(quote);
+
+
+        doAnswer(invocation -> {
+            throw new IllegalArgumentException("Unexpected event value: " + invalidStatus);
+        }).when(quoteRepository).save(any(Quote.class));
+
+        // Act & Assert
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            quoteService.declineQuote(quoteId);
+        });
+
+        // Assert
+        assertThat(exception.getMessage().contains("Unexpected event value: " + invalidStatus));
+    }
+
 
     private QuoteResponseModel buildQuoteResponse(){
         return QuoteResponseModel.builder()

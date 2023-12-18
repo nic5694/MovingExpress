@@ -52,6 +52,7 @@ public class SpringSecurityConfigurationBeans {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/v1/movingexpress/quotes")).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/v1/movingexpress/quotes/request")).permitAll()
+                        .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/v1/movingexpress/quotes/*/events")).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/v1/movingexpress/shipments")).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/v1/movingexpress/customers")).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/v1/movingexpress/security/user-info}")).permitAll()
@@ -89,13 +90,13 @@ public class SpringSecurityConfigurationBeans {
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(new SpaCsrfToken())
                         .ignoringRequestMatchers(
+                                new AntPathRequestMatcher("/api/v1/movingexpress/quotes/*/events", HttpMethod.POST.toString()),
                                 new AntPathRequestMatcher("/api/v1/movingexpress/logout", HttpMethod.POST.toString()),
                                 new AntPathRequestMatcher("/api/v1/movingexpress/security/redirect", HttpMethod.GET.toString()),
                                 new AntPathRequestMatcher("/api/v1/movingexpress/quotes/request", HttpMethod.POST.toString()),
                                 new AntPathRequestMatcher("/api/v1/movingexpress/shipments", HttpMethod.POST.toString()),
                                 new AntPathRequestMatcher("/api/v1/movingexpress/customers", HttpMethod.GET.toString()),
                                 new AntPathRequestMatcher("/api/v1/movingexpress/quotes", HttpMethod.GET.toString())
-
 
                         )
                 )

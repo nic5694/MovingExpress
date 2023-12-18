@@ -3,6 +3,8 @@ package com.example.backend.shipmentsubdomain.presentationlayer;
 import com.example.backend.shipmentsubdomain.businesslayer.QuoteService;
 import com.example.backend.shipmentsubdomain.datalayer.Quote;
 import com.example.backend.shipmentsubdomain.datalayer.QuoteStatus;
+import com.example.backend.shipmentsubdomain.presentationlayer.event.EventRequestModel;
+import com.example.backend.shipmentsubdomain.presentationlayer.event.EventResponseModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -33,4 +35,20 @@ public class QuoteController {
     public QuoteResponseModel addQuote(@RequestBody QuoteRequestModel quoteRequestModel){
         return quoteService.addQuote(quoteRequestModel);
     }
+
+    @ResponseStatus(org.springframework.http.HttpStatus.CREATED)
+    @PostMapping(value = "/{quoteId}/events")
+    public EventResponseModel createQuoteEvent(@RequestBody EventRequestModel eventRequestModel,
+                                               @PathVariable String quoteId){
+
+        switch (eventRequestModel.getEvent()){
+            case "decline":
+                return quoteService.declineQuote(quoteId);
+//            case "accept":
+//                return quoteService.acceptQuote(quoteId);
+            default:
+                throw new IllegalArgumentException("Unexpected event value: " + eventRequestModel.getEvent());
+        }
+    }
+
 }

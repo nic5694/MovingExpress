@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 function ShipmentReviewerPage() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [pendingQuotes, setPendingQuotes] = useState([])
+  const [declinedQuotes, setDeclinedQuotes] = useState([])
 
   const fetchData = async () => {
     try {
@@ -60,6 +61,59 @@ function ShipmentReviewerPage() {
         theme: 'light',
       })
     }
+
+    try {
+      const response = await axios.get('http://localhost:8080/api/v1/movingexpress/quotes', {
+        params: {
+          quoteStatus: 'DECLINED',
+        },
+      });
+
+      console.log(response)
+
+      //@ts-ignore
+      const mappedQuoteForms = response.data.map((item: any) => ({
+        quoteId: item.quoteId,
+        quoteStatus: item.quoteStatus,
+        pickupStreetAddress: item.pickUpAddress,
+        pickupCity: item.cityP,
+        pickupCountry: item.countryP,
+        pickupPostalCode: item.postalCodeP,
+        pickupNumberOfRooms: item.numberofRoomP,
+        pickupElevator: item.elevatorisPresentP,
+        pickupBuildingType: item.buildingTypeP,
+        destinationStreetAddress: item.dropOffAddress,
+        destinationCity: item.cityD,
+        destinationCountry: item.countryD,
+        destinationPostalCode: item.postalCodeD,
+        destinationNumberOfRooms: item.numberofRoomD,
+        destinationElevator: item.elevatorisPresentD,
+        destinationBuildingType: item.buildingTypeD,
+        firstName: item.firstName,
+        lastName: item.lastName,
+        emailAddress: item.emailAddress,
+        phoneNumber: item.phoneNumber,
+        contactMethod: item.wayToContact,
+        expectedMovingDate: item.movingDate,
+        comment: item.additionalComments,
+        shipmentName: item.name,
+      }));
+
+      setDeclinedQuotes(mappedQuoteForms)
+
+    } catch (error) {
+      toast.error('Error Loading Data', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      })
+    }
+
   }
 
   useEffect(() => {
@@ -172,7 +226,7 @@ function ShipmentReviewerPage() {
         position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,
-        closeOnClick: true,
+        //closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
@@ -181,10 +235,28 @@ function ShipmentReviewerPage() {
     }
   }
 
-  //handle accept or decline quote
-  const updateQuoteStatus = async (quoteId: string) => {
+  const declineQuote = async (quoteId: string) => {
+    try {
+        const response = await axios.post(
+            `http://localhost:8080/api/v1/movingexpress/quotes/${quoteId}/events`, 
+            {
+                event: 'decline'
+            }
+        );
 
-  }
+        console.log('Response:', response.data);
+
+        setDisplayDetail(false)
+        fetchData()
+
+    } catch (error) {
+        console.error('Error:', error);
+    }
+
+  };
+
+  //handle accept or decline quote
+
 
   const menuIcon = () => {
     return (
@@ -304,6 +376,24 @@ function ShipmentReviewerPage() {
                   ))
                 }
 
+                {
+                  declinedQuotes.map((quote: any) => (
+                    //@ts-ignore
+                    <tr name={quote.name} id={quote.quoteId} className='text-center text-sm'>
+                      {//@ts-ignore
+                        <td name={quote.shipmentName} className='border px-3'>{quote.shipmentName}</td>}
+                      <td className='border px-3'>{quote.emailAddress}</td>
+                      <td className='border px-3 hidden lg:table-cell'>{quote.phoneNumber}</td>
+                      <td className='border px-3 hidden lg:table-cell'>{quote.firstName}</td>
+                      <td className='border px-3 hidden lg:table-cell'>{quote.lastName}</td>
+                      <td className='border px-3 '>{quote.quoteStatus}</td>
+                      {//@ts-ignore
+                      <td name={quote.shipmentName} className='border px-3 '><button id={`btn-${quote.quoteId}`} onClick={() => { getQuoteDetails(quote.quoteId) }} style={{ fontFamily: 'Bebas Neue, cursive' }} className="bg-companyYellow text-white py-1 px-10 rounded-sm text-sm">View</button></td>
+                      }</tr>
+
+                  ))
+                }
+
               </tbody>
 
             </table>
@@ -311,7 +401,7 @@ function ShipmentReviewerPage() {
           {displayDetail && (
             <div className='relative w-100 h-100 flex justify-center bg-white opacity-100 divide-transparent rounded-lg' style={{ zIndex: 1 }}>
               {/* <div className='flex flex-col'> */}
-              <form>
+              <div className='flex flex-col'>
                 <div className='flex flex-row items-center justify-between mt-6 mb-5'>
                   <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='text-2xl'>Shipment Quotes <span className="text-companyYellow">Details</span></div>
                   <div>
@@ -843,10 +933,15 @@ function ShipmentReviewerPage() {
                   </div>
                 </div>
                 <div className="flex flex-row gap-1 justify-end mb-5">
-                  <div><button onClick={() => { updateQuoteStatus(selectedQuote.quoteId) }} className='px-2.5 py-1 bg-green-500 text-white rounded-sm'>Accept</button></div>
-                  <div><button onClick={() => { updateQuoteStatus(selectedQuote.quoteId) }} className='px-2.5 py-1 bg-red-500 text-white rounded-sm'>Decline</button></div>
-                </div>
-              </form>
+                  {selectedQuote.quoteStatus !== "DECLINED" ? 
+                  <div className=' flex flex-row gap-3'>
+                    <div><button onClick={() => { }} className='px-2.5 py-1 bg-green-500 text-white rounded-sm'>Accept</button></div>
+                    <div><button id='declineBtn' onClick={() => { declineQuote(selectedQuote.quoteId) }} className='px-2.5 py-1 bg-red-500 text-white rounded-sm'>Decline</button></div>
+                  </div>
+                  : <div> </div>
+                }
+                  </div>
+              </div>
             </div>
             // </div>
           )}
