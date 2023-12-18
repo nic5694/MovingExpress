@@ -136,7 +136,7 @@ class QuoteControllerIntegrationTest {
 
                 .jsonPath("$.firstName").isEqualTo("John")
                 .jsonPath("$.lastName").isEqualTo("Doe")
-                .jsonPath("$.emailAddress").isEqualTo("john.doe@example.com")
+                .jsonPath("$.emailAddress").isEqualTo("emily.d@example.com")
                 .jsonPath("$.phoneNumber").isEqualTo("123-555-1234");
     }
 
