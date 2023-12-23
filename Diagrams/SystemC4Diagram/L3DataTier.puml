@@ -16,60 +16,59 @@ skinparam classAttribute {
 
 Database "MySQL" as BoundedContextMySQL #f29111 {
 
-    TABLE(Customer) {
+    TABLE(customers) {
         PRIMARY_KEY(id) INT AUTO_INCREMENT
         FOREIGN_KEY(user_id) VARCHAR(36) UNIQUE NOT NULL
-        firstName VARCHAR(255)
-        lastName VARCHAR(255)
-        profilePictureUrl VARCHAR(255)
-        email VARCHAR(255)
-        phoneNumber VARCHAR(15)
-        streetAddress VARCHAR(255)
-        city VARCHAR(255)
-        country VARCHAR(255)
-        postalCode VARCHAR(10)
+        first_name VARCHAR(255) NOT NULL,
+        last_name VARCHAR(255) NULL,
+        profile_picture_url VARCHAR(255) NULL,
+        email VARCHAR(255) UNIQUE NULL,
+        phone_number VARCHAR(15) NULL,
+        street_address VARCHAR(255) NULL,
+        city VARCHAR(255) NULL,
+        country VARCHAR(255) NULL,
+        postal_code VARCHAR(10) NULL
     }
 
-    TABLE(Truck) {
+    TABLE(trucks) {
         PRIMARY_KEY(id) INT AUTO_INCREMENT
         FOREIGN_KEY(vin) VARCHAR(17) UNIQUE NOT NULL
         capacity DOUBLE
     }
 
-    TABLE(Address) {
+    TABLE(addresses) {
         PRIMARY_KEY(id) INT AUTO_INCREMENT
         FOREIGN_KEY(address_id) VARCHAR(36) UNIQUE NOT NULL
-        streetAddress VARCHAR(255)
-        city VARCHAR(255)
-        country VARCHAR(255)
-        postalCode VARCHAR(10)
+        street_address VARCHAR(255) NOT NULL,
+        city VARCHAR(255) NOT NULL,
+        country VARCHAR(255) NOT NULL,
+        postal_code VARCHAR(10) NOT NULL
     }
-
-    TABLE(Shipment) {
+      TABLE(shipments) {
         PRIMARY_KEY(id) INT AUTO_INCREMENT
         FOREIGN_KEY(shipment_id) VARCHAR(36) UNIQUE
-        status VARCHAR(255)
-        expectedMovingDate Date
-        actualMovingDate Date NULL
-        name VARCHAR(255)
-        approximateWeight DOUBLE NULL
-        weight DOUBLE NULL
-        FOREIGN_KEY(pickup_address_id) VARCHAR(36)
-        FOREIGN_KEY(destination_address_id) VARCHAR(36)
-        FOREIGN_KEY(vin) VARCHAR(17) NULL
-        FOREIGN_KEY(user_id) VARCHAR(36) NULL
-        email VARCHAR(255) NULL
-        phoneNumber VARCHAR(15) NULL
+        status VARCHAR(255),    
+        expected_moving_date Date,
+        actual_moving_date Date NULL,
+        name VARCHAR(255),
+        approximate_weight DOUBLE NULL,
+        weight DOUBLE NULL,
+        email VARCHAR(255) NULL,
+        phone_number VARCHAR(15) NULL,
+        FOREIGN KEY (pickup_address_id) VARCHAR(36),
+        FOREIGN KEY (destination_address_id) VARCHAR(36),
+        FOREIGN KEY (vin) VARCHAR(17) NULL,
+        FOREIGN KEY (user_id) VARCHAR(36) NULL
     }
 
-    TABLE(Inventory) {
+    TABLE(inventories) {
         PRIMARY_KEY(id) INT AUTO_INCREMENT
         FOREIGN_KEY(inventory_id) VARCHAR(36) UNIQUE NOT NULL
         description VARCHAR(255)
         FOREIGN_KEY(shipment_id) VARCHAR(36)
     }
 
-    TABLE(Item) {
+    TABLE(items) {
         PRIMARY_KEY(id) INT AUTO_INCREMENT
         FOREIGN_KEY(item_id) VARCHAR(36) UNIQUE NOT NULL
         name VARCHAR(255) NOT NULL
@@ -81,72 +80,72 @@ Database "MySQL" as BoundedContextMySQL #f29111 {
         FOREIGN_KEY(inventory_id) VARCHAR(36)
     }
 
-    TABLE(MovingEstimator) {
-        PRIMARY_KEY(id) INT AUTO_INCREMENT
-        FOREIGN_KEY(estimator_id) VARCHAR(36) UNIQUE NOT NULL
-        firstName VARCHAR(255)
-        lastName VARCHAR(255)
-        email VARCHAR(255) UNIQUE
-        phoneNumber VARCHAR(15)
-        FOREIGN_KEY(shipment_id) VARCHAR(36)
-    }
+    ' TABLE(MovingEstimator) {
+    '     PRIMARY_KEY(id) INT AUTO_INCREMENT
+    '     FOREIGN_KEY(estimator_id) VARCHAR(36) UNIQUE NOT NULL
+    '     firstName VARCHAR(255)
+    '     lastName VARCHAR(255)
+    '     email VARCHAR(255) UNIQUE
+    '     phoneNumber VARCHAR(15)
+    '     FOREIGN_KEY(shipment_id) VARCHAR(36)
+    ' }
 
-    TABLE(Quote) {
+    TABLE(quotes) {
         PRIMARY_KEY(id) INT AUTO_INCREMENT
         FOREIGN_KEY(quote_id) VARCHAR(36) UNIQUE NOT NULL
-        pickupStreetAddress VARCHAR(255)
-        pickupCity VARCHAR(255)
-        pickupCountry VARCHAR(255)
-        pickupPostalCode VARCHAR(10)
-        pickupNumberOfRooms INT
-        pickupElevator BOOLEAN
-        pickupBuildingType VARCHAR(255)
-        destinationStreetAddress VARCHAR(255)
-        destinationCity VARCHAR(255)
-        destinationCountry VARCHAR(255)
-        destinationPostalCode VARCHAR(10)
-        destinationNumberOfRooms INT
-        destinationElevator BOOLEAN
-        destinationBuildingType VARCHAR(255)
-        firstName VARCHAR(255)
-        lastName VARCHAR(255)
-        emailAddress VARCHAR(255)
-        phoneNumber VARCHAR(15)
-        contactMethod VARCHAR(30)
-        expectedMovingDate Date
-        initiationDate DATETIME
-        comment VARCHAR(255)
-        quoteStatus VARCHAR(10)
-        shipmentName VARCHAR(255)
+        pickup_street_address VARCHAR(255),
+        pickup_city VARCHAR(255),
+        pickup_country VARCHAR(255),
+        pickup_postal_code VARCHAR(10),
+        pickup_number_of_rooms INT,
+        pickup_elevator BOOLEAN,
+        pickup_building_type VARCHAR(255),
+        destination_street_address VARCHAR(255),
+        destination_city VARCHAR(255),
+        destination_country VARCHAR(255),
+        destination_postal_code VARCHAR(10),
+        destination_number_of_rooms INT,
+        destination_elevator BOOLEAN,
+        destination_building_type VARCHAR(255),
+        first_name VARCHAR(255),
+        last_name VARCHAR(255),
+        email_address VARCHAR(255),
+        phone_number VARCHAR(15),
+        contact_method VARCHAR(30),
+        expected_moving_date Date,
+        initiation_date DATETIME,
+        comment VARCHAR(255),
+        quote_status VARCHAR(10),
+        shipment_name VARCHAR(255)
     }
 
-    TABLE(MovingCrew) {
+    TABLE(movingcrews) {
         PRIMARY_KEY(id) INT AUTO_INCREMENT
         FOREIGN_KEY(moving_crew_id) VARCHAR(36) UNIQUE NOT NULL
         type VARCHAR(255)
         FOREIGN_KEY(shipment_id) VARCHAR(36)
     }
 
-    TABLE(Driver) {
+    TABLE(drivers) {
         PRIMARY_KEY(id) INT AUTO_INCREMENT
         FOREIGN_KEY(user_id) VARCHAR(36) UNIQUE NOT NULL
-        firstName VARCHAR(255)
-        lastName VARCHAR(255)
-        phoneNumber VARCHAR(15)
-        email VARCHAR(255) UNIQUE NOT NULL
+        first_name VARCHAR(255),
+        last_name VARCHAR(255),
+        phone_number VARCHAR(15),
+        email VARCHAR(255) UNIQUE NOT NULL,
         FOREIGN_KEY(shipment_id) VARCHAR(36)
     }
 
-    TABLE(ShipmentReviewer) {
-        PRIMARY_KEY(id) INT AUTO_INCREMENT
-        FOREIGN_KEY(user_id) VARCHAR(36)
-        firstName VARCHAR(255)
-        lastName VARCHAR(255)
-        email VARCHAR(255) UNIQUE NOT NULL
-        phoneNumber VARCHAR(15)
-    }
+    ' TABLE(shipmentreviewers) {
+    '     PRIMARY_KEY(id) INT AUTO_INCREMENT
+    '     FOREIGN_KEY(user_id) VARCHAR(36)
+    '     firstName VARCHAR(255)
+    '     lastName VARCHAR(255)
+    '     email VARCHAR(255) UNIQUE NOT NULL
+    '     phoneNumber VARCHAR(15)
+    ' }
 
-    TABLE(Observer) {
+    TABLE(observers) {
         PRIMARY_KEY(id) INT AUTO_INCREMENT
         FOREIGN_KEY(observer_id) VARCHAR(36) UNIQUE NOT NULL
         firstName VARCHAR(255)
@@ -155,7 +154,7 @@ Database "MySQL" as BoundedContextMySQL #f29111 {
         FOREIGN_KEY(shipment_id) VARCHAR(36)
     }
 
-    TABLE(Report) {
+    TABLE(reports) {
         PRIMARY_KEY(id) INT AUTO_INCREMENT
         FOREIGN_KEY(report_id) VARCHAR(36) UNIQUE NOT NULL
         name VARCHAR(50)
@@ -164,22 +163,22 @@ Database "MySQL" as BoundedContextMySQL #f29111 {
         validity DATETIME
     }
 
-    Customer ||--|{ Shipment
-    Truck }|--|| Shipment
-    Address ||--o{ Shipment : pickup_address_id
-    Address ||--o{ Shipment : destination_address_id
-    Shipment ||--|{ MovingCrew
-    MovingCrew ||--o| Report
-    Driver }|--|| Shipment
-    Shipment ||--o{ Observer
-    Shipment ||--|{ ShipmentReviewer
-    Driver ||--|| Truck
-    Inventory ||--o{ Item
-    Customer ||--o| Report
-    Shipment ||--|{ Inventory
-    Customer ||--|{ Quote
-    Quote ||--|{ Shipment
-    MovingEstimator ||--|{ Quote
-    MovingEstimator ||--o| Report
+    customers ||--|{ shipments
+    trucks }|--|| shipments
+    addresses ||--o{ shipments : pickup_address_id
+    addresses ||--o{ shipments : destination_address_id
+    shipments ||--|{ movingcrews
+    movingcrews ||--o| reports
+    drivers }|--|| shipments
+    shipments ||--o{ observers
+    ' shipments ||--|{ shipmentreviewers
+    drivers ||--|| trucks
+    inventories ||--o{ items
+    customers ||--o| reports
+    shipments ||--|{ inventories
+    customers ||--|{ quotes
+    quotes ||--|{ shipments
+    ' movingestimators ||--|{ quotes
+    ' movingestimators ||--o| reports
 
 @enduml
