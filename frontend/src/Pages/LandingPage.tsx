@@ -15,22 +15,17 @@ function LandingPage() {
                     <img src={logo} className="w-24 2xl:w-32" />
                 </div>
 
-                <div className="flex gap-5 align-middle">
-                    <div>
-                        <Link id='reviewerBtn' to={"/Reviewer"} style={{fontFamily : "Bebas Neue, cursive"}} className="border-[3px] border-companyYellow px-7 py-2 rounded-md text-white">Reviewer</Link>
-                        <Link id='estimatorBtn' to={"/Estimator"} style={{fontFamily : "Bebas Neue, cursive"}} className="border-[3px] border-companyYellow px-7 py-2 rounded-md text-white">Estimator</Link>
-                    </div>
-                    <div>
-                        <a
-                            style={{ fontFamily: 'Bebas Neue, cursive' }}
-                            id="signinsignuplandingpage"
-                            className="border-[3px] border-companyYellow px-7 py-2 rounded-md text-white"
-                            href="http://localhost:8080/oauth2/authorization/okta"
-                        >
-                            Login | Sign Up
-                        </a>
-                    </div>
+                <div>
+                    <a
+                        style={{ fontFamily: 'Bebas Neue, cursive' }}
+                        id="signinsignuplandingpage"
+                        className="border-[3px] border-companyYellow px-7 py-2 rounded-md text-white"
+                        href="http://localhost:8080/oauth2/authorization/okta"
+                    >
+                        Login | Sign Up
+                    </a>
                 </div>
+                
             </div>
 
             <div className="flex px-[5%] mt-10 2xl:mt-28 xsm:flex-col lg:flex-row">
