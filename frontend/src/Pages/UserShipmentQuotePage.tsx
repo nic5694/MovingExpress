@@ -1,13 +1,14 @@
-import React from 'react'
-import NavBar1 from '../Components/NavBar1'
+import React, { useEffect, useState } from 'react'
+import NormalNavBar from '../Components/NormalNavBar'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 //@ts-ignore
 import { validate, res } from 'react-email-validator';
+import Cookies from 'js-cookie'
+import { useAuth } from '../auth/components/AuthService'
 import ScrollToTopBtn from '../Components/ScrollToTopBtn';
 
-function ShipmentQuotePage() {
-
+function UserShipmentQuotePage() {
     const missingFieldError = (value:any) =>{
         if(value === "" || value <= 0 || value == null || value === "null"){
             toast.error('Missing Field(s)', {
@@ -250,14 +251,40 @@ function ShipmentQuotePage() {
         }
     }
 
-    return (
-        <div>
-            <NavBar1></NavBar1>
+    const[userEmail, setUserEmail] = useState('');
 
-            <ScrollToTopBtn />
+    const auth = useAuth()
 
-            <div className="px-[5%] py-20">
-                <div className="flex flex-col gap-3 pb-7">
+    const checkIfProfileExists = async () => {
+        await axios.get("http://localhost:8080/api/v1/movingexpress/customers?simpleCheck=true", {
+            headers: {
+                // @ts-ignore
+                "X-XSRF-TOKEN": auth.getXsrfToken(),
+            }
+        }).then(r => {
+          //console.log(r.data)
+          console.log(Cookies.get('email'))
+          let email = Cookies.get('email')?.toString()
+            //@ts-ignore
+          setUserEmail(email)
+        }) 
+    }
+
+    useEffect(() => {
+        checkIfProfileExists();
+    },[])
+
+
+  return (
+    <div>
+        <NormalNavBar />
+
+
+        <ScrollToTopBtn />
+
+
+        <div className="px-[5%] py-20">
+                <div id='top' className="flex flex-col gap-3 pb-7">
                     <div
                         style={{ fontFamily: 'Bebas Neue, cursive' }}
                         className="text-3xl"
@@ -345,6 +372,8 @@ function ShipmentQuotePage() {
                                             id="EmailInput"
                                             name="EmailInput"
                                             placeholder="E-Mail"
+                                            value={userEmail}
+                                            readOnly
                                             required
                                         />
                                         <label
@@ -899,8 +928,8 @@ function ShipmentQuotePage() {
                     </form>
                 </div>
             </div>
-        </div>
-    )
+    </div>
+  )
 }
 
-export default ShipmentQuotePage
+export default UserShipmentQuotePage

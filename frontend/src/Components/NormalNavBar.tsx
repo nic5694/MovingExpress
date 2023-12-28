@@ -59,7 +59,7 @@ function NormalNavBar() {
                         Home
                     </div>
                 </Link>
-                <Link to={'/ShipmentQuote'}>
+                <Link to={'/UserShipmentQuote'}>
                     <div
                         style={{ fontFamily: 'Bebas Neue, cursive' }}
                         className="px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D]"

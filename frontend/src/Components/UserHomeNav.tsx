@@ -40,7 +40,7 @@ function UserHomeNav(props:any) {
         <Link to={"/Home"}>
           <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D]'>Home</div>
         </Link>
-        <Link to={"/ShipmentQuote"}>
+        <Link to={"/UserShipmentQuote"}>
           <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D]'>Shipment Quote</div>
         </Link>
         <Link to={"/Shipments"}>
