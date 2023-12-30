@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS addresses (
 
 CREATE TABLE IF NOT EXISTS shipments (
                                          id INT AUTO_INCREMENT PRIMARY KEY,
-                                         shipment_id VARCHAR(36) UNIQUE,
+                                         shipment_id VARCHAR(36) UNIQUE NOT NULL,
     status VARCHAR(255),
     expected_moving_date Date,
     actual_moving_date Date NULL,
