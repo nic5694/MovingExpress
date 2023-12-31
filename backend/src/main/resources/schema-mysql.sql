@@ -19,9 +19,10 @@ CREATE TABLE IF NOT EXISTS trucks (
     vin VARCHAR(17) UNIQUE NOT NULL,
     capacity DOUBLE
     );
+
 CREATE TABLE IF NOT EXISTS addresses (
-                                       id INT AUTO_INCREMENT PRIMARY KEY,
-                                       address_id VARCHAR(36) UNIQUE NOT NULL,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    address_id VARCHAR(36) UNIQUE NOT NULL,
     street_address VARCHAR(255) NOT NULL,
     city VARCHAR(255) NOT NULL,
     country VARCHAR(255) NOT NULL,
@@ -30,8 +31,8 @@ CREATE TABLE IF NOT EXISTS addresses (
 
 
 CREATE TABLE IF NOT EXISTS shipments (
-                                         id INT AUTO_INCREMENT PRIMARY KEY,
-                                         shipment_id VARCHAR(36) UNIQUE,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    shipment_id VARCHAR(36) UNIQUE,
     status VARCHAR(255),
     expected_moving_date Date,
     actual_moving_date Date NULL,
