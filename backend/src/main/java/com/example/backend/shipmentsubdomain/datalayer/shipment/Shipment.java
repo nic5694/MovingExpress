@@ -3,12 +3,16 @@ package com.example.backend.shipmentsubdomain.datalayer.shipment;
 import com.example.backend.shipmentsubdomain.datalayer.Address.Address;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
 @Entity(name = "shipments")
+@Builder
+@AllArgsConstructor
 public class Shipment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

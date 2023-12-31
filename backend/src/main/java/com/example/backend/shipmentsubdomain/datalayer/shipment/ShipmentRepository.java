@@ -8,5 +8,5 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Integer>{
     List<Shipment> findShipmentByUserId(String userId);
 
     List<Shipment> findShipmentByEmail(String email);
-
+    Shipment findByShipmentIdentifier_ShipmentId(String shipmentId);
 }
