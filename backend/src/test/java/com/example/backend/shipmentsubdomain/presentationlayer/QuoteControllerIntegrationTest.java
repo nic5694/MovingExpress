@@ -33,8 +33,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 class QuoteControllerIntegrationTest {
     private final String BASE_URI_QUOTES = "/api/v1/movingexpress/quotes";
     private final String BASE_URI_QUOTES_REQUEST = "/api/v1/movingexpress/quotes/request";
-    private final String BASE_URI_QUOTES_RETRIEVE = "/api/v1/movingexpress/quotes/retrieve";
-
     private final String VALID_QUOTE_ID = "a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6";
 
     @Autowired
