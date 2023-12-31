@@ -3,15 +3,20 @@ package com.example.backend.shipmentsubdomain.datalayer.shipment;
 import com.example.backend.shipmentsubdomain.datalayer.Address.Address;
 import com.example.backend.shipmentsubdomain.datalayer.Address.AddressRepository;
 import com.example.backend.shipmentsubdomain.datalayer.Country;
+import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponseModel;
+import com.example.backend.util.exceptions.QuoteNotFoundException;
+import com.example.backend.util.exceptions.ShipmentNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 class ShipmentRepositoryPersistenceTest {
@@ -77,12 +82,68 @@ class ShipmentRepositoryPersistenceTest {
     }
 
     @Test
-    public void whenFindShipmentByShipmentIdentifier_ShipmentId_thenCorrectShipmentGetsReturned(){
-        //Act
-        Shipment shipmentFound = shipmentRepository.findShipmentByShipmentIdentifier_ShipmentId(shipmentIdForShipment1);
-        //Assert
-        assertThat(shipmentFound.getUserId()).isEqualTo(shipment1.getUserId());
-        assertThat(shipmentFound.getId()).isEqualTo(shipment1.getId());
-        assertThat(shipmentFound.getName()).isEqualTo(shipment1.getName());
+    public void whenFindShipmentByValidShipmentId_thenReturnShipment(){
+        shipmentRepository.deleteAll();
+        Shipment newShipment=shipmentRepository.save(buildShipment());
+
+        Shipment existingShipment=shipmentRepository.findByShipmentIdentifier_ShipmentId(newShipment.getShipmentIdentifier().getShipmentId());
+
+        assertNotNull(existingShipment);
+        assertEquals(existingShipment.getUserId(), "exampleUserId", "User IDs should match");
+        assertEquals(existingShipment.getStatus(), Status.QUOTED, "Status should match");
+        assertEquals(existingShipment.getExpectedMovingDate(), LocalDate.of(2023, 1, 1), "Expected moving dates should match");
+        assertEquals(existingShipment.getActualMovingDate(), LocalDate.of(2023, 1, 5), "Actual moving dates should match");
+        assertEquals(existingShipment.getApproximateWeight(), 100.0, 0.001, "Approximate weights should match");
+        assertEquals(existingShipment.getName(), "Example Shipment", "Shipment names should match");
+        assertEquals(existingShipment.getPickupAddress(), Address.builder()
+                .id(newShipment.getPickupAddress().getId())
+                .city("PickupCity")
+                .streetAddress("PickupStreet")
+                .country(Country.CA)
+                .postalCode("PickupPostalCode")
+                .build(), "Pickup addresses should match");
+        assertEquals(existingShipment.getDestinationAddress(), Address.builder()
+                .id(newShipment.getDestinationAddress().getId())
+                .city("DestinationCity")
+                .streetAddress("DestinationStreet")
+                .country(Country.USA)
+                .postalCode("DestinationPostalCode")
+                .build(), "Destination addresses should match");
+        assertEquals(existingShipment.getEmail(), "example@example.com", "Emails should match");
+        assertEquals(existingShipment.getPhoneNumber(), "1234567890", "Phone numbers should match");
+    }
+
+    private Shipment buildShipment() {
+        addressRepository.deleteAll();
+
+        Address pickupAddress=Address.builder()
+                .city("PickupCity")
+                .streetAddress("PickupStreet")
+                .country(Country.CA)
+                .postalCode("PickupPostalCode")
+                .build();
+
+        Address destinationAddress=Address.builder()
+                .city("DestinationCity")
+                .streetAddress("DestinationStreet")
+                .country(Country.USA)
+                .postalCode("DestinationPostalCode")
+                .build();
+
+        addressRepository.saveAll(Arrays.asList(pickupAddress, destinationAddress));
+
+        return Shipment.builder()
+                .userId("exampleUserId")
+                .status(Status.QUOTED)
+                .shipmentIdentifier(new ShipmentIdentifier())
+                .expectedMovingDate(LocalDate.of(2023, 1, 1))
+                .actualMovingDate(LocalDate.of(2023, 1, 5))
+                .approximateWeight(100.0)
+                .name("Example Shipment")
+                .pickupAddress(pickupAddress)
+                .destinationAddress(destinationAddress)
+                .email("example@example.com")
+                .phoneNumber("1234567890")
+                .build();
     }
 }

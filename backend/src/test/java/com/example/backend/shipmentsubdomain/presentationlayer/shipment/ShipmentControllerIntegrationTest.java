@@ -11,9 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.time.LocalDate;
@@ -27,12 +29,14 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @AutoConfigureWebClient
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
+@Sql({"/data-mysql.sql"})
 class ShipmentControllerIntegrationTest {
 
     @Autowired
     WebTestClient webTestClient;
 
-    private final String BASE_URI = "/api/v1/movingexpress/shipments";
+    private final String BASE_URI_SHIPMENTS = "/api/v1/movingexpress/shipments";
+    private final String VALID_SHIPMENT_ID="c0a80121-7f5e-4d77-a5a4-5d41b04f5a57";
 
     @BeforeEach
     public void setUp() {
@@ -53,7 +57,7 @@ class ShipmentControllerIntegrationTest {
     @Test
     public void getAllShipmentsWithUserId() {
         String userId = "someUserId";
-        webTestClient.get().uri(uriBuilder -> uriBuilder.path(BASE_URI)
+        webTestClient.get().uri(uriBuilder -> uriBuilder.path(BASE_URI_SHIPMENTS)
                         .queryParam("userId", userId)
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
@@ -67,7 +71,7 @@ class ShipmentControllerIntegrationTest {
     @Test
     public void getAllShipmentsWithEmail() {
         String email = "example@example.com";
-        webTestClient.get().uri(uriBuilder -> uriBuilder.path(BASE_URI)
+        webTestClient.get().uri(uriBuilder -> uriBuilder.path(BASE_URI_SHIPMENTS)
                         .queryParam("email", email)
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
@@ -76,6 +80,49 @@ class ShipmentControllerIntegrationTest {
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody()
                 .jsonPath("$").isArray();
+    }
+
+    @Test
+    public void whenGetShipmentWithValidShipmentIdExists_thenReturnShipment(){
+        webTestClient.get()
+                .uri(BASE_URI_SHIPMENTS +"/"+VALID_SHIPMENT_ID)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .jsonPath("$.shipmentId").isEqualTo(VALID_SHIPMENT_ID)
+                .jsonPath("$.pickupAddress.streetAddress").isEqualTo("4 Oak Ave")
+                .jsonPath("$.pickupAddress.city").isEqualTo("Fotville")
+                .jsonPath("$.pickupAddress.country").isEqualTo("CA")
+                .jsonPath("$.pickupAddress.postalCode").isEqualTo("V3V 1W1")
+                .jsonPath("$.destinationAddress.streetAddress").isEqualTo("555 Pine Ave")
+                .jsonPath("$.destinationAddress.city").isEqualTo("NwHoke")
+                .jsonPath("$.destinationAddress.country").isEqualTo("USA")
+                .jsonPath("$.destinationAddress.postalCode").isEqualTo("M4S 7H6")
+                .jsonPath("$.userId").isEmpty()
+                .jsonPath("$.status").isEqualTo("QUOTED")
+                .jsonPath("$.shipmentName").isEqualTo("ShipmentPQR")
+                .jsonPath("$.approximateWeight").isEqualTo(1500.0)
+                .jsonPath("$.weight").isEqualTo(1575.0)
+                .jsonPath("$.email").isEqualTo("nicholasmartoccia04@icloud.com")
+                .jsonPath("$.phoneNumber").isEqualTo("789-555-3123")
+                .jsonPath("$.expectedMovingDate").isEqualTo("2023-12-30")
+                .jsonPath("$.actualMovingDate").isEqualTo("2024-01-02");
+    }
+
+    @Test
+    public void whenGetShipmentWithInvalidShipmentId_thenReturnShipmentNotFoundException(){
+        String invalidShipmentId = "123";
+
+        webTestClient.get()
+                .uri(BASE_URI_SHIPMENTS + "/" + invalidShipmentId)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isEqualTo(HttpStatus.NOT_FOUND)
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .jsonPath("$.message").isEqualTo("shipmentId not found: " + invalidShipmentId);
     }
 
     @Test
@@ -105,8 +152,9 @@ class ShipmentControllerIntegrationTest {
                 .quoteStatus(QuoteStatus.PENDING)
                 .name("shipmentName")
                 .build();
+
         webTestClient.post()
-                .uri(BASE_URI)
+                .uri(BASE_URI_SHIPMENTS)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(quoteResponseModel)

@@ -4,8 +4,14 @@ import jakarta.persistence.Embeddable;
 import lombok.Data;
 import lombok.Getter;
 
-@Data
+import java.util.UUID;
+
+@Getter
 @Embeddable
 public class TruckIdentifier {
     private String vin;
+
+    public TruckIdentifier(){
+        this.vin= UUID.randomUUID().toString();
+    }
 }

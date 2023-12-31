@@ -13,13 +13,15 @@ import java.time.format.DateTimeFormatter;
 public class HttpErrorInfo {
 
     private final String timestamp;
+    private final String path;
     private final HttpStatus httpStatus;
     private final String message;
 
-    public HttpErrorInfo(HttpStatus httpStatus, String message) {
+    public HttpErrorInfo(HttpStatus httpStatus, String path, String message) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a");
         ZonedDateTime now = ZonedDateTime.now(ZoneId.of("America/Montreal"));
 
+        this.path = path;
         timestamp = now.format(formatter);
         this.httpStatus = httpStatus;
         this.message = message;
