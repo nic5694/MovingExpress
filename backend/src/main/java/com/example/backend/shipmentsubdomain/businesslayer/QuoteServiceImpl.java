@@ -5,20 +5,26 @@ import com.example.backend.shipmentsubdomain.datamapperlayer.quote.QuoteRequestM
 import com.example.backend.shipmentsubdomain.datamapperlayer.quote.QuoteResponseMapper;
 import com.example.backend.shipmentsubdomain.datamapperlayer.shipment.AddressMapper;
 import com.example.backend.shipmentsubdomain.datamapperlayer.shipment.QuoteResponseToShipmentMapper;
+import com.example.backend.util.EmailUtil;
 import com.example.backend.util.exceptions.QuoteNotFoundException;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteController;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteRequestModel;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponseModel;
 import com.example.backend.shipmentsubdomain.presentationlayer.event.EventResponseModel;
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class QuoteServiceImpl implements QuoteService {
     private final QuoteRepository quoteRepository;
@@ -26,7 +32,22 @@ public class QuoteServiceImpl implements QuoteService {
     private final QuoteResponseMapper quoteResponseMapper;
     private final QuoteResponseToShipmentMapper quoteResponseToShipmentMapper;
     private final AddressMapper addressMapper;
+    private final EmailUtil emailUtil;
+    private final TemplateEngine templateEngine;
 
+    @Generated
+    String generateDeclineQuoteEmailContentString(Quote quote) {
+        try {
+            Context context = new Context();
+            context.setVariable("quoteId", quote.getQuoteIdentifier() != null ? quote.getQuoteIdentifier().getQuoteId() : "");
+            context.setVariable("pickupAddress", quote.getPickupAddress() != null ? quote.getPickupAddress() : "");
+            context.setVariable("destinationAddress", quote.getDestinationAddress() != null ? quote.getDestinationAddress() : "");
+            return templateEngine.process("declineQuote", context);
+        } catch (Exception e) {
+            log.error("Error while generating shipment confirmation email", e);
+            return "";
+        }
+    }
     @Override
     public QuoteResponseModel getQuote(String quoteId) {
         Quote existingQuote = quoteRepository.findByQuoteIdentifier_QuoteId(quoteId);
@@ -83,6 +104,7 @@ public class QuoteServiceImpl implements QuoteService {
         Quote quote = quoteRepository.findByQuoteIdentifier_QuoteId(quoteId);
         quote.setQuoteStatus(QuoteStatus.DECLINED);
         quoteRepository.save(quote);
+        emailUtil.SslEmail(quote.getContactDetails().getEmailAddress(), "Quote Declined", generateDeclineQuoteEmailContentString(quote));
         return EventResponseModel.builder()
                 .resultType("SUCCESS")
                 .event("decline")

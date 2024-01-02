@@ -3,9 +3,10 @@ package com.example.backend.shipmentsubdomain.businesslayer;
 import com.example.backend.shipmentsubdomain.datalayer.*;
 import com.example.backend.shipmentsubdomain.datamapperlayer.quote.QuoteRequestMapper;
 import com.example.backend.shipmentsubdomain.datamapperlayer.quote.QuoteResponseMapper;
-import com.example.backend.util.exceptions.QuoteNotFoundException;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteRequestModel;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponseModel;
+import com.example.backend.util.EmailUtil;
+import com.example.backend.util.exceptions.QuoteNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -42,6 +45,10 @@ class QuoteServiceImplUnitTest {
     private QuoteRequestModel sampleQuoteRequestModel;
     private Quote sampleQuote;
     private QuoteResponseModel sampleQuoteResponseModel;
+    @Mock
+    private TemplateEngine templateEngine;
+    @Mock
+    private EmailUtil emailUtil;
 
     @BeforeEach
     void setUp() {
@@ -264,7 +271,12 @@ class QuoteServiceImplUnitTest {
         String quoteId = "validQuoteId";
         Quote quote = buildQuote();
         quote.setQuoteIdentifier(new QuoteIdentifier());
+        quote.setContactDetails(new ContactDetails("John", "Doe", "johndoe@gmail.com", "555-1234"));
         when(quoteRepository.findByQuoteIdentifier_QuoteId(quoteId)).thenReturn(quote);
+
+        // Mocking the templateEngine and emailUtil
+        when(templateEngine.process(any(String.class), any())).thenReturn("This is a test email");
+        doNothing().when(emailUtil).SslEmail(anyString(), anyString(), anyString());
 
         // Act
         quoteService.declineQuote(quoteId);
@@ -272,7 +284,12 @@ class QuoteServiceImplUnitTest {
         // Assert
         assertEquals(QuoteStatus.DECLINED, quote.getQuoteStatus());
         verify(quoteRepository).save(quote);
+
+        // Verify that the email content and parameters are as expected
+        verify(templateEngine).process(eq("declineQuote"), any(Context.class));
+        verify(emailUtil).SslEmail(eq("johndoe@gmail.com"), eq("Quote Declined"), eq("This is a test email"));
     }
+
 
     @Test
     void acceptExistingQuoteEvent_ShouldSucceed(){
