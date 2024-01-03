@@ -53,8 +53,9 @@ CREATE TABLE IF NOT EXISTS shipments (
 
 CREATE TABLE IF NOT EXISTS inventories (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
     inventory_id VARCHAR(36) UNIQUE NOT NULL,
-    description VARCHAR(255),
+    description VARCHAR(2000),
     shipment_id VARCHAR(36),
     FOREIGN KEY (shipment_id) REFERENCES shipments(shipment_id)
     );

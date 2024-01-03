@@ -14,4 +14,7 @@ public class ShipmentIdentifier {
     public ShipmentIdentifier(){
         this.shipmentId= UUID.randomUUID().toString();
     }
+    public ShipmentIdentifier(String shipmentId){
+        this.shipmentId = shipmentId;
+    }
 }
