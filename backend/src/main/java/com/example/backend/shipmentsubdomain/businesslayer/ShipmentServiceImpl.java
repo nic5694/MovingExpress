@@ -2,6 +2,7 @@ package com.example.backend.shipmentsubdomain.businesslayer;
 
 import com.example.backend.customersubdomain.buisnesslayer.CustomerService;
 import com.example.backend.shipmentsubdomain.datalayer.Address.Address;
+import com.example.backend.shipmentsubdomain.datalayer.Address.AddressIdentifier;
 import com.example.backend.shipmentsubdomain.datalayer.Address.AddressRepository;
 import com.example.backend.shipmentsubdomain.datalayer.shipment.Shipment;
 import com.example.backend.shipmentsubdomain.datalayer.shipment.ShipmentIdentifier;
@@ -64,6 +65,7 @@ public class ShipmentServiceImpl implements ShipmentService{
                 quoteResponseModel.getPickupCity(),
                 quoteResponseModel.getPickupPostalCode(),
                 quoteResponseModel.getPickupCountry());
+        pickupAddress.setAddressIdentifier(new AddressIdentifier());
         Address savedDepartureAddress = addressRepository.save(pickupAddress);
 
         // Create and save the arrival address
@@ -72,6 +74,7 @@ public class ShipmentServiceImpl implements ShipmentService{
                 quoteResponseModel.getDestinationCity(),
                 quoteResponseModel.getDestinationPostalCode(),
                 quoteResponseModel.getDestinationCountry());
+        destinationAddress.setAddressIdentifier(new AddressIdentifier());
         Address savedArrivalAddress = addressRepository.save(destinationAddress);
 
         // Map the QuoteResponseModel to Shipment using your mapper
