@@ -45,6 +45,8 @@ CREATE TABLE IF NOT EXISTS shipments (
     user_id VARCHAR(36) NULL,
     email VARCHAR(255) NULL,
     phone_number VARCHAR(15) NULL,
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
     FOREIGN KEY (pickup_address_id) REFERENCES addresses(address_id),
     FOREIGN KEY (destination_address_id) REFERENCES addresses(address_id),
     FOREIGN KEY (vin) REFERENCES trucks(vin),
