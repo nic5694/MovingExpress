@@ -46,6 +46,7 @@ function ShipmentsPage() {
 
 
 
+
   return (
     <div>
       <NormalNavBar />
@@ -53,15 +54,15 @@ function ShipmentsPage() {
       <div className='px-[5%] py-20'>
         <div className="flex flex-col gap-3 pb-7">
           <div
-              style={{ fontFamily: 'Bebas Neue, cursive' }}
-              className="text-3xl"
+            style={{ fontFamily: 'Bebas Neue, cursive' }}
+            className="text-3xl"
           >
-              All{' '}
-              <span className="text-companyYellow">Shipments</span>
+            All{' '}
+            <span className="text-companyYellow">Shipments</span>
           </div>
 
           <div className="pb-5 font-light text-sm opacity-90 lg:pr-[10%]">
-          Welcome to the Shipments Page! Here, you can effortlessly manage and monitor all your created and ongoing shipments. Whether you're tracking the progress of a shipment or need detailed information about your shipments, this page provides a centralized view of your logistics activities. Explore the list of your shipments, each accompanied by essential details such as shipment name, status and weight. To delve deeper into a specific shipment, simply click on the "Eye Icon" button.
+            Welcome to the Shipments Page! Here, you can effortlessly manage and monitor all your created and ongoing shipments. Whether you're tracking the progress of a shipment or need detailed information about your shipments, this page provides a centralized view of your logistics activities. Explore the list of your shipments, each accompanied by essential details such as shipment name, status and weight. To delve deeper into a specific shipment, simply click on the "Eye Icon" button.
           </div>
 
           <hr className="border-1 border-companyYellow" />
@@ -69,18 +70,18 @@ function ShipmentsPage() {
 
         <div>
 
-          { userShipments.length == 0 
-            ? (<div className='text-center opacity-25 font-light'>[ No Shipments ]</div>) 
+          {userShipments.length == 0
+            ? (<div className='text-center opacity-25 font-light'>[ No Shipments ]</div>)
             : (
-              
-                <div className='flex flex-wrap gap-5'>
 
-                  { userShipments.map((shipment: any) => (<ShipmentContainer shipment = {shipment}/>)) }
+              <div className='flex flex-wrap gap-5'>
 
-                </div>
+                {userShipments.map((shipment: any) => (<ShipmentContainer shipment={shipment} />))}
+
+              </div>
 
 
-              ) }
+            )}
         </div>
 
       </div>
