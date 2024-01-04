@@ -13,6 +13,7 @@ import EstimatorPage from './Pages/ShipmentEstimatorPage'
 import ReviewerPage from './Pages/ShipmentReviewerPage'
 import LogoutRedirectHandler from './auth/LogoutRedirectHandler'
 import { AuthProvider } from './auth/components/AuthService'
+import ShipmentDetailsPage from './Pages/ShipmentDetailsPage'
 
 function App() {
     return (
@@ -29,6 +30,7 @@ function App() {
                         <Route path="/Estimator" Component={EstimatorPage} />
                         <Route path="/Reviewer" Component={ReviewerPage} />
                         <Route path="/logout" Component={LogoutRedirectHandler} />
+                        <Route path="/ShipmentDetails" Component={ShipmentDetailsPage} />
                     </Routes>
                     <Footer />
                 </BrowserRouter>
