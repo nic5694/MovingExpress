@@ -44,17 +44,18 @@ function NormalNavBar() {
             </div>
 
             <div
-                className="absolute lg:hidden text-[gray]"
+                className="absolute lg:hidden text-[gray] z-10"
                 style={
                     menuOpen
                         ? { width: '100%', height: '100%', overflow: 'hidden' }
                         : { height: '0', overflow: 'hidden' }
                 }
             >
+                <div className='bg-white shadow-2xl'>
                 <Link to={'/Home'}>
                     <div
                         style={{ fontFamily: 'Bebas Neue, cursive' }}
-                        className="px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D]"
+                        className="px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D] hover:pl-10 duration-300 ease-in-out "
                     >
                         Home
                     </div>
@@ -62,7 +63,7 @@ function NormalNavBar() {
                 <Link to={'/UserShipmentQuote'}>
                     <div
                         style={{ fontFamily: 'Bebas Neue, cursive' }}
-                        className="px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D]"
+                        className="px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D] hover:pl-10 duration-300 ease-in-out "
                     >
                         Shipment Quote
                     </div>
@@ -70,7 +71,7 @@ function NormalNavBar() {
                 <Link to={'/Shipments'}>
                     <div
                         style={{ fontFamily: 'Bebas Neue, cursive' }}
-                        className="px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D]"
+                        className="px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D] hover:pl-10 duration-300 ease-in-out "
                     >
                         Shipments
                     </div>
@@ -78,7 +79,7 @@ function NormalNavBar() {
                 <Link to={'/ContactUs'}>
                     <div
                         style={{ fontFamily: 'Bebas Neue, cursive' }}
-                        className="px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D]"
+                        className="px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D] hover:pl-10 duration-300 ease-in-out "
                     >
                         Contact Us
                     </div>
@@ -86,7 +87,7 @@ function NormalNavBar() {
                 <Link to={'/Profile'}>
                     <div
                         style={{ fontFamily: 'Bebas Neue, cursive' }}
-                        className="px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D]"
+                        className="px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D] hover:pl-10 duration-300 ease-in-out "
                     >
                         Profile
                     </div>
@@ -98,11 +99,11 @@ function NormalNavBar() {
                 >
                     <div
                         style={{ fontFamily: 'Bebas Neue, cursive' }}
-                        className="px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D]"
+                        className="px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D] hover:pl-10 duration-300 ease-in-out "
                     >
                         <button type={'submit'}>Logout</button>
                     </div>
-                </form>
+                </form></div>
             </div>
 
             {/* normal version nav bar */}

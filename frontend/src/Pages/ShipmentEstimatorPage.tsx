@@ -491,13 +491,14 @@ function ShipmentEstimatorPage() {
           </div>
 
         </div>
-        <div className='absolute lg:hidden text-[gray]' style={menuOpen ? { width: "100%", height: "100%", overflow: "hidden" } : { height: "0", overflow: "hidden" }}>
+        <div className='absolute lg:hidden text-[gray] z-10' style={menuOpen ? { width: "100%", height: "100%", overflow: "hidden" } : { height: "0", overflow: "hidden" }}>
+          <div className='bg-white shadow-2xl'>
           <Link to={"/ShipmentQuotes3"}>
-            <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D]'>Shipment Quotes</div>
+            <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D] hover:pl-10 duration-300 ease-in-out '>Shipment Quotes</div>
           </Link>
           <Link to={"/LogOut"}>
-            <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D]'>Log Out</div>
-          </Link>
+            <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D] hover:pl-10 duration-300 ease-in-out '>Log Out</div>
+          </Link></div>
         </div>
 
         <div className={`w-[100%] h-[100vh] py-5 px-5 relative bg-white`}>

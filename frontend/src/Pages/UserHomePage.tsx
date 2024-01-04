@@ -5,13 +5,16 @@ import ScrollToTopBtn from '../Components/ScrollToTopBtn'
 function UserHomePage() {
   return (
     <div>
+      <ScrollToTopBtn />
+
       <div className='bg-[lightgray]'>
         <UserHomeNav />
 
-        <ScrollToTopBtn />
+        <div>
 
-        <div>User Home Page</div>
+        </div>
       </div>
+      
     </div>
   )
 }

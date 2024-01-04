@@ -37,24 +37,26 @@ function UserHomeNav(props:any) {
       </div>
 
       <div className='absolute lg:hidden text-[gray]' style={menuOpen ? {width: "100%" ,height: "100%", overflow: "hidden"} : {height: "0", overflow: "hidden"}}>
-        <Link to={"/Home"}>
-          <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D]'>Home</div>
-        </Link>
-        <Link to={"/UserShipmentQuote"}>
-          <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D]'>Shipment Quote</div>
-        </Link>
-        <Link to={"/Shipments"}>
-          <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D]'>Shipments</div>
-        </Link>
-        <Link to={"/ContactUs"}>
-          <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D]'>Contact Us</div>
-        </Link>
-        <Link to={"/Profile"}>
-          <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D]'>Profile</div>
-        </Link>
-        <Link to={"/"}>
-          <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D]'>Logout</div>
-        </Link>
+        <div className='bg-white shadow-2xl'>
+          <Link to={"/Home"}>
+            <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D] hover:pl-10 duration-300 ease-in-out '>Home</div>
+          </Link>
+          <Link to={"/UserShipmentQuote"}>
+            <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D] hover:pl-10 duration-300 ease-in-out '>Shipment Quote</div>
+          </Link>
+          <Link to={"/Shipments"}>
+            <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D] hover:pl-10 duration-300 ease-in-out '>Shipments</div>
+          </Link>
+          <Link to={"/ContactUs"}>
+            <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D] hover:pl-10 duration-300 ease-in-out '>Contact Us</div>
+          </Link>
+          <Link to={"/Profile"}>
+            <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D] hover:pl-10 duration-300 ease-in-out '>Profile</div>
+          </Link>
+          <Link to={"/"}>
+            <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='px-5 py-2 border-b bg-white hover:bg-companyYellow hover:text-[#2D2D2D] hover:pl-10 duration-300 ease-in-out '>Logout</div>
+          </Link>
+        </div>
       </div>
 
       {/* normal version nav bar */}
