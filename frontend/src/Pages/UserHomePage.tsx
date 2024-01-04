@@ -41,7 +41,7 @@ function UserHomePage() {
 
       </div>
 
-      <div className='pt-20 text-center px-[10%] pb-5'>
+      <div className='pt-20 text-center px-[10%] pb-20'>
         <div style={{ fontFamily: 'Bebas Neue, cursive',alignItems: "center" }} className='text-2xl flex justify-center'>Shipment <span className='text-companyYellow pl-1 pr-3'>Process</span> <img className='w-14' src={truckIcon} /></div>
         <div className="py-3 font-light text-sm opacity-90">The following tree diagram provides a clear and concise visual representation of the step-by-step process involved in making a shipment. This graphical illustration is designed to help you navigate and understand the various stages and decision points in the shipping process.</div>
       </div>
@@ -61,7 +61,7 @@ function UserHomePage() {
 
             <div className='mt-3'>
               <Link to={'/UserShipmentQuote'}>
-                <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='text-companyYellow text-sm border-2 px-5 py-1 w-[110px] border-companyYellow rounded hover:translate-x-[20px] duration-300 ease-in-out'>Make a Quote</div>
+                <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='text-companyYellow text-sm border-2 px-5 py-1 w-[110px] border-companyYellow rounded hover:bg-[#2D2D2D] hover:text-white duration-300 ease-in-out shadow-lg'>Make a Quote</div>
               </Link>
             </div>
           </div>
@@ -86,8 +86,8 @@ function UserHomePage() {
             <div className='lg:w-[400px] font-light text-sm opacity-90'>This graphical illustration is designed to help you navigate and understand the various stages and decision points in the shipping process, ensuring a smooth and efficient journey for your goods from point A to point B.</div>
          
             <div className='mt-3'>
-              <Link to={'/UserShipmentQuote'}>
-                <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='text-companyYellow text-sm border-2 px-5 py-1 w-[120px] border-companyYellow rounded hover:translate-x-[20px] duration-300 ease-in-out'>View Shipments</div>
+              <Link to={'/Shipments'}>
+                <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='text-companyYellow text-sm border-2 px-5 py-1 w-[120px] border-companyYellow rounded hover:bg-[#2D2D2D] hover:text-white duration-300 ease-in-out shadow-lg'>View Shipments</div>
               </Link>
             </div>
           
