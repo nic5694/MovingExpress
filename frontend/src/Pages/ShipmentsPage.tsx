@@ -5,42 +5,45 @@ import axios from 'axios'
 import { useEffect } from 'react'
 import Cookies from 'js-cookie'
 import ShipmentContainer from '../Components/ShipmentContainer'
+import { toast } from 'react-toastify'
+import { Link } from 'react-router-dom'
 
 axios.defaults.withCredentials = true
 function ShipmentsPage() {
 
-  const[userShipments,setUserShipments] = useState([]);
+  const [userShipments, setUserShipments] = useState([]);
 
   const auth = useAuth()
-  
+
   const checkIfProfileExists = async () => {
     await axios.get("http://localhost:8080/api/v1/movingexpress/customers?simpleCheck=true", {
-        headers: {
-            // @ts-ignore
-            "X-XSRF-TOKEN": auth.getXsrfToken(),
-        }
+      headers: {
+        // @ts-ignore
+        "X-XSRF-TOKEN": auth.getXsrfToken(),
+      }
     }).then(r => {
       //console.log(r.data)
       console.log(Cookies.get('email'))
-      getShipments(Cookies.get('email')?.toString())
-    }) 
+      getShipments(Cookies.get('email'))
+    })
   }
 
-  const getShipments = async (email:any) => {
+  const getShipments = async (email: any) => {
 
     await axios.get("http://localhost:8080/api/v1/movingexpress/shipments", {
-        params: {
-            email: email
-        }
-    }).then((r:any) => {
+      params: {
+        email: email
+      }
+    }).then((r: any) => {
       console.log(r.data)
       setUserShipments(r.data)
-    }) 
+    })
   }
 
   useEffect(() => {
     checkIfProfileExists();
-  },[])
+  }, [])
+
 
 
   return (

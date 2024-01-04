@@ -25,4 +25,6 @@ public class ShipmentResponseModel {
     private String phoneNumber;
     private LocalDate expectedMovingDate;
     private LocalDate actualMovingDate;
+    private String firstName;
+    private String lastName;
 }
