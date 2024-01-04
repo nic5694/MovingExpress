@@ -22,7 +22,7 @@ function UserHomeNav(props:any) {
     <div>
 
       {/* phone version nav bar */}
-      <div style={{alignItems: "center"}} className="px-5 py-4 flex justify-between lg:hidden">
+      <div style={menuOpen? {alignItems : "center", backgroundColor : "#2D2D2D"} : {alignItems : "center"}} className="px-5 py-4 flex justify-between lg:hidden ">
 
         <div>
             <img src={logo} alt="logo" className="w-24 2xl:w-32" />
