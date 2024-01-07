@@ -1,11 +1,13 @@
-package com.example.backend.shipmentsubdomain.exceptions;
+package com.example.backend.inventorysubdomain.utils;
 
+import lombok.Generated;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 import java.time.ZonedDateTime;
 
 @Getter
+@Generated
 public class HttpErrorInfo {
     private final ZonedDateTime timestamp;
     private final String path;
@@ -17,7 +19,4 @@ public class HttpErrorInfo {
         this.path = path;
         this.message = message;
     }
-
-
 }
-

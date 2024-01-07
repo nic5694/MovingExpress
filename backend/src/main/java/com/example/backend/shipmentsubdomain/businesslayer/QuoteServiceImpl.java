@@ -6,7 +6,7 @@ import com.example.backend.shipmentsubdomain.datamapperlayer.quote.QuoteResponse
 import com.example.backend.shipmentsubdomain.datamapperlayer.shipment.AddressMapper;
 import com.example.backend.shipmentsubdomain.datamapperlayer.shipment.QuoteResponseToShipmentMapper;
 import com.example.backend.util.EmailUtil;
-import com.example.backend.util.exceptions.QuoteNotFoundException;
+import com.example.backend.shipmentsubdomain.utils.exceptions.QuoteNotFoundException;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteController;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteRequestModel;
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponseModel;
