@@ -150,7 +150,7 @@ function ShipmentDetailsPage() {
             <NormalNavBar />
 
             <div className='relative w-full h-100 flex justify-center bg-white opacity-100 divide-transparent rounded-lg'>
-                <div className='flex flex-col w-[80%]'>
+                <div className='flex flex-col w-[70%]'>
                     <div className='flex flex-row items-center justify-between mt-6 mb-5'>
                         <div style={{ fontFamily: 'Bebas Neue, cursive' }} className='text-2xl'>Shipment <span className="text-companyYellow">Details</span></div>
                         <div className='flex flex-row'>
@@ -166,7 +166,7 @@ function ShipmentDetailsPage() {
                     <hr className="border-1 border-grey mb-6" />
 
                     <div className='flex flex-row gap-4'>
-                        <div className="flex flex-col gap-1">
+                        <div className="flex flex-col gap-1 w-[26.5%]">
                             <input
                                 type="text"
                                 className="border border-[lightgray] text-xs h-[35px] px-4 rounded-sm"
@@ -290,7 +290,7 @@ function ShipmentDetailsPage() {
                     </div>
 
                     <div className='flex flex-row gap-4'>
-                        <div className="flex flex-col gap-1 w-[50%]">
+                        <div className="flex flex-col gap-1 w-[26.5%]">
                             <input
                                 type="text"
                                 className="border border-[lightgray] text-xs h-[35px] px-4 rounded-sm"
@@ -311,7 +311,7 @@ function ShipmentDetailsPage() {
                             </label>
                         </div>
 
-                        <div className="flex flex-col gap-1 w-[50%]">
+                        <div className="flex flex-col gap-1 w-[26.5%]">
                             <input
                                 type="text"
                                 className="border border-[lightgray] text-xs h-[35px] px-4 rounded-sm"
@@ -333,7 +333,7 @@ function ShipmentDetailsPage() {
                         </div>
                     </div>
                     <div className='flex flex-row gap-4'>
-                        <div className="flex flex-col gap-1 w-[50%]">
+                        <div className="flex flex-col gap-1 w-[26.5%]">
                             <input
                                 type="text"
                                 className="border border-[lightgray] text-xs h-[35px] px-4 rounded-sm"
@@ -353,7 +353,7 @@ function ShipmentDetailsPage() {
                             </label>
                         </div>
 
-                        <div className="flex flex-col gap-1 w-[50%]">
+                        <div className="flex flex-col gap-1 w-[26.5%]">
                             <input
                                 type="text"
                                 className="border border-[lightgray] text-xs h-[35px] px-4 rounded-sm"
