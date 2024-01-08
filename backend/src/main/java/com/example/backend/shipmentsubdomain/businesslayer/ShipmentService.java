@@ -10,5 +10,4 @@ public interface ShipmentService {
     ShipmentResponseModel createShipment(QuoteResponseModel quoteResponseModel);
     List<ShipmentResponseModel> getAllShipments(Optional<String> userId, Optional<String> email);
     ShipmentResponseModel getShipment(String shipmentId);
-
 }

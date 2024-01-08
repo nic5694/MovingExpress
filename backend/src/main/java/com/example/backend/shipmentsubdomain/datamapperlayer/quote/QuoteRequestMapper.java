@@ -15,7 +15,8 @@ public interface QuoteRequestMapper {
             @Mapping(target = "destinationAddress", ignore = true),
             @Mapping(target = "contactDetails", ignore = true),
             @Mapping(target = "initiationDate", ignore = true),
-            @Mapping(target = "quoteStatus", ignore = true)
+            @Mapping(target = "quoteStatus", ignore = true),
+            @Mapping(expression = "java(quoteRequestModel.getShipmentName())", target="shipmentName")
     })
     Quote requestModelToEntity(QuoteRequestModel quoteRequestModel);
 }
