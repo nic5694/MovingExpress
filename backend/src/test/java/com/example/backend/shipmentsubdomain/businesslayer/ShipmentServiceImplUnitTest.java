@@ -146,7 +146,7 @@ class ShipmentServiceImplUnitTest {
         Shipment existingShipment=buildShipment();
         ShipmentResponseModel shipmentResponseModel=buildShipmentResponseModel();
 
-        when(shipmentRepository.findByShipmentIdentifier_ShipmentId(anyString())).thenReturn(existingShipment);
+        when(shipmentRepository.findShipmentByShipmentIdentifier_ShipmentId(anyString())).thenReturn(existingShipment);
         when(shipmentResponseMapper.entityToResponseModel(existingShipment)).thenReturn(shipmentResponseModel);
 
         ShipmentResponseModel result=shipmentService.getShipment("c760a2f1-1981-4efb-83d1-3618f363ed27");
