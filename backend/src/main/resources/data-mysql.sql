@@ -17,5 +17,5 @@ INSERT INTO addresses (address_id, street_address, city, country, postal_code) V
     ('a1sc3d4-e5f6-g7h8-i9j0-oil2m3n4o5p2', '555 Pine Ave', 'NwHoke', 'USA', 'M4S 7H6');
 
 -- shipments
--- INSERT INTO shipments (shipment_id, status, expected_moving_date, actual_moving_date, name, approximate_weight, weight, pickup_address_id, destination_address_id, vin, user_id, email, phone_number) VALUES
---     ('c0a80121-7f5e-4d77-a5a4-5d41b04f5a57', 'QUOTED', '2023-12-30', '2024-01-02', 'ShipmentPQR', 1500.0, 1575.0, 'a1sc3d4-e5f6-g7h8-i9j0-oil2m3n4o5p1', 'a1sc3d4-e5f6-g7h8-i9j0-oil2m3n4o5p2', NULL, 'auth0|657d692eb037b915578b9e42', 'nicholasmartoccia04@icloud.com', '789-555-3123');
+INSERT INTO shipments (shipment_id, status, expected_moving_date, actual_moving_date, name, approximate_weight, weight, pickup_address_id, destination_address_id, vin, user_id, email, phone_number) VALUES
+    ('c0a80121-7f5e-4d77-a5a4-5d41b04f5a57', 'QUOTED', '2023-12-30', '2024-01-02', 'ShipmentPQR', 1500.0, 1575.0, 'a1sc3d4-e5f6-g7h8-i9j0-oil2m3n4o5p1', 'a1sc3d4-e5f6-g7h8-i9j0-oil2m3n4o5p2', NULL, 'auth0|657d692eb037b915578b9e42', 'nicholasmartoccia04@icloud.com', '789-555-3123');
