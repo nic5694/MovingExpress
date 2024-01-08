@@ -13,6 +13,8 @@ import EstimatorPage from './Pages/ShipmentEstimatorPage'
 import ReviewerPage from './Pages/ShipmentReviewerPage'
 import LogoutRedirectHandler from './auth/LogoutRedirectHandler'
 import { AuthProvider } from './auth/components/AuthService'
+import UserShipmentQuotePage from './Pages/UserShipmentQuotePage'
+import UserContactUsPage from './Pages/UserContactUsPage'
 
 function App() {
     return (
@@ -22,6 +24,7 @@ function App() {
                     <Routes>
                         <Route path="/" Component={LandingPage} />
                         <Route path="/ShipmentQuote" Component={ShipmentQuotePage} />
+                        <Route path="/UserShipmentQuote" Component={UserShipmentQuotePage} />
                         <Route path="/SignUp" Component={SignUpPage} />
                         <Route path="/Login" Component={LoginPage} />
                         <Route path="/Home" Component={UserHomePage} />
@@ -29,6 +32,7 @@ function App() {
                         <Route path="/Estimator" Component={EstimatorPage} />
                         <Route path="/Reviewer" Component={ReviewerPage} />
                         <Route path="/logout" Component={LogoutRedirectHandler} />
+                        <Route path="/ContactUs" Component={UserContactUsPage} />
                     </Routes>
                     <Footer />
                 </BrowserRouter>

@@ -4,6 +4,7 @@ import { useAuth } from '../auth/components/AuthService'
 import axios from 'axios'
 import { useEffect } from 'react'
 import Cookies from 'js-cookie'
+import ShipmentContainer from '../Components/ShipmentContainer'
 
 axios.defaults.withCredentials = true
 function ShipmentsPage() {
@@ -41,85 +42,46 @@ function ShipmentsPage() {
     checkIfProfileExists();
   },[])
 
-  const yellowTextStyle = { color: '#FFD700' };
-  const textStyle = { color: '#000000', marginBottom: '20px' };
-
-  const styleAll = {
-    color: '#000000',
-    fontFamily: '"Bebas Neue", cursive', 
-    fontSize: '36px', 
-    fontWeight: 'bold',
-  };
-
-  const styleShipments = {
-    color: '#FFD700',
-    fontFamily: '"Bebas Neue", cursive',
-    fontSize: '36px',
-    fontWeight: 'bold',
-  };
-
-  const containerStyle = {
-    display: 'flex' as 'flex',
-    flexDirection: 'column' as 'column',
-    minHeight: '72.8vh',
-  };
 
   return (
-    <div style={containerStyle}>
+    <div>
       <NormalNavBar />
-      <div style={{ flex: 1, padding: '20px' }}>
-        <h2 id="shipmentsHeader">
-          <span id="allText" style={styleAll}>ALL </span>
-          <span id="shipmentsText" style={styleShipments}>SHIPMENTS</span>
-        </h2>
-        <p id="shipmentsDescription" style={textStyle}>
-          A shipment request plays a vital role in ensuring the smooth and
-          organized movement of goods from the point of origin to the
-          destination. It helps both the shipper and the carrier have a clear
-          understanding of the logistics involved, reducing the risk of errors,
-          delays, and misunderstandings during the transportation process.
-        </p>
-        <hr />
-          {
-              userShipments.length !== 0 ? (
-                  <table id="shipmentsTable" style={{ width: '95%', borderCollapse: 'collapse', marginTop: '20px' }}>
-                      <thead>
-                      <tr>
-                          <th id="idHeader" style={{ padding: '10px', borderBottom: '1px solid #DDDDDD' }}>ID</th>
-                          <th id="nameHeader" style={{ padding: '10px', borderBottom: '1px solid #DDDDDD' }}>Shipment Name</th>
-                          <th id="statusHeader" style={{ padding: '10px', borderBottom: '1px solid #DDDDDD' }}>Status</th>
-                          <th id="weightHeader" style={{ padding: '10px', borderBottom: '1px solid #DDDDDD' }}>Approximate Weight</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      {userShipments.map((shipment: any, index) => (
-                          <tr id={`shipmentRow-${index}`} key={shipment.shipmentId} style={{ background: '#FFFFFF', borderBottom: '1px solid #E0E0E0' }}>
-                              <td id={`shipmentId-${index}`} style={{ ...yellowTextStyle, padding: '10px', border: '1px solid #E0E0E0' }}>
-                                  {shipment.shipmentId}
-                              </td>
-                              <td id={`shipmentName-${index}`} style={{ padding: '10px', border: '1px solid #E0E0E0' }}>
-                                  {shipment.shipmentName}
-                              </td>
-                              <td id={`status-${index}`} style={{ ...yellowTextStyle, padding: '10px', border: '1px solid #E0E0E0' }}>
-                                  {shipment.status}
-                              </td>
-                              <td id={`weight-${index}`} style={{ ...yellowTextStyle, padding: '10px', border: '1px solid #E0E0E0' }}>
-                                  {shipment.weight.toLocaleString()} lbs
-                              </td>
-                          </tr>
-                      ))}
-                      </tbody>
-                  </table>
-              ) : (
-                  <div id="noShipmentsMessage" style={{ textAlign: 'center', opacity: '0.5', fontSize: '18px' }}>
-                      <h2>
-                          <span style={styleAll}>Empty - User Has No </span>
-                          <span style={styleShipments}>SHIPMENTS</span>
-                      </h2>
-                  </div>
-              )
-          }
+
+      <div className='px-[5%] py-20'>
+        <div className="flex flex-col gap-3 pb-7">
+          <div
+              style={{ fontFamily: 'Bebas Neue, cursive' }}
+              className="text-3xl"
+          >
+              All{' '}
+              <span className="text-companyYellow">Shipments</span>
+          </div>
+
+          <div className="pb-5 font-light text-sm opacity-90 lg:pr-[10%]">
+          Welcome to the Shipments Page! Here, you can effortlessly manage and monitor all your created and ongoing shipments. Whether you're tracking the progress of a shipment or need detailed information about your shipments, this page provides a centralized view of your logistics activities. Explore the list of your shipments, each accompanied by essential details such as shipment name, status and weight. To delve deeper into a specific shipment, simply click on the "Eye Icon" button.
+          </div>
+
+          <hr className="border-1 border-companyYellow" />
+        </div>
+
+        <div>
+
+          { userShipments.length == 0 
+            ? (<div className='text-center opacity-25 font-light'>[ No Shipments ]</div>) 
+            : (
+              
+                <div className='flex flex-wrap gap-5'>
+
+                  { userShipments.map((shipment: any) => (<ShipmentContainer shipment = {shipment}/>)) }
+
+                </div>
+
+
+              ) }
+        </div>
+
       </div>
+
     </div>
   );
 }
