@@ -44,10 +44,6 @@ function ShipmentsPage() {
     checkIfProfileExists();
   }, [])
 
-
-
-
-
   return (
     <div>
       <NormalNavBar />
