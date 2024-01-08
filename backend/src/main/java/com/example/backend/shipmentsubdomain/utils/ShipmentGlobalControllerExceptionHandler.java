@@ -1,6 +1,6 @@
-package com.example.backend.shipmentsubdomain.exceptions;
+package com.example.backend.shipmentsubdomain.utils;
 
-import com.example.backend.util.exceptions.QuoteNotFoundException;
+import com.example.backend.shipmentsubdomain.utils.exceptions.QuoteNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -12,7 +12,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestControllerAdvice
 @Slf4j
-public class GlobalControllerExceptionHandler {
+public class ShipmentGlobalControllerExceptionHandler {
     @ResponseStatus(NOT_FOUND)
     @ExceptionHandler(QuoteNotFoundException.class)
     public HttpErrorInfo handleNotFoundException(ServerHttpRequest request, Exception ex){

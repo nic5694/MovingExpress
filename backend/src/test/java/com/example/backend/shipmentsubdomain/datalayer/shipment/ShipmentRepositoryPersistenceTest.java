@@ -22,6 +22,9 @@ class ShipmentRepositoryPersistenceTest {
     @Autowired
     private AddressRepository addressRepository;
 
+    private String shipmentIdForShipment1 ;
+    private Shipment shipment1;
+
     @BeforeEach
     public void setUp() {
         Address departureAddress1 = new Address("123 Main St", "CityA", Country.USA, "12345");
@@ -34,9 +37,10 @@ class ShipmentRepositoryPersistenceTest {
         addressRepository.save(departureAddress2);
         addressRepository.save(arrivalAddress2);
 
-        Shipment shipment1 = new Shipment("user123", null, Status.QUOTED, LocalDate.now(), null, 500.0, "Household", departureAddress1, arrivalAddress1, "user123@example.com", "1234567890");
+        shipment1 = new Shipment("user123", null, Status.QUOTED, LocalDate.now(), null, 500.0, "Household", departureAddress1, arrivalAddress1, "user123@example.com", "1234567890");
         Shipment shipment2 = new Shipment("user456", null, Status.DELIVERED, LocalDate.now().minusDays(10), LocalDate.now().minusDays(5), 700.0, "Office Move", departureAddress2, arrivalAddress2, "user456@example.com", "0987654321");
         shipmentRepository.save(shipment1);
+        shipmentIdForShipment1 = shipment1.getShipmentIdentifier().getShipmentId();
         shipmentRepository.save(shipment2);
     }
 
@@ -70,5 +74,15 @@ class ShipmentRepositoryPersistenceTest {
         // Assert
         assertThat(allShipments).hasSize(2);
         assertThat(allShipments).extracting("name").containsExactlyInAnyOrder("Household", "Office Move");
+    }
+
+    @Test
+    public void whenFindShipmentByShipmentIdentifier_ShipmentId_thenCorrectShipmentGetsReturned(){
+        //Act
+        Shipment shipmentFound = shipmentRepository.findShipmentByShipmentIdentifier_ShipmentId(shipmentIdForShipment1);
+        //Assert
+        assertThat(shipmentFound.getUserId()).isEqualTo(shipment1.getUserId());
+        assertThat(shipmentFound.getId()).isEqualTo(shipment1.getId());
+        assertThat(shipmentFound.getName()).isEqualTo(shipment1.getName());
     }
 }

@@ -1,6 +1,5 @@
 package com.example.backend.util;
 
-import com.example.backend.util.exceptions.QuoteNotFoundException;
 import com.example.backend.util.exceptions.CustomerNotFoundException;
 import com.example.backend.util.exceptions.InvalidRequestException;
 import org.springframework.http.HttpStatus;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 @RestControllerAdvice
@@ -17,12 +15,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CustomerNotFoundException.class)
     public HttpErrorInfo handleCustomerNotFoundException(CustomerNotFoundException e) {
         return createHttpErrorInfo(HttpStatus.NOT_FOUND, e);
-    }
-
-    @ResponseStatus(NOT_FOUND)
-    @ExceptionHandler(QuoteNotFoundException.class)
-    public HttpErrorInfo handleNotFoundException(QuoteNotFoundException ex){
-        return createHttpErrorInfo(NOT_FOUND, ex);
     }
 
     @ResponseStatus(UNPROCESSABLE_ENTITY)
