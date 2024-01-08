@@ -100,7 +100,7 @@ class ShipmentControllerIntegrationTest {
                 .jsonPath("$.destinationAddress.city").isEqualTo("NwHoke")
                 .jsonPath("$.destinationAddress.country").isEqualTo("USA")
                 .jsonPath("$.destinationAddress.postalCode").isEqualTo("M4S 7H6")
-                .jsonPath("$.userId").isEqualTo("auth0|657d692eb037b915578b9e42")
+                .jsonPath("$.userId").isEmpty()
                 .jsonPath("$.status").isEqualTo("QUOTED")
                 .jsonPath("$.shipmentName").isEqualTo("ShipmentPQR")
                 .jsonPath("$.approximateWeight").isEqualTo(1500.0)
