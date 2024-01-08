@@ -8,3 +8,13 @@ INSERT INTO quotes (quote_id, pickup_street_address, pickup_city, pickup_country
     ('a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p9', '444 Oak Ave', 'Forestville', 'CA', 'V8V 1W1', 2, TRUE, 'Apartment', '555 Pine Ave', 'Treeville', 'USA', 'M4S 3Z2', 3, FALSE, 'House', 'Emily', 'Davis', 'chahbouney2000@outlook.fr', '789-555-0123', 'EMAIL', '2023-12-30', '2023-12-28 13:15:00', 'Moving details for Emily Davis', 'ACCEPTED', 'ShipmentPQR');
 INSERT INTO quotes (quote_id, pickup_street_address, pickup_city, pickup_country, pickup_postal_code, pickup_number_of_rooms, pickup_elevator, pickup_building_type, destination_street_address, destination_city, destination_country, destination_postal_code, destination_number_of_rooms, destination_elevator, destination_building_type, first_name, last_name, email_address, phone_number, contact_method, expected_moving_date, initiation_date, comment, quote_status, shipment_name) VALUES
     ('a1sc3d4-e5f6-g7h8-i9j0-oil2m3n4o5p9', '4 Oak Ave', 'Fotville', 'CA', 'V3V 1W1', 2, TRUE, 'House', '555 Pine Ave', 'NwHoke', 'USA', 'M4S 7H6', 3, FALSE, 'House', 'Emily', 'Davis', 'nicholasmartoccia04@icloud.com', '789-555-3123', 'EMAIL', '2023-12-30', '2013-12-28 13:15:00', 'Moving details for Emily Davis', 'ACCEPTED', 'ShipmentPQR');
+
+-- addresses
+INSERT INTO addresses (address_id, street_address, city, country, postal_code) VALUES
+    ('a1sc3d4-e5f6-g7h8-i9j0-oil2m3n4o5p1', '4 Oak Ave', 'Fotville', 'CA', 'V3V 1W1');
+INSERT INTO addresses (address_id, street_address, city, country, postal_code) VALUES
+    ('a1sc3d4-e5f6-g7h8-i9j0-oil2m3n4o5p2', '555 Pine Ave', 'NwHoke', 'USA', 'M4S 7H6');
+
+-- shipments
+INSERT INTO shipments (shipment_id, status, expected_moving_date, actual_moving_date, name, approximate_weight, weight, pickup_address_id, destination_address_id, vin, user_id, email, phone_number) VALUES
+    ('c0a80121-7f5e-4d77-a5a4-5d41b04f5a57', 'QUOTED', '2023-12-30', '2024-01-02', 'ShipmentPQR', 1500.0, 1575.0, 'a1sc3d4-e5f6-g7h8-i9j0-oil2m3n4o5p1', 'a1sc3d4-e5f6-g7h8-i9j0-oil2m3n4o5p2', NULL, NULL, 'nicholasmartoccia04@icloud.com', '789-555-3123');

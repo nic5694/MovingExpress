@@ -19,6 +19,8 @@ public interface ShipmentResponseMapper {
             @Mapping(expression = "java(shipment.getWeight())", target = "weight"),
             @Mapping(expression = "java(shipment.getStatus())", target = "status"),
             @Mapping(expression = "java(shipment.getEmail())", target = "email"),
+            @Mapping(expression = "java(shipment.getFirstName())", target = "firstName"),
+            @Mapping(expression = "java(shipment.getLastName())", target = "lastName"),
     })
     ShipmentResponseModel entityToResponseModel(Shipment shipment);
 }

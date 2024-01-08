@@ -31,6 +31,11 @@ public class ShipmentController {
         return ResponseEntity.ok(shipments);
     }
 
+    @GetMapping("/{shipmentId}")
+    public ResponseEntity<ShipmentResponseModel> getShipment(@PathVariable String shipmentId){
+        return ResponseEntity.ok(shipmentService.getShipment(shipmentId));
+    }
+
     @PostMapping()
     public ResponseEntity<ShipmentResponseModel> createShipment(@RequestBody QuoteResponseModel quoteResponseModel){
         return ResponseEntity.status(CREATED).body(shipmentService.createShipment(quoteResponseModel));

@@ -15,6 +15,7 @@ import LogoutRedirectHandler from './auth/LogoutRedirectHandler'
 import { AuthProvider } from './auth/components/AuthService'
 import UserShipmentQuotePage from './Pages/UserShipmentQuotePage'
 import UserContactUsPage from './Pages/UserContactUsPage'
+import ShipmentDetailsPage from './Pages/ShipmentDetailsPage'
 
 function App() {
     return (
@@ -33,6 +34,7 @@ function App() {
                         <Route path="/Reviewer" Component={ReviewerPage} />
                         <Route path="/logout" Component={LogoutRedirectHandler} />
                         <Route path="/ContactUs" Component={UserContactUsPage} />
+                        <Route path="/ShipmentDetails" Component={ShipmentDetailsPage} />
                     </Routes>
                     <Footer />
                 </BrowserRouter>
