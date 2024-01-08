@@ -2,6 +2,7 @@ package com.example.backend.util;
 
 import com.example.backend.util.exceptions.CustomerNotFoundException;
 import com.example.backend.util.exceptions.InvalidRequestException;
+import com.example.backend.util.exceptions.QuoteNotFoundException;
 import com.example.backend.util.exceptions.ShipmentNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 @Slf4j
@@ -19,7 +21,7 @@ import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 public class GlobalExceptionHandler {
     @ExceptionHandler(CustomerNotFoundException.class)
     public HttpErrorInfo handleCustomerNotFoundException(WebRequest request, CustomerNotFoundException e) {
-        return createHttpErrorInfo(HttpStatus.NOT_FOUND, request, e);
+        return createHttpErrorInfo(NOT_FOUND, request, e);
     }
 
     @ResponseStatus(NOT_FOUND)

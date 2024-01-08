@@ -86,7 +86,7 @@ class ShipmentRepositoryPersistenceTest {
         shipmentRepository.deleteAll();
         Shipment newShipment=shipmentRepository.save(buildShipment());
 
-        Shipment existingShipment=shipmentRepository.findByShipmentIdentifier_ShipmentId(newShipment.getShipmentIdentifier().getShipmentId());
+        Shipment existingShipment=shipmentRepository.findShipmentByShipmentIdentifier_ShipmentId(newShipment.getShipmentIdentifier().getShipmentId());
 
         assertNotNull(existingShipment);
         assertEquals(existingShipment.getUserId(), "exampleUserId", "User IDs should match");

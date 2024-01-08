@@ -118,7 +118,7 @@ public class ShipmentServiceImpl implements ShipmentService{
 
     @Override
     public ShipmentResponseModel getShipment(String shipmentId) {
-        Shipment existingShipment=shipmentRepository.findByShipmentIdentifier_ShipmentId(shipmentId);
+        Shipment existingShipment=shipmentRepository.findShipmentByShipmentIdentifier_ShipmentId(shipmentId);
         if(existingShipment==null){
             throw new ShipmentNotFoundException("shipmentId not found: "+shipmentId);
         }
