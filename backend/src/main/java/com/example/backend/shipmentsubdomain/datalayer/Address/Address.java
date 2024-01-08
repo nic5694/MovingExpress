@@ -3,12 +3,16 @@ package com.example.backend.shipmentsubdomain.datalayer.Address;
 import com.example.backend.shipmentsubdomain.datalayer.Country;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Objects;
 
 @Data
 @Entity(name = "addresses")
+@Builder
+@AllArgsConstructor
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

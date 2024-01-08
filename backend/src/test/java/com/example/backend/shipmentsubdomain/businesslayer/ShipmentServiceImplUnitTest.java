@@ -141,6 +141,29 @@ class ShipmentServiceImplUnitTest {
         assertEquals(mockShipmentResponse, result.get(0));
     }
 
+    @Test
+    void getShipmentWithValidShipmentId_ShouldSucceed(){
+        Shipment existingShipment=buildShipment();
+        ShipmentResponseModel shipmentResponseModel=buildShipmentResponseModel();
+
+        when(shipmentRepository.findShipmentByShipmentIdentifier_ShipmentId(anyString())).thenReturn(existingShipment);
+        when(shipmentResponseMapper.entityToResponseModel(existingShipment)).thenReturn(shipmentResponseModel);
+
+        ShipmentResponseModel result=shipmentService.getShipment("c760a2f1-1981-4efb-83d1-3618f363ed27");
+
+        assertEquals(result.getUserId(), existingShipment.getUserId());
+        assertEquals(result.getStatus(), existingShipment.getStatus());
+        assertEquals(result.getExpectedMovingDate(), existingShipment.getExpectedMovingDate());
+        assertEquals(result.getActualMovingDate(), existingShipment.getActualMovingDate());
+        assertEquals(result.getApproximateWeight(), existingShipment.getApproximateWeight());
+        assertEquals(result.getShipmentName(), existingShipment.getName());
+        assertEquals(result.getPickupAddress(), existingShipment.getPickupAddress());
+        assertEquals(result.getDestinationAddress(), existingShipment.getDestinationAddress());
+        assertEquals(result.getEmail(), existingShipment.getEmail());
+        assertEquals(result.getPhoneNumber(), existingShipment.getPhoneNumber());
+        assertEquals(result.getWeight(), existingShipment.getWeight());
+    }
+
 
     @Test
     void createShipment() {
@@ -237,11 +260,58 @@ class ShipmentServiceImplUnitTest {
         verify(quoteResponseToShipmentMapper, Mockito.times(1)).toShipment(quoteResponseModel, addressMapper);
         verify(shipmentResponseMapper, Mockito.times(1)).entityToResponseModel(shipment);
     }
+
+    private Shipment buildShipment() {
+        return Shipment.builder()
+                .userId("exampleUserId")
+                .status(Status.QUOTED)
+                .shipmentIdentifier(new ShipmentIdentifier())
+                .expectedMovingDate(LocalDate.of(2023, 1, 1))
+                .actualMovingDate(LocalDate.of(2023, 1, 5))
+                .approximateWeight(100.0)
+                .name("Example Shipment")
+                .pickupAddress(Address.builder()
+                        .city("PickupCity")
+                        .streetAddress("PickupStreet")
+                        .country(Country.CA)
+                        .postalCode("PickupPostalCode")
+                        .build())
+                .destinationAddress(Address.builder()
+                        .city("DestinationCity")
+                        .streetAddress("DestinationStreet")
+                        .country(Country.USA)
+                        .postalCode("DestinationPostalCode")
+                        .build())
+                .email("example@example.com")
+                .phoneNumber("1234567890")
+                .build();
+    }
+
+    private ShipmentResponseModel buildShipmentResponseModel() {
+        return ShipmentResponseModel.builder()
+                .userId("exampleUserId")
+                .status(Status.QUOTED)
+                .shipmentId("c760a2f1-1981-4efb-83d1-3618f363ed27")
+                .expectedMovingDate(LocalDate.of(2023, 1, 1))
+                .actualMovingDate(LocalDate.of(2023, 1, 5))
+                .pickupAddress(Address.builder()
+                        .city("PickupCity")
+                        .streetAddress("PickupStreet")
+                        .country(Country.CA)
+                        .postalCode("PickupPostalCode")
+                        .build())
+                .destinationAddress(Address.builder()
+                        .city("DestinationCity")
+                        .streetAddress("DestinationStreet")
+                        .country(Country.USA)
+                        .postalCode("DestinationPostalCode")
+                        .build())
+                .email("example@example.com")
+                .phoneNumber("1234567890")
+                .shipmentName("Example Shipment")
+                .approximateWeight(100.0)
+                .weight(0.0)
+                .truckId("db6c3aef-f3f2-4a75-9cfb-67882c1e11f7\n")
+                .build();
+    }
 }
-
-
-
-
-
-
-

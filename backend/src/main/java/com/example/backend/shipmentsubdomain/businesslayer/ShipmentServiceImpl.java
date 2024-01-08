@@ -2,8 +2,10 @@ package com.example.backend.shipmentsubdomain.businesslayer;
 
 import com.example.backend.customersubdomain.buisnesslayer.CustomerService;
 import com.example.backend.shipmentsubdomain.datalayer.Address.Address;
+import com.example.backend.shipmentsubdomain.datalayer.Address.AddressIdentifier;
 import com.example.backend.shipmentsubdomain.datalayer.Address.AddressRepository;
 import com.example.backend.shipmentsubdomain.datalayer.shipment.Shipment;
+import com.example.backend.shipmentsubdomain.datalayer.shipment.ShipmentIdentifier;
 import com.example.backend.shipmentsubdomain.datalayer.shipment.ShipmentRepository;
 import com.example.backend.shipmentsubdomain.datalayer.shipment.Status;
 import com.example.backend.shipmentsubdomain.datamapperlayer.shipment.AddressMapper;
@@ -12,6 +14,7 @@ import com.example.backend.shipmentsubdomain.datamapperlayer.shipment.ShipmentRe
 import com.example.backend.shipmentsubdomain.presentationlayer.QuoteResponseModel;
 import com.example.backend.shipmentsubdomain.presentationlayer.shipment.ShipmentResponseModel;
 import com.example.backend.util.EmailUtil;
+import com.example.backend.util.exceptions.ShipmentNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Generated;
@@ -62,6 +65,7 @@ public class ShipmentServiceImpl implements ShipmentService{
                 quoteResponseModel.getPickupCity(),
                 quoteResponseModel.getPickupPostalCode(),
                 quoteResponseModel.getPickupCountry());
+        pickupAddress.setAddressIdentifier(new AddressIdentifier());
         Address savedDepartureAddress = addressRepository.save(pickupAddress);
 
         // Create and save the arrival address
@@ -70,6 +74,7 @@ public class ShipmentServiceImpl implements ShipmentService{
                 quoteResponseModel.getDestinationCity(),
                 quoteResponseModel.getDestinationPostalCode(),
                 quoteResponseModel.getDestinationCountry());
+        destinationAddress.setAddressIdentifier(new AddressIdentifier());
         Address savedArrivalAddress = addressRepository.save(destinationAddress);
 
         // Map the QuoteResponseModel to Shipment using your mapper
@@ -80,6 +85,7 @@ public class ShipmentServiceImpl implements ShipmentService{
         shipment.setDestinationAddress(savedArrivalAddress);
         shipment.setStatus(Status.QUOTED);
         shipment.setEmail(quoteResponseModel.getEmailAddress());
+        shipment.setShipmentIdentifier(new ShipmentIdentifier());
 
         // Save the shipment
         Shipment savedShipment = shipmentRepository.save(shipment);
@@ -102,12 +108,22 @@ public class ShipmentServiceImpl implements ShipmentService{
         }else {
             shipments = shipmentRepository.findAll();
             log.info("Shipments: {}", shipments);
-            log.info("This is after the find allllll", shipments.get(0).getStatus());
+            log.info("This is after the find all", shipments.get(0).getStatus());
         }
 
         return shipments.stream()
                 .map(shipmentResponseMapper::entityToResponseModel)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ShipmentResponseModel getShipment(String shipmentId) {
+        Shipment existingShipment=shipmentRepository.findShipmentByShipmentIdentifier_ShipmentId(shipmentId);
+        if(existingShipment==null){
+            throw new ShipmentNotFoundException("shipmentId not found: "+shipmentId);
+        }
+
+        return shipmentResponseMapper.entityToResponseModel(existingShipment);
     }
 
 

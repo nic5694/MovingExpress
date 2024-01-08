@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 
+import java.time.LocalDate;
+
 @Value
 @AllArgsConstructor
 @Builder
@@ -21,4 +23,8 @@ public class ShipmentResponseModel {
     private double weight;
     private String email;
     private String phoneNumber;
+    private LocalDate expectedMovingDate;
+    private LocalDate actualMovingDate;
+    private String firstName;
+    private String lastName;
 }
