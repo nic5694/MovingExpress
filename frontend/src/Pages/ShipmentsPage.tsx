@@ -48,7 +48,6 @@ function ShipmentsPage() {
 
 
 
-
   return (
     <div>
       <NormalNavBar />
